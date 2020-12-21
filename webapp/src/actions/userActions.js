@@ -26,14 +26,18 @@ export function getUser(id) {
     };
 }
 export function addUser(payload) {
+    debugger
     return dispatch => {
         axios
             .post(`${PATH}`, payload)
             .then(response => {
+                debugger
                 dispatch({ type: CREATE_USER, payload: response.data });
                 toast.success('User created Successfully')
             })
             .catch(err => {
+                debugger
+                toast.error('Unable to create User')
             });
     };
 }

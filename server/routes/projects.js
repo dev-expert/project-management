@@ -37,7 +37,7 @@ router.get(
       const result =  await findProjects({ createdBy: req.user.username });
       res.json(result);
     } catch (err) {
-      throw err;
+      next(err);
     }
   }
 );
@@ -50,7 +50,7 @@ router.post(
       const result =  await createProjects(project);
       res.json(result);
     } catch (err) {
-      throw err;
+      next(err);
     }
   }
 );
@@ -61,7 +61,7 @@ router.get(
       const result =  await findProjects({ _id: id }, true);
       res.json(result);
     } catch (err) {
-      throw err;
+      next(err);
     }
   }
 );
@@ -73,7 +73,7 @@ router.put(
       const result =  await createProjects({ $set: updatedProject }, { _id: id });
       res.json(result);
     } catch (err) {
-      throw err;
+      next(err);
     }
   }
 );

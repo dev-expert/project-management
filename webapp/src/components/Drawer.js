@@ -14,7 +14,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import getConnect from './connect';
-import { useHistory } from 'react-router-dom';
 import { Copyright } from './Common';
 import ListItem from '@material-ui/core/ListItem';
 import Link from '@material-ui/core/Link'
@@ -124,7 +123,7 @@ export const mainListItems = (
     </Link>
   </div>
 );
-function Dashboard({ isLoggedIn, logout, children }) {
+function Dashboard({ isLoggedIn, logout, children, history }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const handleDrawerOpen = () => {
@@ -132,13 +131,11 @@ function Dashboard({ isLoggedIn, logout, children }) {
   };
   const handleDrawerClose = () => {
     setOpen(false);
-  };
-  
-  const history = useHistory();
-    const exit = () => {
-        logout();
-        history.push('/signin')
-    } 
+  };  
+  const exit = () => {
+      logout();
+      history.push('/signin')
+  } 
   return (
     <div className={classes.root}>
       <CssBaseline />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -10,8 +10,6 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import getConnect from './connect';
-import { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -33,9 +31,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function SignUp({ register, signUp, isLoggedIn }) {
+function SignUp({ register, signUp, isLoggedIn, history }) {
   const classes = useStyles();
-  const history = useHistory();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [username, setUsername] = useState('');
@@ -51,7 +48,7 @@ function SignUp({ register, signUp, isLoggedIn }) {
   }, [signUp, history, isLoggedIn])
   const handleSubmit = () => {
     setSubmit(true)
-    if(username && password) {
+    if(username && password && !firstName) {
       register({ username, password, firstName, lastName })
     }
   }
@@ -70,6 +67,7 @@ function SignUp({ register, signUp, isLoggedIn }) {
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
+                required
                 autoComplete="fname"
                 name="firstName"
                 variant="outlined"
@@ -79,6 +77,7 @@ function SignUp({ register, signUp, isLoggedIn }) {
                 onChange={e => setFirstName(e.target.value)}
                 value={firstName}
                 autoFocus
+                error={submit && !firstName}
               />
             </Grid>
             <Grid item xs={12} sm={6}>

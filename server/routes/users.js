@@ -35,21 +35,23 @@ router.get(
   '/', async (req, res, next) => {
     try {
       const user = req.user.username;
-      const result =  await findUsers({ createdBy: user, username: { $ne: user } });
+      const result =  await findUsers({ createdBy: user });
       res.json(result);
     } catch (err) {
-      throw err;
+      next(err);
     }
   }
 );
 router.post(
   '/', async (req, res, next) => {
     try {
+      const username = req.user.username;
       const user = req.body;
+      user.createdBy = username;
       const result =  await createUsers(user);
       res.json(result);
     } catch (err) {
-      throw err;
+      next(err);
     }
   }
 );
@@ -60,7 +62,7 @@ router.get(
       const result =  await findUsers({ _id: id }, true);
       res.json(result);
     } catch (err) {
-      throw err;
+      next(err);
     }
   }
 );
@@ -72,7 +74,7 @@ router.put(
       const result =  await createUsers({ $set: updatedUser }, { _id: id });
       res.json(result);
     } catch (err) {
-      throw err;
+      next(err);
     }
   }
 );

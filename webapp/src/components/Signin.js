@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -10,8 +10,6 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import getConnect from './connect';
-import { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -32,12 +30,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function SignIn({ login, isLoggedIn }) {
+function SignIn({ login, isLoggedIn, history }) {
   const classes = useStyles();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [submit, setSubmit ] = useState(false);
-  const history = useHistory();
   const handleSubmit = () => {
     setSubmit(true)
     if(username && password) {

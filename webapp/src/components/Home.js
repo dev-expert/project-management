@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import getConnect from './connect';
-import { useHistory } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -22,8 +21,7 @@ const useStyles = makeStyles((theme) => ({
     height: 240,
   },
 }));
-function Home({ isLoggedIn }) {
-    const history = useHistory();
+function Home({ isLoggedIn, history }) {
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
     useEffect(() => {

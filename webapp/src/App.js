@@ -9,13 +9,19 @@ import Home from './components/Home';
 import Projects from './components/Projects';
 import CreateProject from './components/CreateProject';
 import Users from './components/Users';
+import CreateUser from './components/CreateUser';
 import Drawer from './components/Drawer';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import MomentUtils from "@date-io/moment";
+import {
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
 function App() {
   return (
     <Provider store={appStore}>
       <MuiThemeProvider>
+        <MuiPickersUtilsProvider utils={MomentUtils}>
         <Router>
         <Drawer>
           <ToastContainer/>
@@ -25,11 +31,13 @@ function App() {
             <Route path="/home" exact component={Home} />
             <Route path="/projects/create" exact component={CreateProject} />
             <Route path="/projects" exact component={Projects} />
+            <Route path="/users/create" exact component={CreateUser} />
             <Route path="/users" exact component={Users} />
             <Redirect from="*" to="/" />
           </Switch>
         </Drawer>
         </Router>
+        </MuiPickersUtilsProvider>
       </MuiThemeProvider>
     </Provider>
   );

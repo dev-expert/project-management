@@ -1,23 +1,25 @@
 import {
-    CREATE_PROJECT, GET_PROJECTS, GET_PROJECT, UPDATE_PROJECT
+    CREATE_USER, GET_USERS, GET_USER, UPDATE_USER
 } from '../config/actionNames';
 const initialState = {
-    project: {},
-    projects: [],
+    user: {},
+    users: [],
+    userAdded: false
 };
 function reducer(state = initialState, action) {
     switch (action.type) {
-        case GET_PROJECT:
-        case UPDATE_PROJECT:
-        case CREATE_PROJECT:
+        case GET_USER:
+        case UPDATE_USER:
+        case CREATE_USER:
             return {
                 ...state,
-                project: action.payload,
+                user: action.payload,
+                userAdded: true
             }
-        case GET_PROJECTS:
+        case GET_USERS:
             return {
                 ...state,
-                projects: action.payload,
+                users: action.payload,
             }
         default:
             return state;

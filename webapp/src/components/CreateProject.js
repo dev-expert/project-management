@@ -142,7 +142,7 @@ function CreateProject({ addProject, projectAdded, history, users: allUsers, get
       <main className={classes.layout}>
         <Paper className={classes.paper}>
           <Typography component="h1" variant="h4" align="center">
-            Checkout
+            Create Project
           </Typography>
           <Stepper activeStep={activeStep} className={classes.stepper}>
             {steps.map((label) => (

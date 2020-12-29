@@ -35,7 +35,7 @@ function SignUp({ register, signUp, isLoggedIn, history }) {
   const classes = useStyles();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [submit, setSubmit ] = useState(false);
   useEffect(() => {
@@ -48,8 +48,8 @@ function SignUp({ register, signUp, isLoggedIn, history }) {
   }, [signUp, history, isLoggedIn])
   const handleSubmit = () => {
     setSubmit(true)
-    if(username && password && !firstName) {
-      register({ username, password, firstName, lastName })
+    if(email && password && firstName) {
+      register({ email, password, firstName, lastName })
     }
   }
 
@@ -97,13 +97,13 @@ function SignUp({ register, signUp, isLoggedIn, history }) {
                 variant="outlined"
                 required
                 fullWidth
-                id="username"
-                label="Username"
-                name="username"
-                autoComplete="username"
-                onChange={e => setUsername(e.target.value)}
-                value={username}
-                error={submit && !username}
+                id="email"
+                label="Email"
+                name="email"
+                autoComplete="email"
+                onChange={e => setEmail(e.target.value)}
+                value={email}
+                error={submit && !email}
               />
             </Grid>
             <Grid item xs={12}>

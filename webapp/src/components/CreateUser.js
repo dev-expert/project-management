@@ -38,9 +38,9 @@ function CreateUser({ history, addUser, userAdded }) {
   const classes = useStyles();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [type, setType] = useState('client');
+  const [type, setType] = useState('EMPLOYEE');
   const [submit, setSubmit ] = useState(false);
   useEffect(() => {
     if(userAdded) {
@@ -49,8 +49,8 @@ function CreateUser({ history, addUser, userAdded }) {
   }, [userAdded, history])
   const handleSubmit = () => {
     setSubmit(true)
-    if(username && password && firstName && type) {
-      addUser({ username, password, firstName, lastName, role:type })
+    if(email && password && firstName && type) {
+      addUser({ email, password, firstName, lastName, role:type })
     }
   }
 
@@ -95,13 +95,13 @@ function CreateUser({ history, addUser, userAdded }) {
                 variant="outlined"
                 required
                 fullWidth
-                id="username"
-                label="Username"
-                name="username"
-                autoComplete="username"
-                onChange={e => setUsername(e.target.value)}
-                value={username}
-                error={submit && !username}
+                id="email"
+                label="Email"
+                name="email"
+                autoComplete="email"
+                onChange={e => setEmail(e.target.value)}
+                value={email}
+                error={submit && !email}
               />
             </Grid>
             <Grid item xs={12}>
@@ -132,8 +132,9 @@ function CreateUser({ history, addUser, userAdded }) {
                   label="Type"
                   error={submit && !type}
                 >
-                  <MenuItem value={'client'}>Client</MenuItem>
-                  <MenuItem value={'user'}>User</MenuItem>
+                  <MenuItem value={'CLIENT'}>Client</MenuItem>
+                  <MenuItem value={'EMPLOYEE'}>User</MenuItem>
+                  <MenuItem value={'MANAGER'}>MANAGER</MenuItem>
                 </Select>
               </FormControl>
             </Grid>

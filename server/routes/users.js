@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
-const UserModel = require('../models/user');
+var UserController = require('../controllers/users')
+const UserModel = require('../models').User;
+const userDetailsModel = require('../models').UserDetails;
 const createUsers = async (payload, filter = null, updateMany = false) => {
   try {
     let result = null;
@@ -8,10 +10,14 @@ const createUsers = async (payload, filter = null, updateMany = false) => {
       if(updateMany) {
         result = await UserModel.updateMany(filter, payload);
       } else {
-        result = await UserModel.updateOne(filter, payload);
+        result = await UserModel.update( payload, {where: filter}); 
       }
     } else {
-      result = await UserModel.create(payload);
+      const user = await UserModel.create(payload);
+      if(user){
+        payload.userId= user.id
+        result = await userDetailsModel.create(payload);
+      }
     }
     return result;
   } catch (err) {
@@ -22,32 +28,31 @@ const findUsers = async (filter={}, onlyOne=false) => {
   try {
     let result = null;
     if(onlyOne) {
-      result = await UserModel.findOne(filter);
+
+      result = await UserModel.findByPk(filter.id);
     } else {
-      result = await UserModel.find(filter);
+      result = await UserModel.findAll({
+        where: filter,
+        include : [
+          {
+            model: userDetailsModel,
+            as: "UserDetails"
+          }
+        ]
+      });
     }
     return result;
   } catch (err) {
     throw err;
   }
 }
-router.get(
-  '/', async (req, res, next) => {
-    try {
-      const user = req.user.username;
-      const result =  await findUsers({ createdBy: user });
-      res.json(result);
-    } catch (err) {
-      next(err);
-    }
-  }
-);
+router.get('/', UserController.findAll);
 router.post(
   '/', async (req, res, next) => {
     try {
-      const username = req.user.username;
+      const email = req.user.email;
       const user = req.body;
-      user.createdBy = username;
+      // user.createdBy = email;
       const result =  await createUsers(user);
       res.json(result);
     } catch (err) {
@@ -55,23 +60,14 @@ router.post(
     }
   }
 );
-router.get(
-  '/:id', async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const result =  await findUsers({ _id: id }, true);
-      res.json(result);
-    } catch (err) {
-      next(err);
-    }
-  }
-);
+router.get('/:id', UserController.findOne);
 router.put(
   '/:id', async (req, res, next) => {
     try {
+      
       const { id } = req.params;
       const updatedUser = req.body;
-      const result =  await createUsers({ $set: updatedUser }, { _id: id });
+      const result =  await createUsers( updatedUser , { id: id });
       res.json(result);
     } catch (err) {
       next(err);

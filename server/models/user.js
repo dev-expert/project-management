@@ -45,21 +45,38 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-    }
+      User.hasMany(models.UserDetails, {
+        foreignKey: "userId",
+      })
 
-    generateHash(password) {
-      return bcrypt.hash(password, bcrypt.genSaltSync(10))
-    }
-    isValidPassword(password) {
-      return bcrypt.compare(password, this.password);
+      User.hasMany(models.Project, {
+        foreignKey: "client"
+      })
+
+      User.hasMany(models.Project, {
+        foreignKey: "users"
+      })
     }
   };
   User.init({
     email: DataTypes.STRING,
     password: DataTypes.STRING,
     role: DataTypes.ENUM('ADMIN', 'MANAGER', 'EMPOLOYEE', 'CLIENT'),
-    active: DataTypes.BOOLEAN
+    active: DataTypes.BOOLEAN,
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE
   },{
+    hooks: {
+      beforeValidate: async(user, options) => {
+        var pass = () => {
+          return bcrypt.hash(user.password, bcrypt.genSaltSync(10))
+        }
+        if(user.password){
+          var hash =  await pass()
+          user.password = hash
+        }
+      },
+    },
     sequelize,
     modelName: 'User',
   });

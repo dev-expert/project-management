@@ -35,11 +35,11 @@ function Users({ history, getUsers, users }) {
   }
   return (
     <Container maxWidth="lg" className={classes.container}>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} justify='flex-end'>
         <Grid item xs={9} md={10} lg={10}>
           <Title>Users</Title>
         </Grid>
-        <Grid item xs={3} md={2} lg={2} justify='flex-end'>
+        <Grid item xs={3} md={2} lg={2}>
           <button onClick={createUser} className='btn btn-primary'>
           Create User
           </button>
@@ -50,7 +50,7 @@ function Users({ history, getUsers, users }) {
           <TableRow>
             <TableCell>#</TableCell>
             <TableCell>Name</TableCell>
-            <TableCell>Username</TableCell>
+            <TableCell>Email</TableCell>
             <TableCell>Date Created</TableCell>
             <TableCell>Type</TableCell>
             <TableCell>Actions</TableCell>
@@ -60,9 +60,9 @@ function Users({ history, getUsers, users }) {
           {users && users.length ? users.map((row, id) => (
               <TableRow key={row.id}>
                 <TableCell>{id+1}</TableCell>
-                <TableCell>{`${row.firstName ? row.firstName : ''} ${row.lastName ? row.lastName : ''}`}</TableCell>
-                <TableCell>{row.username}</TableCell>
-                <TableCell>{formatDate(row.date_created)}</TableCell>
+                <TableCell>{`${row.UserDetails[0] ? row.UserDetails[0].firstName : ''} ${row.UserDetails[0] ? row.UserDetails[0].lastName : ''}`}</TableCell>
+                <TableCell>{row.email}</TableCell>
+                <TableCell>{formatDate(row.createdAt)}</TableCell>
                 <TableCell>{row.role}</TableCell>
                 <TableCell></TableCell>
               </TableRow>

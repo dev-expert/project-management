@@ -32,13 +32,13 @@ const useStyles = makeStyles((theme) => ({
 
 function SignIn({ login, isLoggedIn, history }) {
   const classes = useStyles();
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [submit, setSubmit ] = useState(false);
   const handleSubmit = () => {
     setSubmit(true)
-    if(username && password) {
-      login({ username, password })
+    if(email && password) {
+      login({ email, password })
     }
   }
   useEffect(() => {
@@ -62,14 +62,14 @@ function SignIn({ login, isLoggedIn, history }) {
             margin="normal"
             required
             fullWidth
-            id="username"
-            label="Username"
-            name="username"
-            autoComplete="username"
+            id="email"
+            label="Email"
+            name="email"
+            autoComplete="email"
             autoFocus
-            onChange={e => setUsername(e.target.value)}
-            value={username}
-            error={submit && !username}
+            onChange={e => setEmail(e.target.value)}
+            value={email}
+            error={submit && !email}
           />
           <TextField
             variant="outlined"

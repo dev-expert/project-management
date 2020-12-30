@@ -5,7 +5,7 @@ import getConnect from './connect';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import { Deposits, Chart } from './Common';
+import { Deposits, Chart } from '.';
 const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(4),

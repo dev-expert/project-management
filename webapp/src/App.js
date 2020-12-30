@@ -3,15 +3,16 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-d
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { Provider } from 'react-redux';
 import appStore from './config/store';
-import Login from './components/Signin';
-import Signup from './components/Signup';
-import Home from './components/Home';
-import Projects from './components/Projects';
-import CreateProject from './components/CreateProject';
-import Users from './components/Users';
-import CreateUser from './components/CreateUser';
-import Drawer from './components/Drawer';
-import Timesheet from './components/timesheet'
+import Login from './components/Auth/Signin';
+import Signup from './components/Auth/Signup';
+import Home from './components/Common/Home';
+import Projects from './components/Project/Projects';
+import CreateProject from './components/Project/CreateProject';
+import Users from './components/User/Users';
+import TimeSheet from './components/Task/TimeSheet';
+import TimeSheetUI from './components/timesheet'
+import CreateUser from './components/User/CreateUser';
+import Drawer from './components/Layouts/Drawer';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import MomentUtils from "@date-io/moment";
@@ -28,13 +29,15 @@ function App() {
           <ToastContainer/>
           <Switch>
             <Route path="/" exact component={Login} />
-            <Route path="/timesheet" exact component={Timesheet} />
+            <Route path="/timesheet" exact component={TimeSheet} />
             <Route path="/signup" exact component={Signup} />
             <Route path="/home" exact component={Home} />
             <Route path="/projects/create" exact component={CreateProject} />
             <Route path="/projects" exact component={Projects} />
             <Route path="/users/create" exact component={CreateUser} />
             <Route path="/users" exact component={Users} />
+            <Route path="/timesheet-ui" exact component={TimeSheetUI} />
+
             <Redirect from="*" to="/" />
           </Switch>
         </Drawer>

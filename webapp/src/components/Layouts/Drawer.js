@@ -13,8 +13,8 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import getConnect from './connect';
-import { Copyright } from './Common';
+import getConnect from '../Common/connect';
+import { Copyright } from '../Common';
 import ListItem from '@material-ui/core/ListItem';
 import Link from '@material-ui/core/Link'
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -119,6 +119,14 @@ export const mainListItems = (
         <ShoppingCartIcon />
       </ListItemIcon>
       <ListItemText primary="Projects" />
+    </ListItem>
+    </Link>
+    <Link href="/timesheet">
+    <ListItem button>
+      <ListItemIcon>
+        <PersonIcon />
+      </ListItemIcon>
+      <ListItemText primary="TimeSheet" />
     </ListItem>
     </Link>
   </div>

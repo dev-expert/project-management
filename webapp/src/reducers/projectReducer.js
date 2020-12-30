@@ -10,6 +10,10 @@ function reducer(state = initialState, action) {
     switch (action.type) {
         case GET_PROJECT:
         case UPDATE_PROJECT:
+            return {
+                ...state,
+                project: action.payload,
+            }
         case CREATE_PROJECT:
             return {
                 ...state,

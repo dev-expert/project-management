@@ -11,14 +11,14 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import getConnect from './connect';
+import getConnect from '../Common/connect';
 import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import { formatDate } from '../config/helper';
+import { formatDate } from '../../config/helper';
 
 const useStyles = makeStyles((theme) => ({
   paper: {

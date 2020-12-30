@@ -121,6 +121,14 @@ export const mainListItems = (
       <ListItemText primary="Projects" />
     </ListItem>
     </Link>
+    <Link href="/timesheet">
+    <ListItem button>
+      <ListItemIcon>
+        <PersonIcon />
+      </ListItemIcon>
+      <ListItemText primary="TimeSheet" />
+    </ListItem>
+    </Link>
   </div>
 );
 function Dashboard({ isLoggedIn, logout, children, history }) {

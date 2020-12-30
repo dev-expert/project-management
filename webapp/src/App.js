@@ -9,6 +9,8 @@ import Home from './components/Home';
 import Projects from './components/Projects';
 import CreateProject from './components/CreateProject';
 import Users from './components/Users';
+import TimeSheet from './components/TimeSheet';
+
 import CreateUser from './components/CreateUser';
 import Drawer from './components/Drawer';
 import { ToastContainer } from 'react-toastify';
@@ -33,6 +35,8 @@ function App() {
             <Route path="/projects" exact component={Projects} />
             <Route path="/users/create" exact component={CreateUser} />
             <Route path="/users" exact component={Users} />
+            <Route path="/timesheet" exact component={TimeSheet} />
+
             <Redirect from="*" to="/" />
           </Switch>
         </Drawer>

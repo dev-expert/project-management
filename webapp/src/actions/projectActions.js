@@ -30,7 +30,6 @@ export function addProject(payload) {
         axios
             .post(`${PATH}`, payload)
             .then(response => {
-                debugger
                 dispatch({ type: CREATE_PROJECT, payload: response.data });
                 toast.success('Project created Successfully')
             })

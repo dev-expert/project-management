@@ -1,6 +1,5 @@
 import { Button, Checkbox, Container, FormControl, FormControlLabel, InputLabel, MenuItem, Select, TextField, IconButton  } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete"
-import { DataGrid } from '@material-ui/data-grid';
 import Table from '@material-ui/core/Table';  
 import TableBody from '@material-ui/core/TableBody';  
 import TableCell from '@material-ui/core/TableCell';  
@@ -9,14 +8,10 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';  
 import Paper from '@material-ui/core/Paper';  
 import { PureComponent } from "react";
-import './common.css';
-import axios from 'axios' 
 import moment from "moment";
 import React  from 'react';
-
+import getConnect from '../Common/connect';
 class User extends PureComponent {
-
-
     constructor(props) {
         super(props)
         this.state= {
@@ -55,16 +50,9 @@ class User extends PureComponent {
           
     }
 
-    async componentDidMount() {
-        var projectList= await this.GetProjectList();
-        var taskList= await this.GetTaskList()
-        this.setState({
-            tasks: taskList.data,
-            projects: projectList.data
-        })
-        debugger;
-
-        
+    componentDidMount() {
+        this.props.getProjects();
+        this.props.getTasks();
         let startTime= localStorage.getItem('startTime')
         let currentTime= new Date().getTime();
         let clocked_time = Math.floor((currentTime - Number(startTime))/1000)
@@ -84,23 +72,7 @@ class User extends PureComponent {
         }
        
     }
-
-    GetTaskList = ()=>{
-        return axios.get(`http://localhost:3000/api/task?user_id=${this.state.user_id}`)
-    }
-
-    GetProjectList = ()=>{
-        return axios.get('http://localhost:3000/api/project')
-    }
-
-    CreateTask = (payLoad)=>{
-        return axios.post('http://localhost:3000/task',payLoad)
-    }
     
-    DeleteTask = (id) => {
-        return axios.delete(`http://localhost:3000/task/${id}`)
-    }
-
     formatTime = (timer) => {
         const getSeconds = `0${(timer % 60)}`.slice(-2)
         const minutes = `${Math.floor(timer / 60)}`
@@ -115,7 +87,7 @@ class User extends PureComponent {
         const name = event.target.name;
         var value;
        
-        if(name == "isBillable"){
+        if(name === "isBillable"){
             value = event.target.checked;
         }else{
             value = event.target.value;
@@ -123,25 +95,18 @@ class User extends PureComponent {
         let state= this.state
         let errors= this.state.errors
         state[name]= value
-        if(name == "description" && value !== ''){
+        if(name === "description" && value !== ''){
             errors[name]= ''
         }
-        if(name == "project" && value !== 0){
+        if(name === "project" && value !== 0){
             errors[name]= ''
         }
         state.errors= errors
         this.setState(state)
     }
 
-    handleDelete = async (id) => {
-        var result = await this.DeleteTask(id)
-        console.log(result)
-        if(result && result.status === 200){
-            let taskList= await this.GetTaskList()
-            this.setState({
-                tasks: taskList.data
-            })
-        }
+    handleDelete = (id) => {
+        this.props.deleteTask(id);
     }
 
     startTimer () {
@@ -168,8 +133,8 @@ class User extends PureComponent {
             let description_error = '';
             let project_error = '';
 
-            description_error= this.state.description == '' ? 'Add description' : ''
-            project_error= this.state.project == 0 ? 'Select Project' : ''
+            description_error= this.state.description === '' ? 'Add description' : ''
+            project_error= this.state.project === 0 ? 'Select Project' : ''
 
             this.setState({
                 errors: {
@@ -178,7 +143,7 @@ class User extends PureComponent {
                 }
             })
 
-            if(this.state.description == '' || this.state.project == 0){
+            if(this.state.description === '' || this.state.project === 0){
                 return false;
             }
             clearInterval(this.intervalID)
@@ -187,7 +152,7 @@ class User extends PureComponent {
                 istracking: false,
                 endTime: currentTime
             })
-            localStorage.clear()
+            localStorage.removeItem("startTime");
             setTimeout( async () => {
                 let payLoad= {
                     "description": this.state.description,
@@ -198,34 +163,23 @@ class User extends PureComponent {
                     "is_billable": this.state.isBillable,
                     "user_id": this.state.user_id
                 }
-               let result = await this.CreateTask(payLoad);
-               if(result.status && result.status == 201){
-                let taskList= await this.GetTaskList()
-                this.setState({
-                    tasks: taskList.data,
-                    clockedTime: 0,
-                    project: 0,
-                    description: ''
-                })
-               }
+               this.props.addTask(payLoad);
             }, 500);
         }
     }
 
     render() {
-     let description= this.state.description
-     let project= this.state.project
-     let isBillable= this.state.isBillable
-     let clockedTime= this.state.clockedTime
+        const { tasks, projects } = this.props;
+        const { clockedTime, errors } = this.state;
         return (
             <div className="main-wrapper">
                 <Container>
                 <div className="head-wrapper">
                     <div className="field-wrapper">
                         <TextField label="Description" name="description" onChange={(e) => this.handleChange(e)} style={{ marginRight: '1rem' }} />
-                        {this.state.errors.description != '' && (
+                        {errors.description !== '' && (
                         <span className="error">
-                            {this.state.errors.description}
+                            {errors.description}
                         </span>)}
                     </div>
                     
@@ -233,14 +187,14 @@ class User extends PureComponent {
                         <InputLabel id="demo-simple-select-label">Project</InputLabel>
                         <Select labelId="demo-simple-select-label" id="demo-simple-select" name="project" onChange={(e) => this.handleChange(e)}>
                         {
-                            this.state.projects.map((project, index) => {
+                            projects && projects.length ? projects.map((project, index) => {
                                 return <MenuItem key={index} value={project.id}>{project.name}</MenuItem>
-                            })
+                            }) : null
                         }
                         </Select>
-                        {this.state.errors.project != '' && (
+                        {errors.project !== '' && (
                         <span className="error">
-                            {this.state.errors.project}
+                            {errors.project}
                         </span>)}
                     </FormControl>
                     <FormControlLabel
@@ -277,18 +231,18 @@ class User extends PureComponent {
                             </TableRow>  
                         </TableHead>
                         <TableBody>  
-                            {  
-                            this.state.tasks.map((task, index) => {  
+                            { tasks && tasks.length ? 
+                                tasks.map((task, index) => {  
                                 return <TableRow key={index}>  
                                             <TableCell component="th" scope="row">{task.description}</TableCell>  
-                                            <TableCell align="left">{task.Project ? task.Project.project_name : ''}{(task.Project && task.Project.Client) ? ' - '+task.Project.Client.client_name : ''}</TableCell>  
+                                            <TableCell align="left">{task.Project ? task.Project.name : ''}{(task.Project && task.Project.client) ? ' - '+task.Project.client: ''}</TableCell>  
                                             <TableCell align="left">{moment(task.start_datetime).format('lll')}</TableCell>  
                                             <TableCell align="left">{moment(task.end_datetime).format('lll')}</TableCell>  
                                             <TableCell align="left">{this.formatTime(task.clocked_time)}</TableCell>
                                             <TableCell align="left">{task.is_billable ? 'Y' : 'N'}</TableCell>  
                                             <TableCell align="left"><IconButton aria-label="delete" onClick={ () => this.handleDelete(task.id) }><DeleteIcon /></IconButton></TableCell>  
                                         </TableRow>  
-                            })  
+                            })  : null
                             }  
                         </TableBody>  
                     </Table>  
@@ -300,4 +254,4 @@ class User extends PureComponent {
     }
 }
 
-export default User
+export default getConnect(User);

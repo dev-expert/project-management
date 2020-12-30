@@ -3,16 +3,16 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-d
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { Provider } from 'react-redux';
 import appStore from './config/store';
-import Login from './components/Signin';
-import Signup from './components/Signup';
-import Home from './components/Home';
-import Projects from './components/Projects';
-import CreateProject from './components/CreateProject';
-import Users from './components/Users';
-import TimeSheet from './components/TimeSheet';
+import Login from './components/Auth/Signin';
+import Signup from './components/Auth/Signup';
+import Home from './components/Common/Home';
+import Projects from './components/Project/Projects';
+import CreateProject from './components/Project/CreateProject';
+import Users from './components/User/Users';
+import TimeSheet from './components/Task/TimeSheet';
 
-import CreateUser from './components/CreateUser';
-import Drawer from './components/Drawer';
+import CreateUser from './components/User/CreateUser';
+import Drawer from './components/Layouts/Drawer';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import MomentUtils from "@date-io/moment";

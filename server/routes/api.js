@@ -1,12 +1,12 @@
 var express = require('express');
 var router = express.Router();
-var userRouter = require('./users');
-var projectRouter = require('./projects');
-var task =  require('./task');
+var usersRouter = require('./users');
+var projectsRouter = require('./projects');
+var tasksRouter =  require('./tasks');
 
-router.use('/users', userRouter);
-router.use('/project', projectRouter);
-router.use('/task', task);
+router.use('/users', usersRouter);
+router.use('/projects', projectsRouter);
+router.use('/tasks', tasksRouter);
 
 
 module.exports = router;

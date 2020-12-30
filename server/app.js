@@ -4,27 +4,16 @@ var dottenv = require('dotenv');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var passport = require('passport');
-// var mongoose = require('mongoose');
 var cors = require('cors');
 dottenv.config();
-var dbConn = require('./models/index');
-// const { mongoUri } = require('./env');
-// mongoose.connect(mongoUri, {
-//     useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true
-// }, (err) => {
-//     if(err) {
-//         debug('MongoDB Connection failed', err)
-//     } else {
-//         debug('MongoDB Connected Sucessfully')
-//     }
-// })
+var dbConn = require('./models');
 
 //Connect Database
 dbConn.sequelize.sync().then(() => {
-    console.log("db connected");
-  }).catch(() => {
-    console.log('Error in db connection')
-  })
+  debug("Database connected");
+}).catch((err) => {
+  debug(err);
+})
 require('./auth/auth');
 var indexRouter = require('./routes/index');
 var apiRouter = require('./routes/api');

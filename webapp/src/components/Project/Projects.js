@@ -4,12 +4,12 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { Title } from './Common';
-import getConnect from './connect';
+import { Title } from '../Common';
+import getConnect from '../Common/connect';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-import { formatDate } from '../config/helper';
+import { formatDate } from '../../config/helper';
 
 const useStyles = makeStyles((theme) => ({
   container: {

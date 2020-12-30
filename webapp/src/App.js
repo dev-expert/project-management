@@ -11,6 +11,7 @@ import CreateProject from './components/CreateProject';
 import Users from './components/Users';
 import CreateUser from './components/CreateUser';
 import Drawer from './components/Drawer';
+import Timesheet from './components/timesheet'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import MomentUtils from "@date-io/moment";
@@ -27,6 +28,7 @@ function App() {
           <ToastContainer/>
           <Switch>
             <Route path="/" exact component={Login} />
+            <Route path="/timesheet" exact component={Timesheet} />
             <Route path="/signup" exact component={Signup} />
             <Route path="/home" exact component={Home} />
             <Route path="/projects/create" exact component={CreateProject} />

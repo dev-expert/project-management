@@ -5,6 +5,8 @@ const initialState = {
     project: {},
     projects: [],
     projectAdded: false,
+    projectUpdated: false,
+
 };
 function reducer(state = initialState, action) {
     switch (action.type) {
@@ -13,6 +15,8 @@ function reducer(state = initialState, action) {
             return {
                 ...state,
                 project: action.payload,
+                projectAdded: false,
+                projectUpdated:true
             }
         case CREATE_PROJECT:
             return {

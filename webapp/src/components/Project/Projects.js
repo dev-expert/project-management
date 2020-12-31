@@ -10,6 +10,9 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import { formatDate } from '../../config/helper';
+import CreateIcon from '@material-ui/icons/Create';
+import DeleteIcon from "@material-ui/icons/Delete"
+import { IconButton  } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -26,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     height: 240,
   },
 }));
-function Projects({ projects, getProjects, history }) {
+function Projects({ projects, getProjects, history ,deleteProject}) {
   const classes = useStyles();
   useEffect(() => {
     getProjects();
@@ -34,6 +37,16 @@ function Projects({ projects, getProjects, history }) {
   const createProject = () => {
     history.push('/projects/create');
   }
+  const editProject  = (id) => {
+    history.push({
+    pathname: '/project/edit',
+    state: { id: id }
+});
+
+}
+const handelDelete  = (id) => {
+  deleteProject(id)
+}
   return (
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3}>
@@ -69,7 +82,8 @@ function Projects({ projects, getProjects, history }) {
                 <TableCell>{formatDate(row.endDate)}</TableCell>
                 <TableCell></TableCell>
                 <TableCell></TableCell>
-                <TableCell></TableCell>
+                <TableCell align="left"><IconButton aria-label="edit" onClick={e => editProject(row.id)}><CreateIcon /></IconButton>
+                <IconButton aria-label="edit" onClick={e => handelDelete(row.id)}><DeleteIcon /></IconButton></TableCell>  
               </TableRow>
             )) : null}
           </TableBody>

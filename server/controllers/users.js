@@ -1,5 +1,6 @@
 const UserModel = require('../models').User;
 const createUsers = async (payload, filter = null, updateMany = false) => {
+
     try {
       let result = null;
       if (filter !== null) {
@@ -23,6 +24,7 @@ const createUsers = async (payload, filter = null, updateMany = false) => {
       if (onlyOne) {
         result = await UserModel.findByPk(filter.id);
       } else {
+
         result = await UserModel.findAll({
           where: filter,
         });

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CREATE_PROJECT, GET_PROJECTS, GET_PROJECT, UPDATE_PROJECT } from '../config/actionNames';
+import { CREATE_PROJECT, GET_PROJECTS, GET_PROJECT, UPDATE_PROJECT,DELETE_PROJECT } from '../config/actionNames';
 import { api } from '../config/env';
 import { toast } from 'react-toastify';
 const PATH = `${api}api/projects`;
@@ -32,6 +32,9 @@ export function addProject(payload) {
             .then(response => {
                 dispatch({ type: CREATE_PROJECT, payload: response.data });
                 toast.success('Project created Successfully')
+                setTimeout(()=>{
+                    dispatch({ type:UPDATE_PROJECT, payload: response.data });
+                },500)
             })
             .catch(err => {
             });
@@ -44,6 +47,21 @@ export function updateProject(id, payload) {
             .then(response => {
                 dispatch({ type: UPDATE_PROJECT, payload: response.data });
                 toast.success('Project updated Successfully')
+
+            })
+            .catch(err => {
+            });
+    };
+}
+
+export function deleteProject(id) {
+    return dispatch => {
+        axios
+            .delete(`${PATH}/${id}`)
+            .then(response => {
+                dispatch({ type: DELETE_PROJECT, payload: response.data });
+                toast.success('Project deleted Successfully')
+                dispatch(getProjects());
             })
             .catch(err => {
             });

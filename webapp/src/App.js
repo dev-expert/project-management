@@ -7,6 +7,8 @@ import Login from './components/Auth/Signin';
 import Signup from './components/Auth/Signup';
 import Home from './components/Common/Home';
 import Projects from './components/Project/Projects';
+import EditProject from './components/Project/EditProject';
+
 import CreateProject from './components/Project/CreateProject';
 import Users from './components/User/Users';
 import TimeSheet from './components/Task/TimeSheet';
@@ -35,6 +37,7 @@ function App() {
             <Route path="/signup" exact component={Signup} />
             <Route path="/home" exact component={Home} />
             <Route path="/projects/create" exact component={CreateProject} />
+            <Route path="/project/edit" exact component={EditProject} />
             <Route path="/projects" exact component={Projects} />
             <Route path="/users/create" exact component={CreateUser} />
             <Route path="/users/edit" exact component={editUser} />

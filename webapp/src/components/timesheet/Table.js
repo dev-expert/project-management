@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles,styled } from '@material-ui/core/styles';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -19,10 +19,11 @@ const useStyles = makeStyles({
 	},
 });
 
-const Space = () => {
-	return (
-		<>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</>)
-}
+const FlexRow = styled('div')({
+  display:'flex',
+  justifyContent:'space-between'
+});
+
 
 export const BorderedCell = withStyles((theme) => ({
 
@@ -69,11 +70,8 @@ export default function BasicTable() {
 					<TableRow>
 						<StyledTableCell>Today</StyledTableCell>
 						<StyledTableCell align="right">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</StyledTableCell>
-						<StyledTableCell align="right">Non Billable: 03:00</StyledTableCell>
-						<StyledTableCell align="right">&nbsp;</StyledTableCell>
-						<StyledTableCell align="right">Billable: 05:30</StyledTableCell>
-						<StyledTableCell align="right">Total : 8:30</StyledTableCell>
-						<StyledTableCell align="right"><CreateIcon /></StyledTableCell>
+						<StyledTableCell align="right">Non Billable: 03:00 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</StyledTableCell>
+						<StyledTableCell align="right"><FlexRow>Billable: 05:30  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total : 8:30 <CreateIcon /></FlexRow></StyledTableCell>
 
 					</TableRow>
 				</TableHead>
@@ -85,13 +83,12 @@ export default function BasicTable() {
 							<BorderedCell component="th" align="left" scope="row">
 								{row.name}
 							</BorderedCell>
-							<BorderedCell align="left">{row.description} &nbsp;&nbsp;&nbsp;&nbsp;<CreateIcon /> </BorderedCell>
-							<BorderedCell align="right">{row.duration} &nbsp;&nbsp;&nbsp;&nbsp;<DateRangeIcon /></BorderedCell>
-							<BorderedCell align="right"><Space />
-								<Space /><Space />
-								<Space />{row.total} &nbsp;&nbsp;&nbsp;&nbsp; <PlayArrowOutlinedIcon />
-							</BorderedCell>
-							<BorderedCell align="right"><MoreVertOutlinedIcon /></BorderedCell>
+							<BorderedCell align="left"><FlexRow>{row.description} <CreateIcon /></FlexRow></BorderedCell>
+							<BorderedCell align="right"><FlexRow>{row.duration} <DateRangeIcon /> {row.total}  <PlayArrowOutlinedIcon />
+								<MoreVertOutlinedIcon />
+							 </FlexRow>
+							 </BorderedCell>
+
 						</TableRow>
 					))}
 				</TableBody>

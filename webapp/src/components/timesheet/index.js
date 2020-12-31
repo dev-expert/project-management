@@ -3,9 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import TableContainer from '@material-ui/core/TableContainer';
 
 import DollarIcon from '@material-ui/icons/AttachMoney'
-import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import StartIcon from '@material-ui/icons/PlayArrow';
 import ListIcon from '@material-ui/icons/List';
 import Paper from '@material-ui/core/Paper';
@@ -17,8 +15,9 @@ import TimeSheetTable from './Table';
 import ControlPointOutlinedIcon from '@material-ui/icons/ControlPointOutlined';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
-import CreateIcon from '@material-ui/icons/Create';
 import TableRow from '@material-ui/core/TableRow';
+
+
 
 const BorderedCell = withStyles((theme) => ({
 	head:{
@@ -48,14 +47,11 @@ const Index = () => {
 							</BorderedCell>
 
 							<BorderedCell align="center">
-								<Input
-									id="standard-adornment-weight"
-									value=""
-									onChange=""
-									placeholder="What are you working"
-									endAdornment={<InputAdornment position="end"><DescriptionIcon /></InputAdornment>}
-
-								/>
+								<div
+								style={{display:'flex',justifyContent:'space-between'}}
+								>
+									What are you working  <DescriptionIcon />
+									</div>
 							</BorderedCell>
 							<BorderedCell align="center">00:00</BorderedCell>
 							<BorderedCell align="center"><Button variant="contained"

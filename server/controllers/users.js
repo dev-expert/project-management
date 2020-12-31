@@ -24,6 +24,8 @@ Methods.findAll = async (req, res, next) => {
         const condition= userType ? { type: userType } : ''
         var result = await UserModel.findAll({
             where: condition,
+            where: {active:true},
+
             include : [
                 {
                   model: userDetailsModel,

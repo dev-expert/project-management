@@ -12,6 +12,8 @@ import Users from './components/User/Users';
 import TimeSheet from './components/Task/TimeSheet';
 
 import CreateUser from './components/User/CreateUser';
+import editUser from './components/User/EditUser';
+
 import Drawer from './components/Layouts/Drawer';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -34,9 +36,9 @@ function App() {
             <Route path="/projects/create" exact component={CreateProject} />
             <Route path="/projects" exact component={Projects} />
             <Route path="/users/create" exact component={CreateUser} />
+            <Route path="/users/edit" exact component={editUser} />
             <Route path="/users" exact component={Users} />
             <Route path="/timesheet" exact component={TimeSheet} />
-
             <Redirect from="*" to="/" />
           </Switch>
         </Drawer>

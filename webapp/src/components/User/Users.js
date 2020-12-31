@@ -76,7 +76,7 @@ function Users({ history, getUsers, users,deleteUser }) {
           {users && users.length ? users.map((row, id) => (
               <TableRow key={row.id}>
                 <TableCell>{id+1}</TableCell>
-                <TableCell>{`${row.UserDetails[0] ? row.UserDetails[0].firstName : ''} ${row.UserDetails[0] ? row.UserDetails[0].lastName : ''}`}</TableCell>
+                <TableCell>{row.firstName} {row.lastName}</TableCell>
                 <TableCell>{row.email}</TableCell>
                 <TableCell>{formatDate(row.createdAt)}</TableCell>
                 <TableCell>{row.role}</TableCell>

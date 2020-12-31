@@ -27,7 +27,10 @@ module.exports = (sequelize, DataTypes) => {
     createdBy: DataTypes.INTEGER,
     repliedToCommentId: DataTypes.INTEGER,
     comment: DataTypes.TEXT,
-    isDeleted: DataTypes.ENUM('Y','N'),
+    isDeleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE
   },{

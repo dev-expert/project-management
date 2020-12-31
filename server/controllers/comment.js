@@ -14,7 +14,7 @@ Methods.create = async (req, res, next) => {
 
 Methods.findAll = async (req, res, next) => {
     try{
-        const condition= { isDeleted: 'N' }
+        const condition= { isDeleted: false }
         var result = await CommentModel.findAll({
             where: condition,
             include : [
@@ -33,7 +33,7 @@ Methods.findAll = async (req, res, next) => {
 
 Methods.findOne = async (req, res, next) => {
     try{
-        const condition= { isDeleted: 'N' }
+        const condition= { isDeleted: false }
         var result = await CommentModel.findByPk(req.params.id,
             {
                 where: condition,

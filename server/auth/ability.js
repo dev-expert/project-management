@@ -1,8 +1,8 @@
 
-const { AbilityBuilder, Ability } = require('@casl/ability')
+const { AbilityBuilder, Ability } = require('@casl/ability');
 
 function defineAbilitiesFor (role) {
-  const { rules, can } = AbilityBuilder.extract()
+  const { rules, can } = new AbilityBuilder();
   switch(role) {
     case 'ADMIN':
     case 'MANAGER':
@@ -11,7 +11,7 @@ function defineAbilitiesFor (role) {
     case 'EMPOLOYEE':
     case 'CLIENT':
       can(['read', 'write', 'update', 'delete'], ['tasks'])
-      can(['read'], ['projects'])
+      can(['read'], ['projects', 'users'])
     break;
     default:
       break;

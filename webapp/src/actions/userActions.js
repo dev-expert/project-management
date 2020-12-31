@@ -1,8 +1,13 @@
 import axios from 'axios';
-import { CREATE_USER, GET_USERS, GET_USER, UPDATE_USER ,DELETE_USER} from '../config/actionNames';
+import { CREATE_USER, GET_USERS, GET_USER, UPDATE_USER ,DELETE_USER, USER_ACTION_PERFORMED  } from '../config/actionNames';
 import { api } from '../config/env';
 import { toast } from 'react-toastify';
 const PATH = `${api}api/users`;
+function userActionPerformed(dispatch) {
+    setTimeout(()=>{
+        dispatch({ type: USER_ACTION_PERFORMED });
+    }, 500)
+}
 export function getUsers() {
     return dispatch => {
         axios
@@ -30,11 +35,9 @@ export function addUser(payload) {
         axios
             .post(`${PATH}`, payload)
             .then(response => {
+                toast.success('User created Successfully');
                 dispatch({ type: CREATE_USER, payload: response.data });
-                toast.success('User created Successfully')
-                setTimeout(()=>{
-                    dispatch({ type:UPDATE_USER, payload: response.data });
-                },500)
+                userActionPerformed(dispatch);
             })
             .catch(err => {
                 toast.error('Unable to create User')
@@ -46,8 +49,9 @@ export function updateUser(id, payload) {
         axios
             .put(`${PATH}/${id}`, payload)
             .then(response => {
+                toast.success('User updated Successfully');
                 dispatch({ type: UPDATE_USER, payload: response.data });
-                toast.success('User updated Successfully')
+                userActionPerformed(dispatch);
             })
             .catch(err => {
                 toast.error('Unable to create User')
@@ -60,9 +64,10 @@ export function deleteUser(id) {
         axios
             .delete(`${PATH}/${id}`)
             .then(response => {
+                toast.success('User deleted Successfully');
                 dispatch({ type: DELETE_USER, payload: response.data });
-                toast.success('User deleted Successfully')
                 dispatch(getUsers());
+                userActionPerformed(dispatch);
             })
             .catch(err => {
             });

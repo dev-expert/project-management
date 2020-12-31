@@ -1,38 +1,61 @@
 const UserModel = require('../models').User;
-const userDetailsModel = require('../models').UserDetails;
-// const { validationResult } = require('express-validator');
+const createUsers = async (payload, filter = null, updateMany = false) => {
+    try {
+      let result = null;
+      if (filter !== null) {
+        if (updateMany) {
+          result = await UserModel.updateMany(filter, payload);
+        } else {
+          result = await UserModel.update(payload, { where: filter });
+        }
+      } else {
+        payload.active = true;
+        result = await UserModel.create(payload);
+      }
+      return result;
+    } catch (err) {
+      throw err;
+    }
+  }
+  const findUsers = async (filter = {}, onlyOne = false) => {
+    try {
+      let result = null;
+      if (onlyOne) {
+        result = await UserModel.findByPk(filter.id);
+      } else {
+        result = await UserModel.findAll({
+          where: filter,
+        });
+      }
+      return result;
+    } catch (err) {
+      throw err;
+    }
+  }
 
 const Methods = {};
 
-// Methods.create = async (req,res) => {
-//     try{
-//         const errors = validationResult(req);
-//         if (!errors.isEmpty()) {
-//           return res.status(400).json({ errors: errors.array() });
-//         }
-//         var result = await UserModel.create(req.body)
-//         res.status(201).send(result)
-//     }
-//     catch(error){
-//         res.status(500).send(error.message)
-//     }
-// }
+Methods.create = async (req,res, next) => {
+    try {
+        const { id } = req.user;
+        const user = req.body;
+        user.createdBy = id;
+        const result = await createUsers(user);
+        res.status(201).json(result);
+    } catch (err) {
+        next(err);
+    }
+}
 
 Methods.findAll = async (req, res, next) => {
     try{
-        const userType= req.query.user_type
-        const condition= userType ? { type: userType } : ''
-        var result = await UserModel.findAll({
-            where: condition,
-            where: {active:true},
-
-            include : [
-                {
-                  model: userDetailsModel,
-                  as: "UserDetails"
-                }
-              ]
-            })
+        const { role } = req.query;
+        const { id } = req.user;
+        const filter =  { active:true, createdBy: id };
+        if(role) {
+          filter.role = role;
+        }
+        var result = await findUsers(filter)
         return res.json(result);
     }
     catch(error){
@@ -42,15 +65,8 @@ Methods.findAll = async (req, res, next) => {
 
 Methods.findOne = async (req, res, next) => {
     try{
-        var result = await UserModel.findByPk(req.params.id,
-            {
-                include : [
-                    {
-                      model: userDetailsModel,
-                      as: "UserDetails"
-                    }
-                  ]
-            })
+        const { id } = req.params;
+        var result = await findUsers({ id }, true)
         res.json(result);
     }
     catch(error){
@@ -58,47 +74,25 @@ Methods.findOne = async (req, res, next) => {
     }
 }
 
-// Methods.update = async (req, res) => {
-//     try{
-//         const id = req.params.id;
-//         var result = await User.update(req.body, {where: { id: id }})
-//         console.log("result",result)
-//         if(result == 1){
-//             res.send({
-//                 message: "Updated"
-//             })
-//         }else{
-//             res.send({
-//                 message: "Cannot Update"
-//             })
-//         }
-//     }
-//     catch(error){
-//         res.status(500).send(error.message)
-//     }
-// }
+Methods.update = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const updatedUser = req.body;
+        const result = await createUsers(updatedUser, { id });
+        res.json(result);
+    } catch (err) {
+        next(err);
+    }
+}
 
-// Methods.delete = async (req, res) => {
-//     try{
-//         const id = req.params.id
-//         var result = await User.destroy({
-//                 where: {
-//                     id: id
-//                 }
-//             })
-//             if (result == 1) {
-//                 res.send({
-//                     message: "Deleted successfully!"
-//                 });
-//             } else {
-//                 res.send({
-//                     message: `Cannot delete id=${id}`
-//                 });
-//             }
-//     }
-//     catch(error){
-//         res.status(500).send(error.message)
-//     }
-// }
+Methods.delete = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const result = await createUsers({ active: false }, { id });
+        res.json(result);
+    } catch (err) {
+        next(err);
+    }
+}
 
 module.exports = Methods;

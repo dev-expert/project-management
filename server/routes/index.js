@@ -27,16 +27,13 @@ router.post(
 
             return next(error);
           }
-
+          const userDetails = { id: user.id, email: user.email, role: user.role };
           req.login(
-            user,
+            userDetails,
             { session: false },
             async (error) => {
               if (error) return next(error);
-
-              const body = { id: user.id, email: user.email };
-              const token = jwt.sign({ user: body }, jwtSecret);
-
+              const token = jwt.sign({ user: userDetails }, jwtSecret);
               return res.json({ token });
             }
           );

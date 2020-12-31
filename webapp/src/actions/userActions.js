@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CREATE_USER, GET_USERS, GET_USER, UPDATE_USER } from '../config/actionNames';
+import { CREATE_USER, GET_USERS, GET_USER, UPDATE_USER ,DELETE_USER} from '../config/actionNames';
 import { api } from '../config/env';
 import { toast } from 'react-toastify';
 const PATH = `${api}api/users`;
@@ -32,6 +32,9 @@ export function addUser(payload) {
             .then(response => {
                 dispatch({ type: CREATE_USER, payload: response.data });
                 toast.success('User created Successfully')
+                setTimeout(()=>{
+                    dispatch({ type:UPDATE_USER, payload: response.data });
+                },500)
             })
             .catch(err => {
                 toast.error('Unable to create User')
@@ -45,6 +48,21 @@ export function updateUser(id, payload) {
             .then(response => {
                 dispatch({ type: UPDATE_USER, payload: response.data });
                 toast.success('User updated Successfully')
+            })
+            .catch(err => {
+                toast.error('Unable to create User')
+            });
+    };
+}
+
+export function deleteUser(id) {
+    return dispatch => {
+        axios
+            .delete(`${PATH}/${id}`)
+            .then(response => {
+                dispatch({ type: DELETE_USER, payload: response.data });
+                toast.success('User deleted Successfully')
+                dispatch(getUsers());
             })
             .catch(err => {
             });

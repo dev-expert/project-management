@@ -3,6 +3,7 @@ const {
   Model
 } = require('sequelize');
 const bcrypt = require("bcrypt");
+const { rounds } = require('../env');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -12,10 +13,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      User.hasMany(models.UserDetails, {
-        foreignKey: "userId",
-      })
-
       User.hasMany(models.Project, {
         foreignKey: "client"
       })
@@ -26,20 +23,41 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   User.init({
-    email: DataTypes.STRING,
+    email: {
+      type: DataTypes.STRING,
+      unique: true,
+      allowNull: false 
+    },
     password: DataTypes.STRING,
-    role: DataTypes.ENUM('ADMIN', 'MANAGER', 'EMPOLOYEE', 'CLIENT'),
+    role: {
+      type: DataTypes.ENUM('ADMIN', 'MANAGER', 'EMPOLOYEE', 'CLIENT'),
+      allowNull: false,
+      defaultValue: 'ADMIN'
+    },
     active: DataTypes.BOOLEAN,
-    createdAt: DataTypes.DATE,
-    updatedAt: DataTypes.DATE
+    firstName: DataTypes.STRING,
+    lastName: DataTypes.STRING,
+    createdAt: {
+      field: 'createdAt',
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW
+    },
+    updatedAt: {
+      field: 'updatedAt',
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW
+    },
+    createdBy: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    }
   },{
     hooks: {
       beforeValidate: async(user, options) => {
-        var pass = () => {
-          return bcrypt.hash(user.password, bcrypt.genSaltSync(10))
-        }
         if(user.password){
-          var hash =  await pass()
+          var hash =  await bcrypt.hash(user.password, rounds);
           user.password = hash
         }
       },

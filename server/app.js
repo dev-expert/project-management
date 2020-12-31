@@ -7,7 +7,7 @@ var passport = require('passport');
 var cors = require('cors');
 dottenv.config();
 var dbConn = require('./models');
-
+var ability = require('./auth/ability');
 //Connect Database
 dbConn.sequelize.sync().then(() => {
   debug("Database connected");
@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use('/', indexRouter);
-app.use('/api', passport.authenticate('jwt', { session: false }), apiRouter);
+app.use('/api', passport.authenticate('jwt', { session: false }), ability, apiRouter);
 
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);

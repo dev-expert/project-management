@@ -4,12 +4,17 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import CreateIcon from '@material-ui/icons/Create';
+import DeleteIcon from "@material-ui/icons/Delete"
+
 import { Title } from '../Common';
 import getConnect from '../Common/connect';
+import { IconButton  } from "@material-ui/core";
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import { formatDate } from '../../config/helper';
+
 const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(4),
@@ -25,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     height: 240,
   },
 }));
-function Users({ history, getUsers, users }) {
+function Users({ history, getUsers, users,deleteUser }) {
   const classes = useStyles();
   useEffect(() => {
     getUsers();
@@ -33,6 +38,17 @@ function Users({ history, getUsers, users }) {
   const createUser = () => {
     history.push('/users/create');
   }
+  const editUser  = (id) => {
+           history.push({
+           pathname: '/users/edit',
+           state: { id: id }
+       });
+
+  }
+  const handelDelete  = (id) => {
+    deleteUser(id);
+}
+  
   return (
     <Container maxWidth="lg" className={classes.container}>
       <Grid container spacing={3} justify='flex-end'>
@@ -60,11 +76,12 @@ function Users({ history, getUsers, users }) {
           {users && users.length ? users.map((row, id) => (
               <TableRow key={row.id}>
                 <TableCell>{id+1}</TableCell>
-                <TableCell>{`${row.UserDetails[0] ? row.UserDetails[0].firstName : ''} ${row.UserDetails[0] ? row.UserDetails[0].lastName : ''}`}</TableCell>
+                <TableCell>{row.firstName} {row.lastName}</TableCell>
                 <TableCell>{row.email}</TableCell>
                 <TableCell>{formatDate(row.createdAt)}</TableCell>
                 <TableCell>{row.role}</TableCell>
-                <TableCell></TableCell>
+                <TableCell align="left"><IconButton aria-label="edit" onClick={e => editUser(row.id)}><CreateIcon /></IconButton>
+                <IconButton aria-label="edit" onClick={e => handelDelete(row.id)}><DeleteIcon /></IconButton></TableCell>  
               </TableRow>
             )) : null}
         </TableBody>

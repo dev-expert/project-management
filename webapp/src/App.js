@@ -10,7 +10,7 @@ import Projects from './components/Project/Projects';
 import CreateProject from './components/Project/CreateProject';
 import Users from './components/User/Users';
 import TimeSheet from './components/Task/TimeSheet';
-
+import TimeSheetUI from './components/timesheet'
 import CreateUser from './components/User/CreateUser';
 import editUser from './components/User/EditUser';
 
@@ -31,6 +31,7 @@ function App() {
           <ToastContainer/>
           <Switch>
             <Route path="/" exact component={Login} />
+            <Route path="/timesheet" exact component={TimeSheet} />
             <Route path="/signup" exact component={Signup} />
             <Route path="/home" exact component={Home} />
             <Route path="/projects/create" exact component={CreateProject} />
@@ -38,7 +39,8 @@ function App() {
             <Route path="/users/create" exact component={CreateUser} />
             <Route path="/users/edit" exact component={editUser} />
             <Route path="/users" exact component={Users} />
-            <Route path="/timesheet" exact component={TimeSheet} />
+            <Route path="/timesheet-ui" exact component={TimeSheetUI} />
+
             <Redirect from="*" to="/" />
           </Switch>
         </Drawer>

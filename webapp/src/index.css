@@ -17,6 +17,36 @@ body {
 *:focus {
     outline: 0;
 }
+
+.timesheet {
+    padding: 10px;
+
+}
+
+.timesheet .timesheet__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+/* timesheet */
+.timesheet .timesheet__header .icon__Left {
+}
+
+.timesheet__header__select {
+    border-left: 1px solid lightgray;
+    border-right: 1px solid lightgray;
+    padding: 0px 15px;
+
+}
+
+.timesheet__table {
+    margin-top: 50px;
+}
+
+
+.timesheet .MuiInput-root {
+    width: 100% !important;
+}
 .main-wrapper{
     display: flex;
     flex-direction: column;

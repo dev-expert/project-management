@@ -67,21 +67,21 @@ const handelDelete  = (id) => {
               <TableCell>Description</TableCell>
               <TableCell>Start Date</TableCell>
               <TableCell>End Date</TableCell>
-              <TableCell>Clients</TableCell>
-              <TableCell>Users</TableCell>
+              {/* <TableCell>Clients</TableCell>
+              <TableCell>Users</TableCell> */}
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {projects && projects.length ? projects.map((row, id) => (
+            { projects && projects.length ? projects[0].projects.map((row, id) => (
               <TableRow key={row.id}>
                 <TableCell>{id+1}</TableCell>
                 <TableCell>{row.name}</TableCell>
                 <TableCell>{row.description}</TableCell>
                 <TableCell>{formatDate(row.startDate)}</TableCell>
                 <TableCell>{formatDate(row.endDate)}</TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
+                {/* <TableCell></TableCell>
+                <TableCell></TableCell> */}
                 <TableCell align="left"><IconButton aria-label="edit" onClick={e => editProject(row.id)}><CreateIcon /></IconButton>
                 <IconButton aria-label="edit" onClick={e => handelDelete(row.id)}><DeleteIcon /></IconButton></TableCell>  
               </TableRow>

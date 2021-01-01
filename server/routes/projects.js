@@ -22,7 +22,7 @@ const createProjects = async (payload, filter = null, updateMany = false) => {
 }
 const findProjects = async (filter = {}, onlyOne = false) => {
   try {
-    let result = null;
+    let result = [];
     if (onlyOne) {
       result = await ProjectModel.findByPk(filter.id);
     } else {
@@ -30,7 +30,7 @@ const findProjects = async (filter = {}, onlyOne = false) => {
       let limit = 10;   // number of records per page
       let offset = 0;
 
-      const data = await ProjectModel.findAll({
+      let data = await ProjectModel.findAll({
         where: filter,
         include: [
           {
@@ -43,15 +43,15 @@ const findProjects = async (filter = {}, onlyOne = false) => {
           }
         ]
       });
+      // let page = req.params  ? req.params.page:0;      // page number
+      let page = 0;      // page number
+      let pages = Math.ceil(data.length / limit);
+       offset = 0 + (page - 1) * limit;
 
-      let page = req.params.page?req.params.page:0;      // page number
-      let pages = Math.ceil(data.count / limit);
-      offset = limit * (page - 1);
-
-      const result = await ProjectModel.findAll({
-        where: filter,
+     let  projects = await ProjectModel.findAll({
         limit: limit,
-        offset: offset,
+        offset: offset > 0 ? offset:0,
+        where: filter,
         include: [
           {
             model: UserModel,
@@ -62,10 +62,11 @@ const findProjects = async (filter = {}, onlyOne = false) => {
             as: 'User'
           }
         ]
+
       });
 
-      result.count = data.count;
-      result.pages= pages;
+      result.push({projects, 'count': data.length, 'pages': pages});
+      
 
     }
     return result;

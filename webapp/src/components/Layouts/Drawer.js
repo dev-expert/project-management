@@ -20,7 +20,7 @@ import Link from '@material-ui/core/Link'
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { Person as PersonIcon, ShoppingCart as ShoppingCartIcon } from '@material-ui/icons';
-
+import access from '../../config/access'; 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -105,30 +105,30 @@ const useStyles = makeStyles((theme) => ({
 
 export const mainListItems = (
   <div>
-    <Link href="/users">
+    {access('read', 'Users') ? <Link href="/users">
     <ListItem button>
       <ListItemIcon>
         <PersonIcon />
       </ListItemIcon>
       <ListItemText primary="Users" />
     </ListItem>
-    </Link>
-    <Link href="/projects">
+    </Link> : null}
+    {access('read', 'Users') ? <Link href="/projects">
     <ListItem button>
       <ListItemIcon>
         <ShoppingCartIcon />
       </ListItemIcon>
       <ListItemText primary="Projects" />
     </ListItem>
-    </Link>
-    <Link href="/timesheet">
+    </Link> : null}
+    {access('read', 'Common') ? <Link href="/timesheet">
     <ListItem button>
       <ListItemIcon>
         <PersonIcon />
       </ListItemIcon>
       <ListItemText primary="TimeSheet" />
-    </ListItem>
-    </Link>
+    </ListItem> 
+    </Link>: null}
   </div>
 );
 function Dashboard({ isLoggedIn, logout, children, history }) {

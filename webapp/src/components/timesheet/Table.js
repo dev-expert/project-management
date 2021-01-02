@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles, withStyles,styled } from '@material-ui/core/styles';
+import { makeStyles, withStyles, styled } from '@material-ui/core/styles';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -7,12 +7,18 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import DollarIcon from '@material-ui/icons/AttachMoney'
 import CreateIcon from '@material-ui/icons/Create';
 import DateRangeIcon from '@material-ui/icons/DateRange';
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined';
 import PlayArrowOutlinedIcon from '@material-ui/icons/PlayArrowOutlined';
+import CommentIcon from '@material-ui/icons/ChatBubble';
+import Badge from '@material-ui/core/Badge';
+import ErrorIcon from '@material-ui/icons/Error';
+import Comments from './Comments';
+import TaskRow from './TaskRow';
 const useStyles = makeStyles({
 	table: {
 		minWidth: 650,
@@ -20,8 +26,8 @@ const useStyles = makeStyles({
 });
 
 const FlexRow = styled('div')({
-  display:'flex',
-  justifyContent:'space-between'
+	display: 'flex',
+	justifyContent: 'space-between'
 });
 
 
@@ -60,12 +66,12 @@ const rows = [
 	createData('Tern', "Creating Mockup for dashboard", "09:30 - 07:00", "03:00"),
 ];
 
-export default function BasicTable() {
+export default function BasicTable({tasks}) {
 	const classes = useStyles();
 
 	return (
 		<TableContainer component={Paper}>
-			<Table className={classes.table} aria-label="simple table">
+			<div className={classes.table} aria-label="simple table">
 				<TableHead>
 					<TableRow>
 						<StyledTableCell>Today</StyledTableCell>
@@ -75,24 +81,12 @@ export default function BasicTable() {
 
 					</TableRow>
 				</TableHead>
-				<TableBody>
-					{rows.map((row) => (
-						<TableRow key={row.name}>
-							<BorderedCell align="left"><DollarIcon />
-							</BorderedCell>
-							<BorderedCell component="th" align="left" scope="row">
-								{row.name}
-							</BorderedCell>
-							<BorderedCell align="left"><FlexRow>{row.description} <CreateIcon /></FlexRow></BorderedCell>
-							<BorderedCell align="right"><FlexRow>{row.duration} <DateRangeIcon /> {row.total}  <PlayArrowOutlinedIcon />
-								<MoreVertOutlinedIcon />
-							 </FlexRow>
-							 </BorderedCell>
-
-						</TableRow>
+				<div>
+					{tasks.map((row) => (
+						<TaskRow task={row}/>
 					))}
-				</TableBody>
-			</Table>
+				</div>
+			</div>
 		</TableContainer>
 	);
 }

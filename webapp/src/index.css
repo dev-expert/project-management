@@ -47,6 +47,72 @@ body {
 .timesheet .MuiInput-root {
     width: 100% !important;
 }
+
+/* comments */
+.comment {
+   background-color:  rgba(34, 47, 185, 0.2);
+   display:flex;
+   padding:10px 20px 10px;
+   align-items: flex-start;
+}
+
+.comment .comment__user {
+    display: flex;
+}
+
+.comments {
+    /* display: flex; */
+}
+
+.input__box input[type='text'] {
+    border: none;
+    padding: 5px;
+    outline: none;
+}
+
+.input__box input[type='text']:focus {
+    border: none;
+    outline: none;
+         box-shadow: 0 0 0 rgb(255, 255, 255);
+}
+
+.input__box {
+    width:100%;
+    display: flex;
+    height: 43px;
+    margin-left: 5px;
+    background:white;
+    align-items: center;
+    padding: 10px;
+
+}
+
+.comment__box {
+    display: flex;
+   background-color:  rgba(34, 47, 185, 0.2);
+   padding:2px 20px 10px;
+}
+
+.comment .comment__detail {
+    display: flex;
+    align-self: center;
+}
+
+.comment__user .title {
+    display:flex;
+    flex:1;
+    margin-left: 10px;
+}
+
+.comment .body {
+    margin:0px 10px;
+}
+
+.comment__user .role {
+    font-size: 12px;
+    margin-left: 10px;
+}
+
 .main-wrapper{
     display: flex;
     flex-direction: column;
@@ -93,3 +159,5 @@ body {
     font-size: 10px;
     font-weight: 500;
 }
+
+

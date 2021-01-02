@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react'
+import React, { useEffect, useState } from 'react'
 import { withStyles } from '@material-ui/core/styles';
 import TableContainer from '@material-ui/core/TableContainer';
 
@@ -16,7 +16,9 @@ import ControlPointOutlinedIcon from '@material-ui/icons/ControlPointOutlined';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import { Checkbox } from '@material-ui/core';
 import getConnect from '../Common/connect';
+
 
 
 
@@ -33,8 +35,6 @@ const BorderedCell = withStyles((theme) => ({
 
 
 const Index = ({ getTasks, getProjects, tasks, projects, addTask }) => {
-
-
 	const [title, setTitle] = useState('Test Title');
 	const [description, setDescription] = useState('Test description');
 	const [projectId, setProjectId] = useState(1);
@@ -52,7 +52,7 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask }) => {
 		let startTime= localStorage.getItem('startTime')
         let currentTime= new Date().getTime();
         let clocked_time = Math.floor((currentTime - Number(startTime))/1000)
-
+        
         if(startTime){
             let d = new Date()
 			d.setTime(Number(startTime))
@@ -60,18 +60,17 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask }) => {
 			setClockedTime(clocked_time)
 			setIsTracking(true)
 			startTimer()
-
+            
         }
 
 	  }, [getTasks])
-	  console.log("tasks:",tasks);
 
 	  const formatTime = (timer) => {
         const getSeconds = `0${(timer % 60)}`.slice(-2)
         const minutes = `${Math.floor(timer / 60)}`
         const getMinutes = `0${minutes % 60}`.slice(-2)
         const getHours = `0${Math.floor(timer / 3600)}`.slice(-2)
-
+      
         return `${getHours} : ${getMinutes} : ${getSeconds}`
 	  }
 
@@ -87,7 +86,7 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask }) => {
 			return clockedTime + 1
 		})
 	}
-
+	
 	const handleSubmit= async () => {
         if(!isTracking){
             let currentTime = new Date();
@@ -132,7 +131,6 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask }) => {
             }, 500);
         }
     }
-
 	return (
 		<div className="timesheet">
 			<div>
@@ -141,7 +139,14 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask }) => {
 			<Table  aria-label="simple table">
 					<TableHead>
 						<TableRow>
-							<BorderedCell align="left">	<DollarIcon /></BorderedCell>
+							<BorderedCell align="left">
+								<Checkbox
+									icon={<DollarIcon />}
+									checkedIcon={<DollarIcon />}
+									onChange={(e) => setIsBillable(e.target.checked)}
+									name="isBillable"
+								/>
+							</BorderedCell>
 							<BorderedCell align="center">
 							<ControlPointOutlinedIcon />&nbsp;&nbsp;&nbsp; <span htmlFor="age-native-simple">Select Project</span>
 							</BorderedCell>
@@ -153,13 +158,14 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask }) => {
 									What are you working  <DescriptionIcon />
 									</div>
 							</BorderedCell>
-							<BorderedCell align="center">00:00</BorderedCell>
+							<BorderedCell align="center">{formatTime(clockedTime)}</BorderedCell>
 							<BorderedCell align="center"><Button variant="contained"
 
 								startIcon={<StartIcon />}
-								color="#000000"
+								// color="#000000"
+								onClick={ () => handleSubmit()}
 							>
-								Start
+								{isTracking ? 'Stop' : 'Start'}
       					</Button></BorderedCell>
 
 							<BorderedCell align="center">

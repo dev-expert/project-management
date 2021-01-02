@@ -61,7 +61,7 @@ const rows = [
 	createData('Email Marketing', "Creating Mockup for dashboard", "09:30 - 07:00", "03:00"),
 	createData('Noteworthy', "Creating Mockup for dashboard", "09:30 - 07:00", "03:00"),
 	createData('Rediminds', "Creating Mockup for dashboard", "09:30 - 07:00", "03:00"),
-	createData('Rediminds', "Creating Mockup for dashboard", "09:30 - 07:00", "03:00"),
+	// createData('Rediminds', "Creating Mockup for dashboard", "09:30 - 07:00", "03:00"),
 	createData('Froloa', "Creating Mockup for dashboard", "09:30 - 07:00", "03:00"),
 	createData('Tern', "Creating Mockup for dashboard", "09:30 - 07:00", "03:00"),
 ];

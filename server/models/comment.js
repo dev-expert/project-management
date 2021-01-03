@@ -11,31 +11,29 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
-      Comment.hasMany(models.Comment, {
-        foreignKey: "repliedToCommentId",
-        as: 'reply'
-      })
-
-      Comment.belongsTo(models.Comment, {
-        foreignKey: "repliedToCommentId"
-      })
+     
     }
   };
   Comment.init({
     timeEntryId: DataTypes.INTEGER,
     createdBy: DataTypes.INTEGER,
-    repliedToCommentId: DataTypes.INTEGER,
     comment: DataTypes.TEXT,
-    isDeleted: {
+    active: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
     },
-    createdAt: DataTypes.DATE,
-    updatedAt: DataTypes.DATE
-  },{
-    sequelize,
+	createdBy: {
+		type: DataTypes.INTEGER,
+		allowNull: true,
+	},
+	updatedBy: {
+		type: DataTypes.INTEGER,
+		allowNull: true,
+	}
+},{
+	sequelize,
     modelName: 'Comment',
+	timestamps: true
   });
   return Comment;
 };

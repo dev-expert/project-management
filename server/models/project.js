@@ -30,21 +30,18 @@ module.exports = (sequelize, DataTypes) => {
     client: DataTypes.INTEGER,
     users: DataTypes.INTEGER,
     active: DataTypes.BOOLEAN,
-    createdAt: {
-      field: 'createdAt',
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW
-  },
-    updatedAt: {
-      field: 'updatedAt',
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW
-  }
-  },{
-    sequelize,
+    createdBy: {
+		type: DataTypes.INTEGER,
+		allowNull: true,
+	},
+	updatedBy: {
+		type: DataTypes.INTEGER,
+		allowNull: true,
+	}
+},{
+	sequelize,
     modelName: 'Project',
+	timestamps: true
   });
   return Project;
 }

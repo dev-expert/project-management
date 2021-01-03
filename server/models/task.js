@@ -11,23 +11,35 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Task.belongsTo(models.Project, {
-        foreignKey: "project_id",
-        onDelete: "CASCADE"
+      Task.hasOne(models.TaskStatus, {
+        foreignKey: "statusId",
+	  })
+	  Task.hasOne(models.ApproveStatus, {
+        foreignKey: "approvedStatusId",
       })
     }
   };
   Task.init({
-    project_id: DataTypes.INTEGER,
+    projectId: DataTypes.INTEGER,
     description: DataTypes.TEXT,
-    start_datetime: DataTypes.DATE,
-    end_datetime: DataTypes.DATE,
-    clocked_time: DataTypes.INTEGER,
-    is_billable: DataTypes.BOOLEAN,
-    user_id: DataTypes.INTEGER,
+    startedAt: DataTypes.DATE,
+    completedAt: DataTypes.DATE,
+    clockedTime: DataTypes.INTEGER,
+	isBillable: DataTypes.BOOLEAN,
+	statusId : DataTypes.INTEGER,
+	approvedStatusId : DataTypes.INTEGER,
+	createdBy: {
+		type: DataTypes.INTEGER,
+		allowNull: true,
+	},
+	updatedBy: {
+		type: DataTypes.INTEGER,
+		allowNull: true,
+	}
   }, {
     sequelize,
-    modelName: 'Task',
+	modelName: 'Task',
+	timestamps: true
   });
   return Task;
 };

@@ -51,13 +51,13 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask }) => {
 
 		let startTime= localStorage.getItem('startTime')
         let currentTime= new Date().getTime();
-        let clocked_time = Math.floor((currentTime - Number(startTime))/1000)
+        let clockedTime = Math.floor((currentTime - Number(startTime))/1000)
         
         if(startTime){
             let d = new Date()
 			d.setTime(Number(startTime))
 			setCheckIn(d)
-			setClockedTime(clocked_time)
+			setClockedTime(clockedTime)
 			setIsTracking(true)
 			startTimer()
             
@@ -119,12 +119,12 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask }) => {
             setTimeout( async () => {
                 let payLoad= {
                     "description": description,
-                    "project_id": projectId,
-                    "start_datetime": checkIn,
-                    "end_datetime": currentTime,
-                    "clocked_time": clockedTime,
-                    "is_billable": isBillable,
-                    "user_id": submittedBy
+                    "projectId": projectId,
+                    "startedAt": checkIn,
+                    "completedAt": currentTime,
+                    "clockedTime": clockedTime,
+                    "isBillable": isBillable,
+                    "createdBy": submittedBy
                 }
 			   addTask(payLoad);
 			   setClockedTime(0)

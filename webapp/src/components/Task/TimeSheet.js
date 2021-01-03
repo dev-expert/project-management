@@ -29,20 +29,20 @@ class User extends PureComponent {
                 description: '',
                 project: ''
             },
-            user_id: 4
+            createdBy: 4
         }
         // this.columns = [
         //     { field: 'description', headerName: 'Description', width: 300 },
         //     { field: 'Project.project_name', headerName: 'Project', width: 300 },
-        //     { field: 'start_datetime', headerName: 'Start Time', width: 300 },
-        //     { field: 'end_datetime', headerName: 'End Time', width: 300 },
+        //     { field: 'startedAt', headerName: 'Start Time', width: 300 },
+        //     { field: 'completedAt', headerName: 'End Time', width: 300 },
         //     {
-        //       field: 'is_billable',
+        //       field: 'isBillable',
         //       headerName: 'Billable',
         //       width: 90,
         //     },
         //     {
-        //       field: 'clocked_time',
+        //       field: 'clockedTime',
         //       headerName: 'Clocked Time',
         //       width: 100
         //     }
@@ -55,14 +55,14 @@ class User extends PureComponent {
         this.props.getTasks();
         let startTime= localStorage.getItem('startTime')
         let currentTime= new Date().getTime();
-        let clocked_time = Math.floor((currentTime - Number(startTime))/1000)
+        let clockedTime = Math.floor((currentTime - Number(startTime))/1000)
         
         if(startTime){
             let d = new Date()
             d.setTime(Number(startTime))
             this.setState({
                 startTime: d,
-                clockedTime: clocked_time,
+                clockedTime: clockedTime,
                 istracking: true
             })
             setTimeout(() => {
@@ -156,12 +156,12 @@ class User extends PureComponent {
             setTimeout( async () => {
                 let payLoad= {
                     "description": this.state.description,
-                    "project_id": this.state.project,
-                    "start_datetime": this.state.startTime,
-                    "end_datetime": this.state.endTime,
-                    "clocked_time": this.state.clockedTime,
-                    "is_billable": this.state.isBillable,
-                    "user_id": this.state.user_id
+                    "projectId": this.state.project,
+                    "startedAt": this.state.startTime,
+                    "completedAt": this.state.endTime,
+                    "clockedTime": this.state.clockedTime,
+                    "isBillable": this.state.isBillable,
+                    "createdBy": this.state.createdBy
                 }
                this.props.addTask(payLoad);
             }, 500);
@@ -236,10 +236,10 @@ class User extends PureComponent {
                                 return <TableRow key={index}>  
                                             <TableCell component="th" scope="row">{task.description}</TableCell>  
                                             <TableCell align="left">{task.Project ? task.Project.name : ''}{(task.Project && task.Project.client) ? ' - '+task.Project.client: ''}</TableCell>  
-                                            <TableCell align="left">{moment(task.start_datetime).format('lll')}</TableCell>  
-                                            <TableCell align="left">{moment(task.end_datetime).format('lll')}</TableCell>  
-                                            <TableCell align="left">{this.formatTime(task.clocked_time)}</TableCell>
-                                            <TableCell align="left">{task.is_billable ? 'Y' : 'N'}</TableCell>  
+                                            <TableCell align="left">{moment(task.startedAt).format('lll')}</TableCell>  
+                                            <TableCell align="left">{moment(task.completedAt).format('lll')}</TableCell>  
+                                            <TableCell align="left">{this.formatTime(task.clockedTime)}</TableCell>
+                                            <TableCell align="left">{task.isBillable ? 'Y' : 'N'}</TableCell>  
                                             <TableCell align="left"><IconButton aria-label="delete" onClick={ () => this.handleDelete(task.id) }><DeleteIcon /></IconButton></TableCell>  
                                         </TableRow>  
                             })  : null

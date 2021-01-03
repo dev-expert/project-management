@@ -51,9 +51,9 @@ Methods.create = async (req,res, next) => {
 
 Methods.findAll = async (req, res, next) => {
     try{
-        const { role } = req.query;
+        const { role } = req.user;
         const { id } = req.user;
-        const filter =  { active:true, createdBy: id };
+        const filter =  { active:true };
         if(role) {
           filter.role = role;
         }

@@ -20,8 +20,8 @@ Methods.create = async (req, res) => {
 
 Methods.findAll = async (req, res) => {
     try{
-        const user = req.query.user_id
-        var condition = user ? { user_id: user } : null
+        const user = req.query.createdBy
+        var condition = user ? { createdBy: user } : null
         var result= await Task.findAll({ 
             where: condition,
             include : [

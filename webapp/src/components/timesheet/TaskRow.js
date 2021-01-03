@@ -61,10 +61,10 @@ const TaskRow = ({ task }) => {
 						<div style={{ display: 'flex', flex: 1, padding: '0 5px 0px 30px', justifyContent: 'space-between', alignItems: 'center' }} >
 
 							<FlexRow>
-								{task.start_datetime}
+								{task.startedAt}
 								<DateRangeIcon />
 							</FlexRow>
-							<FlexRow>{task.end_datetime}
+							<FlexRow>{task.completedAt}
 								<PlayArrowOutlinedIcon />
 							</FlexRow>
 

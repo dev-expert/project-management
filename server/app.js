@@ -9,11 +9,16 @@ dottenv.config();
 var dbConn = require('./models');
 var ability = require('./auth/ability');
 //Connect Database
-dbConn.sequelize.sync().then(() => {
-  debug("Database connected");
-}).catch((err) => {
-  debug(err);
-})
+
+dbConn.sequelize
+  .authenticate()
+  .then(() => {
+    debug('DB Connection has been established successfully.');
+  })
+  .catch(err => {
+    debug('Unable to connect to the database:', err);
+  });
+
 require('./auth/auth');
 var indexRouter = require('./routes/index');
 var apiRouter = require('./routes/api');

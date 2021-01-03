@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env-shell DEBUG=simpleserver:* nodemon ./bin/www"
+    "start": "cross-env-shell DEBUG=simpleserver:* nodemon ./bin/www",
+    "db:reset": "cross-env-shell node ./migrations/reset.js"
   },
   "dependencies": {
     "@casl/ability": "^5.1.1",

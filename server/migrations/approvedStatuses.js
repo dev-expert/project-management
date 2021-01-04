@@ -1,4 +1,5 @@
 const approvedStatuses = [
 	{ status: 'APPROVED' },
-	{ status: 'PENDING' }];
+	{ status: 'INPROGRESS' },
+	{ status: 'PENDINGFORAPPROVAL' }];
 module.exports = approvedStatuses;

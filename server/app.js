@@ -8,7 +8,19 @@ var cors = require('cors');
 dottenv.config();
 var dbConn = require('./models');
 var ability = require('./auth/ability');
+
+//const winstonLogger = require("./util/logger.ts"); // console logger using winston
+
 //Connect Database
+
+process.on("uncaughtException", (e) => {
+	console.error(e);
+	process.exit(1);
+  });
+  process.on("unhandledRejection", (e) => {
+	console.error(e);
+	process.exit(1);
+  });
 
 dbConn.sequelize
   .authenticate()
@@ -34,7 +46,10 @@ app.use(cookieParser());
 app.use('/', indexRouter);
 app.use('/api', passport.authenticate('jwt', { session: false }), ability, apiRouter);
 
+
+//Error handler
 app.use(function(err, req, res, next) {
+	console.log(err);
     res.status(err.status || 500);
     res.json({ error: err });
 });

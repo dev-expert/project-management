@@ -11,15 +11,12 @@ module.exports = (sequelize, DataTypes) => {
 		 */
 		static associate(models) {
 			// define association here
-			// User.hasMany(models.Project, {
-			// 	foreignKey: "client"
-			// })
-
+			User.belongsToMany(models.Project, { through: 'UserProject' });
 			User.belongsTo(models.Role, {
 				foreignKey: "roleId",
 				as: 'role'
 			})
-			
+
 		}
 	};
 	User.init({
@@ -31,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false
 		},
 		password: DataTypes.STRING,
-		roleId:  {
+		roleId: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 		},

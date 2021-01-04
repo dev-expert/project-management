@@ -1,4 +1,5 @@
 const UserModel = require('../models').User;
+const RoleModel = require('../models').Role;
 const createUsers = async (payload, filter = null, updateMany = false) => {
 
     try {
@@ -22,11 +23,15 @@ const createUsers = async (payload, filter = null, updateMany = false) => {
     try {
       let result = null;
       if (onlyOne) {
-        result = await UserModel.findByPk(filter.id);
+        result = await UserModel.findOne({
+          where: filter,
+          include: [ { model: RoleModel, as: 'role' }]
+        });
       } else {
 
         result = await UserModel.findAll({
           where: filter,
+          include: [ { model: RoleModel, as: 'role' }]
         });
       }
       return result;
@@ -51,11 +56,10 @@ Methods.create = async (req,res, next) => {
 
 Methods.findAll = async (req, res, next) => {
     try{
-        const { role } = req.user;
-        const { id } = req.user;
+        const { role, id } = req.user;
         const filter =  { active:true };
-        if(role) {
-          filter.role = role;
+        if(role !== 'ADMIN') {
+          filter.createdBy = id
         }
         var result = await findUsers(filter)
         return res.json(result);

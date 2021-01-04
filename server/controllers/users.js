@@ -59,7 +59,7 @@ Methods.findAll = async (req, res, next) => {
         const { role, id } = req.user;
         const filter =  { active:true };
         if(role !== 'ADMIN') {
-          filter.createdBy = id
+         // filter.createdBy = id
         }
         var result = await findUsers(filter)
         return res.json(result);

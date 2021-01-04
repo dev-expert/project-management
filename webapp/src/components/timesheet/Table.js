@@ -69,6 +69,7 @@ const rows = [
 export default function BasicTable({tasks}) {
 	const classes = useStyles();
 
+
 	return (
 		<TableContainer component={Paper}>
 			<div className={classes.table} aria-label="simple table">

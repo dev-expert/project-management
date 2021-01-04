@@ -14,6 +14,19 @@ export function getTasks(params) {
             });
     };
 }
+
+export const getInProgressTask = () => {
+    return dispatch => {
+        axios
+            .get(`${PATH}/inprogress`)
+            .then(response => {
+                dispatch({ type: GET_TASK, payload: response.data });
+            })
+            .catch(err => {
+            });
+    };
+}
+
 export function getTask(id) {
     return dispatch => {
         axios

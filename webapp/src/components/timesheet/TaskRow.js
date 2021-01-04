@@ -52,7 +52,7 @@ const TaskRow = ({ task }) => {
 				<BorderedDiv align="left"><DollarIcon /></BorderedDiv>
 				<div key={task.name} style={{ display: 'flex', width: '70%' }}>
 					<BorderedDiv style={{ flex: 1 }}>
-						<FlexRow>{task.Project.name}</FlexRow>
+						<FlexRow>{task.Projects.name}</FlexRow>
 					</BorderedDiv>
 					<BorderedDiv align="left" style={{ flex: 1 }}><FlexRow>{task.description} <CreateIcon /></FlexRow></BorderedDiv>
 				</div>
@@ -61,10 +61,11 @@ const TaskRow = ({ task }) => {
 						<div style={{ display: 'flex', flex: 1, padding: '0 5px 0px 30px', justifyContent: 'space-between', alignItems: 'center' }} >
 
 							<FlexRow>
-								{task.startedAt}
+								{task.startedAt || "00:00" }
 								<DateRangeIcon />
 							</FlexRow>
-							<FlexRow>{task.completedAt}
+							<FlexRow>
+								{task.completedAt || "00:00"}
 								<PlayArrowOutlinedIcon />
 							</FlexRow>
 

@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-function CreateUser({ history, addUser, userActionPerformed }) {
+function CreateUser({ history, addUser, userActionPerformed,getRoles,roles }) {
   const classes = useStyles();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -42,6 +42,11 @@ function CreateUser({ history, addUser, userActionPerformed }) {
   const [password, setPassword] = useState('');
   const [type, setType] = useState('EMPLOYEE');
   const [submit, setSubmit ] = useState(false);
+
+  useEffect(() => {
+    getRoles();
+  }, [getRoles])
+
   useEffect(() => {
     if(userActionPerformed) {
       history.push('/users')
@@ -50,7 +55,7 @@ function CreateUser({ history, addUser, userActionPerformed }) {
   const handleSubmit = () => {
     setSubmit(true)
     if(email && password && firstName && type) {
-      addUser({ email, password, firstName, lastName, role:type })
+      addUser({ email, password, firstName, lastName, roleId:type })
     }
   }
 
@@ -132,10 +137,14 @@ function CreateUser({ history, addUser, userActionPerformed }) {
                   label="Type"
                   error={submit && !type}
                 >
-                  <MenuItem value={'CLIENT'}>Client</MenuItem>
-                  <MenuItem value={'EMPLOYEE'}>User</MenuItem>
-                  <MenuItem value={'MANAGER'}>MANAGER</MenuItem>
-                </Select>
+                <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {roles && roles.length ? roles.map((row, id) => (
+                <MenuItem key={row.id} value={row.id}>{row.role}</MenuItem>
+              )) : null}
+             
+            </Select>
               </FormControl>
             </Grid>
           </Grid>

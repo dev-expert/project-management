@@ -57,7 +57,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 function Users({ history, getUsers, users, deleteUser, getRoles, roles }) {
-  
+  const countData = users.length > 0 ? users[0].totalRecords: 0 ;
+  const pageCount = Math.ceil(countData/10);
   const classes = useStyles();
   const [page, setPage] = useState(1);
   const [offset, setOffset] = useState(0);
@@ -167,7 +168,7 @@ function Users({ history, getUsers, users, deleteUser, getRoles, roles }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {users && users.length ? users.map((row, id) => (
+          {users && users.length ? users[0].data.map((row, id) => (
               <TableRow key={row.id}>
                 <TableCell>{id+1}</TableCell>
                 <TableCell>{row.firstName} {row.lastName}</TableCell>
@@ -181,7 +182,7 @@ function Users({ history, getUsers, users, deleteUser, getRoles, roles }) {
         </TableBody>
       </Table>
       <div className={classes.paginate}>
-        <Pagination count={15} page={page} onChange={handleChange} siblingCount={1} boundaryCount={1}  variant="outlined" />
+        <Pagination count={pageCount > 1 ? pageCount: 1 } page={countData} onChange={handleChange} siblingCount={1} boundaryCount={1}  variant="outlined" />
       </div>
       </Grid>
       </Grid>

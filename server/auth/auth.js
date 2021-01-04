@@ -16,7 +16,7 @@ passport.use(
       },
       async (req, email, password, done) => {
         try {
-          const userPayload = { ...req.body, email, password, active: true };
+          const userPayload = { ...req.body, email, password, roleId: 1, active: true };
           const user = await UserModel.create(userPayload);
           return done(null, user);
         } catch (error) {

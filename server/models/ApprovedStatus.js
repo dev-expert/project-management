@@ -10,14 +10,16 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-
+		ApprovedStatus.hasOne(models.Task, {
+			foreignKey: "approvedStatusId",
+		  })
 	}
   };
   ApprovedStatus.init({
 	status : DataTypes.STRING,
   }, {
     sequelize,
-	modelName: 'ApproveStatus',
+	modelName: 'ApprovedStatus',
 	timestamps: false
   });
   return ApprovedStatus;

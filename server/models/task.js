@@ -11,12 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Task.hasOne(models.TaskStatus, {
-        foreignKey: "statusId",
-	  })
-	  Task.hasOne(models.ApproveStatus, {
-        foreignKey: "approvedStatusId",
-      })
+    //   Task.hasOne(models.TaskStatus, {
+    //     foreignKey: "id",
+	//   })
+	//   Task.hasOne(models.ApprovedStatus, {
+    //     foreignKey: "id",
+    //   })
     }
   };
   Task.init({

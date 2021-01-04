@@ -8,10 +8,23 @@ function userActionPerformed(dispatch) {
         dispatch({ type: USER_ACTION_PERFORMED });
     }, 500)
 }
-export function getUsers() {
+export function getUsers(OFFSET, LIMIT, SEARCH) {
+    const name= SEARCH.name
+    const email= SEARCH.email
+    const role= SEARCH.role
+    // const searchQuery = `&name=${name}&email=${email}&role=${role}`
+    // const queryParams = `?offset=${OFFSET}&limit=${LIMIT}${searchQuery}`
     return dispatch => {
         axios
-            .get(`${PATH}`)
+            .get(`${PATH}`,{
+                params: {
+                    offset: OFFSET,
+                    limit: LIMIT,
+                    name: name,
+                    email: email,
+                    role: role,
+                }
+            })
             .then(response => {
                 dispatch({ type: GET_USERS, payload: response.data });
             })

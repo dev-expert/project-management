@@ -4,6 +4,7 @@ const JWTstrategy = require('passport-jwt').Strategy;
 const ExtractJWT = require('passport-jwt').ExtractJwt;
 const { jwtSecret } = require('../env');
 const UserModel = require("../models").User;
+const RoleModel = require('../models').Role;
 const bcrypt = require("bcrypt");
 
 passport.use(
@@ -35,7 +36,7 @@ passport.use(
       },
       async (email, password, done) => {
         try {
-          const user = await UserModel.findOne({ where: { email }});
+          const user = await UserModel.findOne({ where: { email }, include: [ { model: RoleModel, as: 'role' }] });
           if (!user) {
             return done(null, false, { message: 'User not found' });
           }

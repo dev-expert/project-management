@@ -27,7 +27,7 @@ router.post(
 
             return next(error);
           }
-          const userDetails = { id: user.id, email: user.email, role: user.role };
+          const userDetails = { id: user.id, email: user.email, role: user.role.role };
           req.login(
             userDetails,
             { session: false },

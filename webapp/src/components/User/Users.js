@@ -79,7 +79,7 @@ function Users({ history, getUsers, users,deleteUser }) {
                 <TableCell>{row.firstName} {row.lastName}</TableCell>
                 <TableCell>{row.email}</TableCell>
                 <TableCell>{formatDate(row.createdAt)}</TableCell>
-                <TableCell>{row.role}</TableCell>
+                <TableCell>{row.role.role}</TableCell>
                 <TableCell align="left"><IconButton aria-label="edit" onClick={e => editUser(row.id)}><CreateIcon /></IconButton>
                 <IconButton aria-label="edit" onClick={e => handelDelete(row.id)}><DeleteIcon /></IconButton></TableCell>  
               </TableRow>

@@ -16,11 +16,11 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import getConnect from '../Common/connect';
 import { Copyright } from '../Common';
 import ListItem from '@material-ui/core/ListItem';
-import Link from '@material-ui/core/Link'
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { Person as PersonIcon, ShoppingCart as ShoppingCartIcon } from '@material-ui/icons';
 import access from '../../config/access'; 
+import { Link } from 'react-router-dom';
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -105,7 +105,7 @@ const useStyles = makeStyles((theme) => ({
 
 export const mainListItems = (
   <div>
-    {access('read', 'Users') ? <Link href="/users">
+    {access('read', 'Users') ? <Link to="/users">
     <ListItem button>
       <ListItemIcon>
         <PersonIcon />
@@ -113,7 +113,7 @@ export const mainListItems = (
       <ListItemText primary="Users" />
     </ListItem>
     </Link> : null}
-    {access('read', 'Users') ? <Link href="/projects">
+    {access('read', 'Users') ? <Link to="/projects">
     <ListItem button>
       <ListItemIcon>
         <ShoppingCartIcon />
@@ -121,7 +121,7 @@ export const mainListItems = (
       <ListItemText primary="Projects" />
     </ListItem>
     </Link> : null}
-    {access('read', 'Common') ? <Link href="/timesheet">
+    {access('read', 'Common') ? <Link to="/timesheet">
     <ListItem button>
       <ListItemIcon>
         <PersonIcon />

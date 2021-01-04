@@ -1,7 +1,5 @@
 import ability from './ability';
 const access = (action, data) => {
-	debugger;
-	//ability.can(action, data)
-	return true;
+	return ability.can(action, data)
 };
 export default access;

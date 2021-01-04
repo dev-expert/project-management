@@ -34,31 +34,9 @@ const createUsers = async (payload, filter = null, updateMany = false) => {
     throw err;
   }
 }
-const findUsers = async (filter = {}, onlyOne = false) => {
-  try {
-    let result = null;
-    if (onlyOne) {
 
-      result = await UserModel.findByPk(filter.id);
-    } else {
-      result = await UserModel.findAll({
-        where: filter,
-        include: [
-          {
-            model: userDetailsModel,
-            as: "UserDetails"
-          }
-        ]
-      });
-    }
-    return result;
-  } catch (err) {
-    throw err;
-  }
-}
 router.get('/', UserController.findAll);
-router.post(
-  '/', async (req, res, next) => {
+router.post(  '/', async (req, res, next) => {
     try {
       const email = req.user.email;
       const user = req.body;
@@ -71,8 +49,7 @@ router.post(
   }
 );
 router.get('/:id', UserController.findOne);
-router.put(
-  '/:id', async (req, res, next) => {
+router.put('/:id', async (req, res, next) => {
     try {
       const { id } = req.params;
       const updatedUser = req.body;
@@ -84,8 +61,7 @@ router.put(
   }
 );
 
-router.delete(
-  '/:id', async (req, res, next) => {
+router.delete(  '/:id', async (req, res, next) => {
     try {
       const { id } = req.params;
       const result = await UserModel.update({

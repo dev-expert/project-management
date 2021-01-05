@@ -70,8 +70,10 @@ const handleChange = (event, value) => {
   console.log(event)
   console.log(value)
   setPage(value);
-  setOffset(value-1);
-  getProjects(value-1, limit, search);
+  let offsetValue = (value-1) * limit;
+  setOffset(offsetValue) ;
+  getProjects(offsetValue, limit, search);
+    
 };
 
 const handleSearch = () => {

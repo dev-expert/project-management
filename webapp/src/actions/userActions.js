@@ -25,6 +25,7 @@ export function getUsers(offset, limit, SEARCH) {
 			});
 	};
 }
+
 export function getUser(id) {
 	return dispatch => {
 		axios

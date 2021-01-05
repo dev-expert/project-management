@@ -11,8 +11,7 @@ import EditProject from './components/Project/EditProject';
 
 import CreateProject from './components/Project/CreateProject';
 import Users from './components/User/Users';
-import TimeSheet from './components/Task/TimeSheet';
-import TimeSheetUI from './components/timesheet'
+import TimeSheet from './components/Timesheet'
 import CreateUser from './components/User/CreateUser';
 import editUser from './components/User/EditUser';
 import Drawer from './components/Layouts/Drawer';
@@ -42,7 +41,6 @@ function App() {
             <ProtectedRoute action='write' path="/users/edit" exact component={editUser} />
             <ProtectedRoute path="/users" exact component={Users} />
             <ProtectedRoute path="/timesheet" exact component={TimeSheet} />
-            <Route path="/timesheet-ui" exact component={TimeSheetUI} />
             <Redirect from="*" to="/" />
           </Switch>
         </Drawer>

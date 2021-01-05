@@ -76,7 +76,7 @@ export default function BasicTable({tasks,onAddComment}) {
 				</TableHead>
 				<div>
 					{tasks.map((row) => (
-						<TaskRow task={row} onAddComment={onAddComment}/>
+						<TaskRow key={row.id}  task={row}/>
 					))}
 				</div>
 			</div>

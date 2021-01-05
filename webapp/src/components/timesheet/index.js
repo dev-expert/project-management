@@ -28,6 +28,12 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { Checkbox } from '@material-ui/core';
 import getConnect from '../Common/connect';
+import {
+	MuiPickersUtilsProvider,
+	KeyboardTimePicker,
+	KeyboardDatePicker,
+  } from '@material-ui/pickers';
+  
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -54,10 +60,10 @@ const BorderedCell = withStyles((theme) => ({
 
 const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, getTask, getInProgressTask, task }) => {
 	const [title, setTitle] = useState('Test Title');
-	const [projectId, setProjectId] = useState(1);
+	const [projectId, setProjectId] = useState(0);
 	const [isBillable, setIsBillable] = useState(false);
-	const [checkIn, setCheckIn] = useState('');
-	const [checkOut, setCheckOut] = useState('');
+	const [checkIn, setCheckIn] = useState();
+	const [checkOut, setCheckOut] = useState();
 	const [clockedTime, setClockedTime] = useState(0);
 	const [submittedBy, setSubmittedBy] = useState(3);
 	const [isTracking, setIsTracking] = useState(false);
@@ -66,25 +72,14 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 	const [modelOpen, setModelOpen] = useState(false);
 	const [project, setProject] = useState();
 	const [taskDetail, setTaskDetail] = useState('');
+	const [projectError, setProjectError] = useState('');
+	const [selectedDate, setSelectedDate] = useState(new Date());
+	const [startTime, setStartTimeDate] = useState(new Date());
+	const [endTime, setEndTimeDate] = useState(new Date());
+	const [isManual, setIsManual] = useState(false);
 	useEffect(() => {
 		getProjects();
 		getTasks();
-
-
-		let startTime = localStorage.getItem('startTime')
-		let currentTime = new Date().getTime();
-		let clockedTime = Math.floor((currentTime - Number(startTime)) / 1000)
-
-		if (startTime) {
-			let d = new Date()
-			d.setTime(Number(startTime))
-			setCheckIn(d)
-			setClockedTime(clockedTime)
-			setIsTracking(true)
-			startTimer()
-
-		}
-
 	}, [getTasks])
 
 	useEffect(() => {
@@ -92,19 +87,26 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 		getInProgressTask();
 	}, []);
 
-
-	const onAddComment = (comment)=> {
-		console.log("Adding comment",comment)
-	}
-
-	let currentProject
-	if (projects && projects[0]) {
-
-		currentProject = projects[0].data.find(p => p.id == task.projectId)
-		if(!currentProject) {
-			currentProject = project;
+	useEffect(() => {
+		if (projects && projects[0] && task && task.id) {
+			let currentProject = projects[0].data.find(p => p.id == task.projectId)
+			setProject(currentProject)
+			setProjectId(task.projectId)
+			let startTime = new Date(task.startedAt).getTime()
+			let currentTime = new Date().getTime();
+			let clockedTime = Math.floor((currentTime - Number(startTime)) / 1000)
+	
+			if (startTime && !isTracking) {
+				setTaskDetail(task)
+				setClockedTime(clockedTime)
+				setIsTracking(true)
+				startTimer()
+				setCheckIn(task.startedAt)
+				setIsBillable(task.isBillable)
+			}
 		}
-	}
+		
+	}, [task, projects]);
 
 
 	const formatTime = (timer) => {
@@ -130,38 +132,76 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 	}
 
 	const handleSubmit = async () => {
-			let currentTime = new Date();
-			setCheckIn(currentTime);
+		let project_error = '';
 
-		if (isTracking) {
-			setIsTracking(false)
-			setCheckOut(currentTime)
-			setTimeout(async () => {
-				let payLoad = {
-					"description": task.description,
-					"projectId": currentProject.id,
-					"startedAt": currentTime,
-					"approvedStatusId": 3,
-					"completedAt": currentTime,
-					"clockedTime": clockedTime,
-					"isBillable": isBillable,
-					"createdBy": submittedBy
-				}
-		    	updateTask(task.id,payLoad)
-				setClockedTime(0)
-			}, 500);
-			return;
+		project_error= projectId === 0 ? 'Select Project' : ''
+
+		setProjectError(project_error)
+		if(projectId === 0){
+			return false;
 		}
-		// setIsTracking(false)
-		// setCheckOut(currentTime)
-		setIsTracking(false)
-		setCheckOut(currentTime)
-		setTimeout(async () => {
+
+		if(isManual){
+			let selected_date= new Date(selectedDate)
+			let selected_starttime= new Date(startTime)
+			let selected_endtime= new Date(endTime)
+			selected_starttime.setFullYear(selected_date.getFullYear())
+			selected_starttime.setMonth(selected_date.getMonth())
+			selected_starttime.setDate(selected_date.getDate())
+			selected_endtime.setFullYear(selected_date.getFullYear())
+			selected_endtime.setMonth(selected_date.getMonth())
+			selected_endtime.setDate(selected_date.getDate())
+			console.log(selectedDate)
+			console.log(startTime)
+			console.log(selected_starttime)
+			console.log(endTime)
+			console.log(selected_endtime)
 			let payLoad = {
 				"description": taskDetail.description,
-				"title":taskDetail.title,
-				"videoLink":taskDetail.videoLink,
-				"projectId": currentProject.id,
+				"projectId": project.id,
+				"startedAt": selected_starttime,
+				"approvedStatusId": 2,
+				"completedAt": selected_endtime,
+				"clockedTime": clockedTime,
+				"isBillable": isBillable,
+				"createdBy": submittedBy
+			}
+			addTask(payLoad);
+		}else{
+
+			if (isTracking) {
+			
+				let currentTime = new Date();
+				setIsTracking(false)
+				setCheckOut(currentTime)
+				setTimeout(async () => {
+					clearInterval(intervalId)
+					let payLoad = {
+						"description": taskDetail.description,
+						"projectId": project.id,
+						"approvedStatusId": 3,
+						"completedAt": currentTime,
+						"clockedTime": clockedTime,
+						"isBillable": isBillable,
+						"createdBy": submittedBy
+					}
+					updateTask(taskDetail.id,payLoad)
+					setClockedTime(0)
+					setIsBillable(false)
+					setTaskDetail('')
+					setProject()
+					setProjectId(0)
+				}, 500);
+				return;
+			}
+			
+			let currentTime = new Date();
+			setIsTracking(true)
+			setCheckIn(currentTime)
+			startTimer()
+			let payLoad = {
+				"description": taskDetail.description,
+				"projectId": project.id,
 				"startedAt": currentTime,
 				"approvedStatusId": 2,
 				"completedAt": currentTime,
@@ -169,44 +209,33 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 				"isBillable": isBillable,
 			}
 			addTask(payLoad);
-			// setClockedTime(0)
-		}, 500);
-
-
-		// if (!isTracking) {
-		// 	let currentTime = new Date();
-		// 	localStorage.setItem("startTime", currentTime.getTime())
-		// 	setIsTracking(true)
-		// 	setCheckIn(currentTime)
-		// 	startTimer()
-		// } else {
-		// let description_error = '';
-		// let project_error = '';
-
-		// description_error= description === '' ? 'Add description' : ''
-		// project_error= projectId === 0 ? 'Select Project' : ''
-
-		// this.setState({
-		//     errors: {
-		//         description: description_error,
-		//         project: project_error
-		//     }
-		// })
-
-		// if(this.state.description === '' || this.state.project === 0){
-		//     return false;
-		// }
-		// clearInterval(intervalId)
-
-		// localStorage.removeItem("startTime");
-
+		}
 	}
 
 
 	const handleProjectChange = (evt) => {
-		setProject(evt.target.value);
+		setProjectId(evt.target.value);
+		let currentProject = projects[0].data.find(p => p.id == evt.target.value)
+		setProject(currentProject)
+		let project_error = '';
+		
+		project_error= evt.target.value === 0 ? 'Select Project' : ''
+
+		setProjectError(project_error)
 	}
 
+	const handleDateChange = (date, value) => {
+		setSelectedDate(date);
+	  };
+
+	const handleStartTimeChange = (date, value) => {
+		setStartTimeDate(date);
+	};
+
+	const handleEndTimeChange = (date, value) => {
+		setEndTimeDate(date);
+	};
+	
 
 	return (
 		<div className="timesheet">
@@ -222,6 +251,7 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 											checkedIcon={<DollarIcon />}
 											onChange={(e) => setIsBillable(e.target.checked)}
 											name="isBillable"
+											checked={isBillable}
 										/>
 									</BorderedCell>
 									<BorderedCell align="center" style={{ cursor: 'pointer' }}>
@@ -229,13 +259,13 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 										<FormControl>
 											<div style={{ display: 'flex' }} onClick={() => setOpen(!open)}>
 												<ControlPointOutlinedIcon />
-												<span htmlFor="age-native-simple">{currentProject ? currentProject.name : 'Select Project'}</span>
+												<span htmlFor="age-native-simple">{project ? project.name : 'Select Project'}</span>
 											</div>
 
 											<Select
 												labelId="demo-mutiple-name-label"
 												id="demo-mutiple-name"
-												value={project && project.name}
+												value={projectId}
 												onChange={handleProjectChange}
 												input={<Input />}
 												open={open}
@@ -244,11 +274,15 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 											>
 
 												{projects[0] && projects[0].data.map((project) => (
-													<MenuItem key={project.name} name={project.name} value={project}>
+													<MenuItem key={project.name} name={project.name} value={project.id}>
 														{project.name}
 													</MenuItem>
 												))}
 											</Select>
+											{projectError != '' && (
+											<span className="error">
+												{projectError}
+											</span>)}
 										</FormControl>
 									</BorderedCell>
 
@@ -265,20 +299,85 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 											{taskDetail ? (taskDetail.title) : ("What are you working")}<DescriptionIcon />
 										</div>
 									</BorderedCell>
-									<BorderedCell align="center">{formatTime(clockedTime)}</BorderedCell>
-									<BorderedCell align="center"><Button variant="contained"
+									{isManual && (
+										<BorderedCell  style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
+											<KeyboardDatePicker  style={{ width: '25%' }}
+											disableToolbar
+											format="MM/DD/yyyy"
+											margin="normal"
+											id="date-picker-inline"
+											label="Date"
+											value={selectedDate}
+											onChange={handleDateChange}
+											KeyboardButtonProps={{
+												'aria-label': 'change date',
+											}}
+											/>
+											<KeyboardTimePicker style={{ width: '25%' }}
+											margin="normal"
+											id="start-time-picker"
+											label="Start"
+											value={startTime}
+											onChange={handleStartTimeChange}
+											KeyboardButtonProps={{
+												'aria-label': 'change time',
+											}}
+											/>
 
-										startIcon={<StartIcon />}
-										// color="#000000"
-										onClick={() => handleSubmit()}
-									>
-										{isTracking ? 'Stop' : 'Start'}
-									</Button></BorderedCell>
-
+											<KeyboardTimePicker style={{ width: '25%' }}
+											margin="normal"
+											id="end-time-picker"
+											label="End"
+											value={endTime}
+											onChange={handleEndTimeChange}
+											KeyboardButtonProps={{
+												'aria-label': 'change time',
+											}}
+											/>
+										</BorderedCell>
+									)}
+									
+									<BorderedCell align="center" style={{ minWidth: '110px'}}>{formatTime(clockedTime)}</BorderedCell>
 									<BorderedCell align="center">
-										<ClockIcon />
+										{!isManual && (
+											<Button variant="contained"
+
+												startIcon={<StartIcon />}
+												// color="#000000"
+												onClick={() => handleSubmit()}
+											>
+												{isTracking ? 'Stop' : 'Start'}
+											</Button>
+										)}
+
+										{isManual && (
+											<Button variant="contained"
+
+												startIcon={<StartIcon />}
+												onClick={() => handleSubmit()}
+											>
+												Add
+											</Button>
+										)}
+										
+									</BorderedCell>
+
+									<BorderedCell align="center" style={{ display: 'flex', flexDirection: 'column' }}>
+										<Checkbox
+											icon={<ClockIcon />}
+											checkedIcon={<ClockIcon />}
+											onChange={(e) => setIsManual(false)}
+											checked={!isManual}
+										/>
+										<Checkbox
+											icon={<ListIcon />}
+											checkedIcon={<ListIcon />}
+											onChange={(e) => setIsManual(true)}
+											checked={isManual}
+										/>
+										{/* <ClockIcon onClick={() => setIsManual(false)} />
 										<br />
-										<ListIcon />
+										<ListIcon  onClick={() => setIsManual(true)} /> */}
 									</BorderedCell>
 
 								</TableRow>
@@ -290,7 +389,7 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 
 
 				<div className="timesheet__table">
-					<TimeSheetTable tasks={tasks} onAddComment={onAddComment}/>
+					<TimeSheetTable tasks={tasks}/>
 				</div>
 			</div>
 

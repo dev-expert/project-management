@@ -78,8 +78,9 @@ router.get(
 		try {
 			const result = await findProjects(req);
 			res.json(result);
-		} catch (err) {
-			next(err);
+	    }
+		catch (error) {
+		  next(error);
 		}
 	}
 );
@@ -91,8 +92,9 @@ router.post(
 			console.log(project);
 			const result = await createProjects(project);
 			res.json(result);
-		} catch (err) {
-			next(err);
+	    }
+		catch (error) {
+		  next(error);
 		}
 	}
 );
@@ -102,8 +104,9 @@ router.get(
 			const { id } = req.params;
 			const result = await findProjects({ id: id }, true);
 			res.json(result);
-		} catch (err) {
-			next(err);
+	    }
+		catch (error) {
+		  next(error);
 		}
 	}
 );
@@ -114,8 +117,9 @@ router.put(
 			const updatedProject = req.body;
 			const result = await createProjects(updatedProject, { id: id });
 			res.json(result);
-		} catch (err) {
-			next(err);
+	    }
+		catch (error) {
+		  next(error);
 		}
 	}
 );
@@ -129,8 +133,9 @@ router.delete(
 			}, { where: { id: id } });
 
 			res.json(result);
-		} catch (err) {
-			next(err);
+	    }
+		catch (error) {
+		  next(error);
 		}
 	}
 );

@@ -8,11 +8,17 @@ router.post(
   '/signup',
   passport.authenticate('signup', { session: false }),
   async (req, res, next) => {
-    const body = { id: req.user.id, email: req.user.email };
-    res.json({
-      message: 'Signup successfull',
-      user: body
-    });
+    try {
+
+      const body = { id: req.user.id, email: req.user.email };
+      res.json({
+        message: 'Signup successfull',
+        user: body
+      });
+    }
+    catch (error) {
+      next(error);
+    }
   }
 );
 router.post(
@@ -37,8 +43,9 @@ router.post(
               return res.json({ token });
             }
           );
-        } catch (error) {
-          return next(error);
+        }
+        catch (error) {
+          next(error);
         }
       }
     )(req, res, next);

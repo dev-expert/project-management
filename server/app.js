@@ -9,6 +9,11 @@ dottenv.config();
 var dbConn = require('./models');
 var ability = require('./auth/ability');
 const pagination = require('./middlewares/filter/pagination');
+const errorLogs = require('./controllers/errorLog');
+
+const winston = require("winston");
+
+
 
 //Connect Database
 
@@ -46,7 +51,7 @@ app.use(cookieParser());
 app.use('/', indexRouter);
 app.use('/api', passport.authenticate('jwt', { session: false }), ability,pagination,apiRouter);
 app.use(function(err, req, res, next) {
-	console.log(err);
+    errorLogs.getSub(req,err);
     res.status(err.status || 500);
     res.json({ error: err });
 });

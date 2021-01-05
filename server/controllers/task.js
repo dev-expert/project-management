@@ -6,7 +6,7 @@ const users = require('../models').User
 
 const Methods= {}
 
-Methods.create = async (req, res) => {
+Methods.create = async (req, res,next) => {
     try{
         // const errors = validationResult(req)
         // if(!errors.isEmpty()){
@@ -16,11 +16,11 @@ Methods.create = async (req, res) => {
         res.status(201).send(result)
     }
     catch(error){
-        res.status(500).send(error.message)
+        next(error);
     }
 }
 
-Methods.findAll = async (req, res) => {
+Methods.findAll = async (req, res,next) => {
     try{
         const user = req.query.createdBy
         var condition = user ? { createdBy: user } : null
@@ -44,12 +44,11 @@ Methods.findAll = async (req, res) => {
         // throw new Error("No data found")
     }
     catch(error){
-        console.log(error)
-        res.status(500).send(error.message)
+        next(error);
     }
 }
 
-Methods.findOne =  async (req, res) => {
+Methods.findOne =  async (req, res,next) => {
     try{
         const id = req.params.id
         var result = await Task.findByPk(id)
@@ -59,12 +58,12 @@ Methods.findOne =  async (req, res) => {
         // throw new Error("No data found")
     }
     catch(error){
-        res.status(500).send(error.message)
+        next(error);
     }
 }
 
 
-Methods.findInProgress =  async (req, res) => {
+Methods.findInProgress =  async (req, res,next) => {
     try{
         var result = await Task.findOne({where: {approvedStatusId:2}})
         // if(result){
@@ -73,11 +72,11 @@ Methods.findInProgress =  async (req, res) => {
         // throw new Error("No data found")
     }
     catch(error){
-        res.status(500).send(error.message)
+        next(error);
     }
 }
 
-Methods.update = async (req, res) => {
+Methods.update = async (req, res,next) => {
     try{
         // const errors = validationResult(req)
         // if(!errors.isEmpty()){
@@ -97,11 +96,11 @@ Methods.update = async (req, res) => {
         }
     }
     catch(error){
-        res.status(500).send(error.message)
+        next(error);
     }
 }
 
-Methods.delete = async (req, res) => {
+Methods.delete = async (req, res,next) => {
     try{
         const id = req.params.id
         var result= await Task.destroy({where: { id: id }})
@@ -116,7 +115,7 @@ Methods.delete = async (req, res) => {
         }
     }
     catch(error){
-        res.status(500).send(error.message)
+        next(error);
     }
 
 }

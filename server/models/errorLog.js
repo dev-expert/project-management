@@ -10,11 +10,6 @@ module.exports = (sequelize, DataTypes) => {
 	};
 
 	ErrorLog.init({
-		id: {
-			type: DataTypes.UUID,
-			defaultValue: DataTypes.UUIDV4,
-			primaryKey: true,
-		},
 		userId: {
 			type: DataTypes.INTEGER,
 			allowNull: true,

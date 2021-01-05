@@ -21,7 +21,7 @@ const createUsers = async (payload, filter = null, updateMany = false) => {
 	}
 }
 const findUsers = async (req, onlyOne = false) => {
-	const { query, filter } = req;
+	const { query, filtessr } = req;
 	try {
 		let result = [];
 		if (onlyOne) {
@@ -79,9 +79,9 @@ const findUsers = async (req, onlyOne = false) => {
 			result.push({ data: users.rows, 'totalRecords': users.count });
 		}
 		return result;
-	} catch (err) {
-		throw err;
-	}
+	}catch (err) {
+	throw err;
+}
 }
 
 const Methods = {};
@@ -93,9 +93,10 @@ Methods.create = async (req, res, next) => {
 		user.createdBy = id;
 		const result = await createUsers(user);
 		res.status(201).json(result);
-	} catch (err) {
-		next(err);
 	}
+    catch(error){
+        next(error);
+    }
 }
 
 Methods.findAll = async (req, res, next) => {
@@ -108,9 +109,9 @@ Methods.findAll = async (req, res, next) => {
 		var result = await findUsers(req)
 		return res.json(result);
 	}
-	catch (error) {
-		next(error);
-	}
+    catch(error){
+        next(error);
+    }
 }
 
 Methods.findOne = async (req, res, next) => {
@@ -119,9 +120,9 @@ Methods.findOne = async (req, res, next) => {
 		var result = await findUsers({ id }, true)
 		res.json(result);
 	}
-	catch (error) {
-		next(error);
-	}
+    catch(error){
+        next(error);
+    }
 }
 
 Methods.update = async (req, res, next) => {
@@ -130,9 +131,10 @@ Methods.update = async (req, res, next) => {
 		const updatedUser = req.body;
 		const result = await createUsers(updatedUser, { id });
 		res.json(result);
-	} catch (err) {
-		next(err);
 	}
+    catch(error){
+        next(error);
+    }
 }
 
 Methods.delete = async (req, res, next) => {
@@ -140,9 +142,10 @@ Methods.delete = async (req, res, next) => {
 		const { id } = req.params;
 		const result = await createUsers({ active: false }, { id });
 		res.json(result);
-	} catch (err) {
-		next(err);
 	}
+    catch(error){
+        next(error);
+    }
 }
 
 module.exports = Methods;

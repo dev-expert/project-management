@@ -12,6 +12,7 @@ import EditProject from './components/Project/EditProject';
 import CreateProject from './components/Project/CreateProject';
 import Users from './components/User/Users';
 import TimeSheet from './components/Timesheet'
+import Reports from './components/Reports'
 import CreateUser from './components/User/CreateUser';
 import editUser from './components/User/EditUser';
 import Drawer from './components/Layouts/Drawer';
@@ -41,6 +42,7 @@ function App() {
             <ProtectedRoute action='write' path="/users/edit" exact component={editUser} />
             <ProtectedRoute path="/users" exact component={Users} />
             <ProtectedRoute path="/timesheet" exact component={TimeSheet} />
+            <ProtectedRoute path="/reports" exact component={Reports} />
             <Redirect from="*" to="/" />
           </Switch>
         </Drawer>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -10,9 +10,15 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import { formatDate } from '../../config/helper';
+import { IconButton  } from "@material-ui/core";
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from "@material-ui/icons/Delete"
-import { IconButton  } from "@material-ui/core";
+import FormControl from '@material-ui/core/FormControl';
+
+import Pagination from '@material-ui/lab/Pagination';
+import TextField from '@material-ui/core/TextField';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -30,9 +36,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 function Projects({ projects, getProjects, history ,deleteProject}) {
+  const countData = projects.length > 0 ? projects[0].totalRecords: 0 ;
+  const pageCount = Math.ceil(countData/10);
   const classes = useStyles();
-  useEffect(() => {
-    getProjects();
+  const [page, setPage] = useState(1);
+  const [offset, setOffset] = useState(0);
+  const [limit, setLimit] = useState(10);
+  const [search, setSearch] = useState({
+    name: '',
+    description: '',
+  });
+
+  useEffect(() => { 
+    getProjects(offset, limit, search);
   }, [getProjects])
   const createProject = () => {
     history.push('/projects/create');
@@ -44,6 +60,29 @@ function Projects({ projects, getProjects, history ,deleteProject}) {
 });
 
 }
+const handleNameChange = (event) => {
+  setSearch({
+    name: event.target.value,
+    description: event.target.value,
+  })
+};
+const handleChange = (event, value) => {
+  console.log(event)
+  console.log(value)
+  setPage(value);
+  let offsetValue = (value-1) * limit;
+  setOffset(offsetValue) ;
+  getProjects(offsetValue, limit, search);
+    
+};
+
+const handleSearch = () => {
+  setOffset(0)
+  setPage(1)
+  getProjects(0, limit, search);
+};
+
+
 const handelDelete  = (id) => {
   deleteProject(id)
 }
@@ -57,6 +96,15 @@ const handelDelete  = (id) => {
           <button onClick={createProject} className='btn btn-primary'>
           Create Project
           </button>
+        </Grid>
+        <Grid item xs={12} md={12} lg={12} >
+        <form className={classes.root} noValidate autoComplete="off">
+          <TextField id="name" label="Search" onChange={handleNameChange} variant="outlined" />
+          <FormControl></FormControl>
+          <button onClick={handleSearch} style={{marginLeft: '10px'}} type="button" className='btn btn-primary'>
+          Search
+          </button>
+        </form>
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
         <Table>
@@ -73,7 +121,7 @@ const handelDelete  = (id) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            { projects && projects.length ? projects[0].projects.map((row, id) => (
+            { projects && projects.length ? projects[0].data.map((row, id) => (
               <TableRow key={row.id}>
                 <TableCell>{id+1}</TableCell>
                 <TableCell>{row.name}</TableCell>
@@ -88,6 +136,9 @@ const handelDelete  = (id) => {
             )) : null}
           </TableBody>
         </Table>
+        <div className={classes.paginate}>
+        <Pagination count={pageCount > 1 ? pageCount: 1 } page={countData} onChange={handleChange} siblingCount={1} boundaryCount={1}  variant="outlined" />
+      </div>
         </Grid>
       </Grid>
     </Container>

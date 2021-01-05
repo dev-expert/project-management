@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 const ProjectModel = require('../models').Project;
 const UserModel = require('../models').User;
+var Sequelize = require('sequelize');
+
 const createProjects = async (payload, filter = null, updateMany = false) => {
   try {
     let result = null;
@@ -26,48 +28,29 @@ const findProjects = async (filter = {}, onlyOne = false) => {
     if (onlyOne) {
       result = await ProjectModel.findByPk(filter.id);
     } else {
-      filter.active = true;
-      let limit = 10;   // number of records per page
-      let offset = 0;
 
       let data = await ProjectModel.findAll({
-        where: filter,
-        include: [
-          {
-            model: UserModel,
-            as: 'clientDetails'
+        where: { active: true },
+      });
+      let projects = await ProjectModel.findAll({
+        where: {
+          active: true,
+          [Sequelize.Op.or]: [{
+            name: {
+              [Sequelize.Op.like]: `%${filter.query.name}%`
+            }
           },
           {
-            model: UserModel,
-            as: 'User'
-          }
-        ]
-      });
-      // let page = req.params  ? req.params.page:0;      // page number
-      let page = 0;      // page number
-      let pages = Math.ceil(data.length / limit);
-       offset = 0 + (page - 1) * limit;
-
-     let  projects = await ProjectModel.findAll({
-        limit: limit,
-        offset: offset > 0 ? offset:0,
-        where: filter,
-        include: [
-          {
-            model: UserModel,
-            as: 'clientDetails'
+            description: {
+              [Sequelize.Op.like]: `%${filter.query.description}%`
+            }
           },
-          {
-            model: UserModel,
-            as: 'User'
-          }
-        ]
-
+          ]
+        },
+        offset: parseInt(filter.query.offset),
+        limit: parseInt(filter.query.limit),
       });
-
-      result.push({projects, 'count': data.length, 'pages': pages});
-      
-
+      result.push({ data: projects, 'totalRecords': data.length });
     }
     return result;
   } catch (err) {
@@ -77,7 +60,7 @@ const findProjects = async (filter = {}, onlyOne = false) => {
 router.get(
   '/', async (req, res, next) => {
     try {
-      const result = await findProjects({});
+      const result = await findProjects({ query: req.query });
       res.json(result);
     } catch (err) {
       next(err);

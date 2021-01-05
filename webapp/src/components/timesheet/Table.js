@@ -57,10 +57,8 @@ function createData(name, description, duration, total, protein) {
 }
 
 
-export default function BasicTable({tasks,onAddComment}) {
+export default function BasicTable({tasks}) {
 	const classes = useStyles();
-
-
 
 	return (
 		<TableContainer component={Paper}>
@@ -76,7 +74,7 @@ export default function BasicTable({tasks,onAddComment}) {
 				</TableHead>
 				<div>
 					{tasks.map((row) => (
-						<TaskRow task={row} onAddComment={onAddComment}/>
+						<TaskRow task={row} />
 					))}
 				</div>
 			</div>

@@ -52,14 +52,14 @@ const BorderedCell = withStyles((theme) => ({
 }))(TableCell);
 
 
-const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, getTask, getInProgressTask, task }) => {
+const Index = ({ getTasks, getProjects, tasks, projects, addComment, addTask, updateTask, getTask, getInProgressTask, task }) => {
 	const [title, setTitle] = useState('Test Title');
 	const [projectId, setProjectId] = useState(1);
 	const [isBillable, setIsBillable] = useState(false);
 	const [checkIn, setCheckIn] = useState('');
 	const [checkOut, setCheckOut] = useState('');
 	const [clockedTime, setClockedTime] = useState(0);
-	const [submittedBy, setSubmittedBy] = useState(3);
+	const [submittedBy, setSubmittedBy] = useState(1);
 	const [isTracking, setIsTracking] = useState(false);
 	const [intervalId, setIntervalId] = useState(null);
 	const [open, setOpen] = useState(false);
@@ -93,9 +93,6 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 	}, []);
 
 
-	const onAddComment = (comment)=> {
-		console.log("Adding comment",comment)
-	}
 
 	let currentProject
 	if (projects && projects[0]) {
@@ -290,7 +287,7 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 
 
 				<div className="timesheet__table">
-					<TimeSheetTable tasks={tasks} onAddComment={onAddComment}/>
+					<TimeSheetTable tasks={tasks}  />
 				</div>
 			</div>
 

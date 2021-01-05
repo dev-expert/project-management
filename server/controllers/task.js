@@ -59,9 +59,11 @@ Methods.findOne =  async (req, res) => {
 Methods.findInProgress =  async (req, res) => {
     try{
         var result = await Task.findOne({where: {approvedStatusId:2}})
-        // if(result){
+        if(result){
             res.send(result)
-        // }
+        }else{
+            res.send({})
+        }
         // throw new Error("No data found")
     }
     catch(error){

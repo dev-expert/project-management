@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState} from 'react'
 import Avatar from '@material-ui/core/Avatar';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -13,7 +13,8 @@ const StyledButton = styled(Button)({
 });
 
 
-const Comment = () => {
+const Comment = ({comment}) => {
+
 	return (
 		<div
 			className="comment"
@@ -42,13 +43,23 @@ const Comment = () => {
 	)
 }
 
-const CommentBox = () => {
+const CommentBox = (props) => {
+	const [comment,setComment] = useState('');
+	const addComment = () => {
+		if(!comment){
+			return;
+		}
+		props.onAddComment(comment);
+
+	}
 	return (
 		<div className="comment__box">
 			<Avatar alt="Remy Sharp" src="https://picsum.photos/200/200" />
 			<div className="input__box">
-				<input type="text" className="input__box" placeholder="Write a comment" />
-				<StyledButton>
+				<input type="text" value={comment}
+				onChange={(e) => setComment(e.target.value)}
+				className="input__box" placeholder="Write a comment" />
+				<StyledButton onClick={addComment}>
 					SEND
 				  </StyledButton>
 			</div>
@@ -57,15 +68,15 @@ const CommentBox = () => {
 }
 
 
-const Comments = () => {
+const Comments = ({comments, onAddComment}) => {
 	return (
 		<div className="comments" >
-			{[1, 2, 3].map(() => {
+			{comments.map((comment) => {
 				return (
-					<Comment />
+					<Comment comment={comment}/>
 				)
 			})}
-			<CommentBox />
+			<CommentBox onAddComment={onAddComment}/>
 		</div>
 
 

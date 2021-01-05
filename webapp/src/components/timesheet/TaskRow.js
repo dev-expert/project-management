@@ -37,7 +37,7 @@ export const BorderedCell = withStyles((theme) => ({
 
 
 
-const TaskRow = ({ task }) => {
+const TaskRow = ({ task,onAddComment }) => {
 	const [showComments, setShowComments] = useState(false);
 
 
@@ -71,7 +71,7 @@ const TaskRow = ({ task }) => {
 
 							<FlexRow>
 								<IconButton onClick={toggleCommentsView}>
-									<Badge badgeContent={4} color="secondary">
+									<Badge badgeContent={task.comments.length} color="secondary">
 										<CommentIcon />
 									</Badge>
 								</IconButton>
@@ -83,7 +83,9 @@ const TaskRow = ({ task }) => {
 				</div>
 			</div>
 			<div>
-					{showComments && <Comments />}
+					{showComments && <Comments
+					onAddComment={onAddComment}
+					  comments={task.comments}/>}
 				</div>
 		</>
 	)

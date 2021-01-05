@@ -3,10 +3,17 @@ import { CREATE_PROJECT, GET_PROJECTS, GET_PROJECT, UPDATE_PROJECT,DELETE_PROJEC
 import { api } from '../config/env';
 import { toast } from 'react-toastify';
 const PATH = `${api}api/projects`;
-export function getProjects() {
+export function getProjects(offset, limit, SEARCH) {
+    
     return dispatch => {
         axios
-            .get(`${PATH}`)
+            .get(`${PATH}`,{
+                params: {
+					...SEARCH,
+					offset,
+					limit,
+                }
+            })
             .then(response => {
                 dispatch({ type: GET_PROJECTS, payload: response.data });
             })

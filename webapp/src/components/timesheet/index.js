@@ -96,7 +96,7 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 	let currentProject
 	if (projects && projects[0] && task) {
 
-		currentProject = projects[0].projects.find(p => p.id == task.projectId)
+		currentProject = projects[0].data.find(p => p.id == task.projectId)
 	}
 
 
@@ -234,7 +234,7 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 												MenuProps={MenuProps}
 											>
 
-												{projects[0] && projects[0].projects.map((project) => (
+												{projects[0] && projects[0].data.map((project) => (
 													<MenuItem key={project.name} name={project.name} value={project}>
 														{project.name}
 													</MenuItem>

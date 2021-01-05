@@ -1,5 +1,7 @@
 const Task = require('../models').Task;
-const Projects = require('../models').Project;
+const Projects = require('../models').Project
+const comment = require('../models').Comment
+const users = require('../models').User
 // const { validationResult } = require('express-validator');
 
 const Methods= {}
@@ -27,6 +29,12 @@ Methods.findAll = async (req, res) => {
             include : [
                 {
                     model: Projects, as: "Projects"
+                },
+                 {
+                    model: comment, as: "comments"
+                },
+                {
+                    model: users, as: "userInfo"
                 }
             ]
         });

@@ -21,12 +21,14 @@ const createUsers = async (payload, filter = null, updateMany = false) => {
 	}
 }
 const findUsers = async (req, onlyOne = false) => {
-	const { query, filtessr } = req;
+	const { query, filter } = req;
 	try {
 		let result = [];
 		if (onlyOne) {
+			console.log(req);
 			result = await UserModel.findOne({
-				where: { active: true },
+				where: { active: true , id: req.id },
+
 				include: [{ model: RoleModel, as: 'role' }]
 			});
 		} else {

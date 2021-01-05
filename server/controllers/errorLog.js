@@ -2,7 +2,7 @@
 const ErrorLog = require('../models/errorLog').errorLog;
 
 
-exports.getSub = async  (req, err) => {
+exports.errorLogging = async  (req, err) => {
   let payload = {
     userId: req.user.id ? req.user.id : '',
     userEmail: req.user.email ? req.user.email : '',

@@ -51,7 +51,7 @@ app.use(cookieParser());
 app.use('/', indexRouter);
 app.use('/api', passport.authenticate('jwt', { session: false }), ability,pagination,apiRouter);
 app.use(function(err, req, res, next) {
-    errorLogs.getSub(req,err);
+    errorLogs.errorLogging(req,err);
     res.status(err.status || 500);
     res.json({ error: err });
 });

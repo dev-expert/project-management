@@ -74,7 +74,7 @@ export default function BasicTable({tasks}) {
 				</TableHead>
 				<div>
 					{tasks.map((row) => (
-						<TaskRow task={row} />
+						<TaskRow key={row.id}  task={row}/>
 					))}
 				</div>
 			</div>

@@ -9,7 +9,7 @@ Methods.create = async (req, res) => {
         // const errors = validationResult(req)
         // if(!errors.isEmpty()){
         //     return res.status(400).json({errors: errors.array()})
-        // } 
+        // }
         var result = await Task.create(req.body);
         res.status(201).send(result)
     }
@@ -22,11 +22,11 @@ Methods.findAll = async (req, res) => {
     try{
         const user = req.query.createdBy
         var condition = user ? { createdBy: user } : null
-        var result= await Task.findAll({ 
+        var result= await Task.findAll({
             where: condition,
             include : [
                 {
-                    model: Projects,
+                    model: Projects, as: "Projects"
                 }
             ]
         });
@@ -55,12 +55,27 @@ Methods.findOne =  async (req, res) => {
     }
 }
 
+
+Methods.findInProgress =  async (req, res) => {
+    try{
+        var result = await Task.findOne({where: {approvedStatusId:2}})
+        // if(result){
+            res.send(result)
+        // }
+        // throw new Error("No data found")
+    }
+    catch(error){
+        res.status(500).send(error.message)
+    }
+}
+
 Methods.update = async (req, res) => {
     try{
         // const errors = validationResult(req)
         // if(!errors.isEmpty()){
         //     return res.status(400).json({errors: errors.array()})
-        // } 
+        // }
+
         const id = req.params.id
         var result= await Task.update(req.body, {where: { id: id }})
         if(result == 1){
@@ -95,7 +110,7 @@ Methods.delete = async (req, res) => {
     catch(error){
         res.status(500).send(error.message)
     }
-    
+
 }
 
 module.exports = Methods;

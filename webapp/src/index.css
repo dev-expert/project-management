@@ -129,6 +129,12 @@ body {
     border-style: outset;
 }
 
+.MuiInput-underline:before {
+    display: none !important;
+}
+
+
+
 .select-formcontrol{
     width: 90%;
     top: 100px;

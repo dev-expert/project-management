@@ -130,15 +130,17 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 	}
 
 	const handleSubmit = async () => {
-		if (isTracking) {
 			let currentTime = new Date();
+			setCheckIn(currentTime);
+
+		if (isTracking) {
 			setIsTracking(false)
 			setCheckOut(currentTime)
 			setTimeout(async () => {
 				let payLoad = {
 					"description": task.description,
 					"projectId": currentProject.id,
-					"startedAt": checkIn,
+					"startedAt": currentTime,
 					"approvedStatusId": 3,
 					"completedAt": currentTime,
 					"clockedTime": clockedTime,
@@ -152,19 +154,19 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 		}
 		// setIsTracking(false)
 		// setCheckOut(currentTime)
-		let currentTime = new Date();
 		setIsTracking(false)
 		setCheckOut(currentTime)
 		setTimeout(async () => {
 			let payLoad = {
 				"description": taskDetail.description,
+				"title":taskDetail.title,
+				"videoLink":taskDetail.videoLink,
 				"projectId": currentProject.id,
-				"startedAt": checkIn,
+				"startedAt": currentTime,
 				"approvedStatusId": 2,
 				"completedAt": currentTime,
 				"clockedTime": clockedTime,
 				"isBillable": isBillable,
-				"createdBy": submittedBy
 			}
 			addTask(payLoad);
 			// setClockedTime(0)

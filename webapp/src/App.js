@@ -12,7 +12,7 @@ import EditProject from './components/Project/EditProject';
 import CreateProject from './components/Project/CreateProject';
 import Users from './components/User/Users';
 import TimeSheet from './components/Task/TimeSheet';
-import TimeSheetUI from './components/timesheet'
+import TimeSheetUI from './components/Timesheet'
 import CreateUser from './components/User/CreateUser';
 import editUser from './components/User/EditUser';
 import Drawer from './components/Layouts/Drawer';

@@ -34,6 +34,11 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
+  paginate: {
+    padding: '1rem',
+    display: 'flex',
+    justifyContent: 'flex-end'
+  },
 }));
 function Projects({ projects, getProjects, history ,deleteProject}) {
   const countData = projects.length > 0 ? projects[0].totalRecords: 0 ;
@@ -88,11 +93,11 @@ const handelDelete  = (id) => {
 }
   return (
       <Container maxWidth="lg" className={classes.container}>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} justify='flex-end'>
         <Grid item xs={9} md={10} lg={10}>
           <Title>Projects</Title>
         </Grid>
-        <Grid item xs={3} md={2} lg={2} justify='flex-end'>
+        <Grid item xs={3} md={2} lg={2}>
           <button onClick={createProject} className='btn btn-primary'>
           Create Project
           </button>

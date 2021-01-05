@@ -20,7 +20,8 @@ const createUsers = async (payload, filter = null, updateMany = false) => {
 		throw err;
 	}
 }
-const findUsers = async (filter = {}, onlyOne = false) => {
+const findUsers = async (req, onlyOne = false) => {
+	const { query, filter } = req;
 	try {
 		let result = [];
 		if (onlyOne) {
@@ -29,44 +30,50 @@ const findUsers = async (filter = {}, onlyOne = false) => {
 				include: [{ model: RoleModel, as: 'role' }]
 			});
 		} else {
-
 			let where = {
 				active: true
 			}
 			const ORFilter = [];
-			if (filter.query.email) {
+			if (query.email) {
 				ORFilter.push({
 					email: {
-						[Sequelize.Op.like]: `%${filter.query.email}%`
+						[Sequelize.Op.like]: `%${query.email}%`
 					}
 				})
 			}
-			if (filter.query.name) {
+			if (query.name) {
 				ORFilter.push({
 					firstName: {
-						[Sequelize.Op.like]: `%${filter.query.name}%`
+						[Sequelize.Op.like]: `%${query.name}%`
 					}
 				})
 
 				ORFilter.push({
 					lastName: {
-						[Sequelize.Op.like]: `%${filter.query.name}%`
+						[Sequelize.Op.like]: `%${query.name}%`
 					}
 				})
 			}
 
 
 
-			if (filter.query.role) {
-				where.roleId = filter.query.role;
+			if (query.role) {
+				where.roleId = query.role;
 			}
-			where = { ...where, 
-				 [Sequelize.Op.or]: ORFilter
-			 }
+			if (ORFilter.length > 0) {
+				where = {
+					...where,
+					[Sequelize.Op.or]: ORFilter
+				}
+			} else {
+				where = {
+					...where,
+				}
+			}
 
 			let users = await UserModel.findAndCountAll({
+				...filter,
 				where,
-		//		...filter.query,
 				include: [{ model: RoleModel, as: 'role' }]
 			});
 			result.push({ data: users.rows, 'totalRecords': users.count });
@@ -98,7 +105,7 @@ Methods.findAll = async (req, res, next) => {
 			// filter.createdBy = id
 		}
 
-		var result = await findUsers({ query: req.query })
+		var result = await findUsers(req)
 		return res.json(result);
 	}
 	catch (error) {

@@ -9,10 +9,6 @@ function userActionPerformed(dispatch) {
 	}, 500)
 }
 export function getUsers(offset, limit, SEARCH) {
-	debugger;
-
-	// const searchQuery = `&name=${name}&email=${email}&role=${role}`
-	// const queryParams = `?offset=${OFFSET}&limit=${LIMIT}${searchQuery}`
 	return dispatch => {
 		axios
 			.get(`${PATH}`, {

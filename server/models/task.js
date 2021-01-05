@@ -53,7 +53,10 @@ module.exports = (sequelize, DataTypes) => {
     clockedTime: DataTypes.INTEGER,
 	isBillable: DataTypes.BOOLEAN,
 	statusId : DataTypes.INTEGER,
-	approvedStatusId : DataTypes.INTEGER,
+  approvedStatusId : DataTypes.INTEGER,
+  title :DataTypes.STRING,
+  videoLink :DataTypes.TEXT,
+  isManual :DataTypes.BOOLEAN,
 	createdBy: {
 		type: DataTypes.INTEGER,
 		allowNull: true,

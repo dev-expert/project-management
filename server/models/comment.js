@@ -21,7 +21,6 @@ module.exports = (sequelize, DataTypes) => {
     timeEntryId: DataTypes.INTEGER,
     createdBy: DataTypes.INTEGER,
     comment: DataTypes.TEXT,
-    isDeleted: DataTypes.BOOLEAN,
     active: {
         type: DataTypes.BOOLEAN,
         defaultValue: false

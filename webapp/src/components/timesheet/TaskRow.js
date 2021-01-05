@@ -62,7 +62,7 @@ const TaskRow = ({ task }) => {
 	},[task.id]);
 
 	const handleDeleteComment = async (id) => {
-		await updateComment(id,{isDeleted:true});
+		await updateComment(id,{active:false});
 		fetchComments();
 	}
 

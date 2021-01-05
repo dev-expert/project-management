@@ -4,7 +4,7 @@ const users = require('../models').User;
 const Methods = {};
 
 Methods.create = async (req, res, next) => {
-    const body = { ...req.body, createdBy: req.user.id,isDeleted: false};
+    const body = { ...req.body, createdBy: req.user.id};
     try {
         var result = await CommentModel.create(body)
         res.json(result);
@@ -18,7 +18,7 @@ Methods.findAll = async (req, res, next) => {
     const timeEntryId = req.query.timeEntryId;
 
     try {
-        const condition = {isDeleted: 0, timeEntryId}
+        const condition = {active: true, timeEntryId}
         var result = await CommentModel.findAll({
             where: condition,
             include: [
@@ -36,7 +36,7 @@ Methods.findAll = async (req, res, next) => {
 
 Methods.findOne = async (req, res, next) => {
     try {
-        const condition = { isDeleted: false }
+        const condition = { active: false }
         var result = await CommentModel.findByPk(req.params.id,
             {
                 where: condition,

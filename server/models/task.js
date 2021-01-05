@@ -21,7 +21,20 @@ module.exports = (sequelize, DataTypes) => {
 				foreignKey: "projectId",
         as: 'Projects',
 
-			})
+      })
+
+      Task.belongsTo(models.User, {
+				foreignKey: "createdBy",
+        as: 'userInfo',
+
+      })
+ 
+
+      Task.hasMany(models.Comment, {
+        foreignKey: 'timeEntryId',
+        as: 'comments'
+      });
+
 
       // define association here
     //   Task.hasOne(models.TaskStatus, {

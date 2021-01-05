@@ -12,7 +12,8 @@ Methods.create = async (req, res) => {
         // if(!errors.isEmpty()){
         //     return res.status(400).json({errors: errors.array()})
         // }
-        var result = await Task.create(req.body);
+        const body = {...req.body,createdBy:req.user.id};
+        var result = await Task.create(body);
         res.status(201).send(result)
     }
     catch(error){
@@ -22,8 +23,10 @@ Methods.create = async (req, res) => {
 
 Methods.findAll = async (req, res) => {
     try{
-        const user = req.query.createdBy
-        var condition = user ? { createdBy: user } : null
+
+        const user = req.user;
+        var condition = user ? { createdBy: user.id } : null
+
         var result= await Task.findAll({
             where: condition,
             include : [

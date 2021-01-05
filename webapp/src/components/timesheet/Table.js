@@ -56,18 +56,10 @@ function createData(name, description, duration, total, protein) {
 	return { name, description, duration, total, protein };
 }
 
-const rows = [
-	createData('Project Management Tool', "Creating Mockup for dashboard", "09:30 - 07:00", "03:00"),
-	createData('Email Marketing', "Creating Mockup for dashboard", "09:30 - 07:00", "03:00"),
-	createData('Noteworthy', "Creating Mockup for dashboard", "09:30 - 07:00", "03:00"),
-	createData('Rediminds', "Creating Mockup for dashboard", "09:30 - 07:00", "03:00"),
-	// createData('Rediminds', "Creating Mockup for dashboard", "09:30 - 07:00", "03:00"),
-	createData('Froloa', "Creating Mockup for dashboard", "09:30 - 07:00", "03:00"),
-	createData('Tern', "Creating Mockup for dashboard", "09:30 - 07:00", "03:00"),
-];
 
-export default function BasicTable({tasks}) {
+export default function BasicTable({tasks,onAddComment}) {
 	const classes = useStyles();
+
 
 
 	return (
@@ -84,7 +76,7 @@ export default function BasicTable({tasks}) {
 				</TableHead>
 				<div>
 					{tasks.map((row) => (
-						<TaskRow task={row}/>
+						<TaskRow task={row} onAddComment={onAddComment}/>
 					))}
 				</div>
 			</div>

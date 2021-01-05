@@ -93,10 +93,17 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 	}, []);
 
 
+	const onAddComment = (comment)=> {
+		console.log("Adding comment",comment)
+	}
+
 	let currentProject
-	if (projects && projects[0] && task) {
+	if (projects && projects[0]) {
 
 		currentProject = projects[0].data.find(p => p.id == task.projectId)
+		if(!currentProject) {
+			currentProject = project;
+		}
 	}
 
 
@@ -281,7 +288,7 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 
 
 				<div className="timesheet__table">
-					<TimeSheetTable tasks={tasks} />
+					<TimeSheetTable tasks={tasks} onAddComment={onAddComment}/>
 				</div>
 			</div>
 

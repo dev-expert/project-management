@@ -30,7 +30,7 @@ const findUsers = async (filter = {}, onlyOne = false) => {
 			});
 		} else {
 
-			const where = {
+			let where = {
 				active: true
 			}
 			const ORFilter = [];
@@ -60,12 +60,13 @@ const findUsers = async (filter = {}, onlyOne = false) => {
 			if (filter.query.role) {
 				where.roleId = filter.query.role;
 			}
-			where = { ...where, [Sequelize.Op.or]: ORFilter }
+			where = { ...where, 
+				 [Sequelize.Op.or]: ORFilter
+			 }
 
 			let users = await UserModel.findAndCountAll({
 				where,
-				offset: parseInt(filter.query.offset),
-				limit: parseInt(filter.query.limit),
+		//		...filter.query,
 				include: [{ model: RoleModel, as: 'role' }]
 			});
 			result.push({ data: users.rows, 'totalRecords': users.count });

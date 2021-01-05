@@ -207,7 +207,6 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 				"completedAt": currentTime,
 				"clockedTime": clockedTime,
 				"isBillable": isBillable,
-				"createdBy": submittedBy
 			}
 			addTask(payLoad);
 		}
@@ -390,7 +389,7 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 
 
 				<div className="timesheet__table">
-					<TimeSheetTable tasks={tasks} />
+					<TimeSheetTable tasks={tasks}/>
 				</div>
 			</div>
 

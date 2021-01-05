@@ -19,7 +19,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { Person as PersonIcon, ShoppingCart as ShoppingCartIcon } from '@material-ui/icons';
-import access from '../../config/access'; 
+import access from '../../config/access';
 import { Link } from 'react-router-dom';
 const drawerWidth = 240;
 
@@ -127,7 +127,15 @@ export const mainListItems = (
         <PersonIcon />
       </ListItemIcon>
       <ListItemText primary="TimeSheet" />
-    </ListItem> 
+    </ListItem>
+    </Link>: null}
+    {access('read', 'Common') ? <Link to="/reports">
+    <ListItem button>
+      <ListItemIcon>
+        <PersonIcon />
+      </ListItemIcon>
+      <ListItemText primary="Reports" />
+    </ListItem>
     </Link>: null}
   </div>
 );
@@ -139,11 +147,11 @@ function Dashboard({ isLoggedIn, logout, children, history }) {
   };
   const handleDrawerClose = () => {
     setOpen(false);
-  };  
+  };
   const exit = () => {
       logout();
       history.push('/signin')
-  } 
+  }
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -177,7 +185,7 @@ function Dashboard({ isLoggedIn, logout, children, history }) {
           <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
           </IconButton>
-        </div> 
+        </div>
         <Divider />
         {isLoggedIn ? <List>{mainListItems}</List> : null}
       </Drawer>

@@ -33,6 +33,7 @@ import {
 	KeyboardTimePicker,
 	KeyboardDatePicker,
   } from '@material-ui/pickers';
+  import { toast } from 'react-toastify';
   
 
 const ITEM_HEIGHT = 48;
@@ -96,7 +97,7 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 			let currentTime = new Date().getTime();
 			let clockedTime = Math.floor((currentTime - Number(startTime)) / 1000)
 	
-			if (startTime && !isTracking) {
+			if (startTime && !isTracking && !isManual) {
 				setTaskDetail(task)
 				setClockedTime(clockedTime)
 				setIsTracking(true)
@@ -142,6 +143,7 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 		}
 
 		if(isManual){
+			let clocked_time=0
 			let selected_date= new Date(selectedDate)
 			let selected_starttime= new Date(startTime)
 			let selected_endtime= new Date(endTime)
@@ -151,22 +153,32 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 			selected_endtime.setFullYear(selected_date.getFullYear())
 			selected_endtime.setMonth(selected_date.getMonth())
 			selected_endtime.setDate(selected_date.getDate())
-			console.log(selectedDate)
-			console.log(startTime)
-			console.log(selected_starttime)
-			console.log(endTime)
-			console.log(selected_endtime)
+			if(selected_endtime.getTime() > selected_starttime.getTime()){
+				clocked_time= Math.floor((selected_endtime.getTime() - selected_starttime.getTime()) / 1000)
+				setClockedTime(clocked_time)
+			}else{
+				toast.error('End time must be greater then start time')
+				return false;
+			}
+			
 			let payLoad = {
 				"description": taskDetail.description,
+				"title": taskDetail.title,
+				"videoLink": taskDetail.videoLink,
 				"projectId": project.id,
 				"startedAt": selected_starttime,
-				"approvedStatusId": 2,
+				"approvedStatusId": 3,
 				"completedAt": selected_endtime,
-				"clockedTime": clockedTime,
+				"clockedTime": clocked_time,
 				"isBillable": isBillable,
-				"createdBy": submittedBy
+				"isManual": isManual
 			}
 			addTask(payLoad);
+			setClockedTime(0)
+			setIsBillable(false)
+			setTaskDetail('')
+			setProject()
+			setProjectId(0)
 		}else{
 
 			if (isTracking) {
@@ -178,12 +190,14 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 					clearInterval(intervalId)
 					let payLoad = {
 						"description": taskDetail.description,
+						"title": taskDetail.title,
+						"videoLink": taskDetail.videoLink,
 						"projectId": project.id,
 						"approvedStatusId": 3,
 						"completedAt": currentTime,
 						"clockedTime": clockedTime,
 						"isBillable": isBillable,
-						"createdBy": submittedBy
+						"isManual": isManual
 					}
 					updateTask(taskDetail.id,payLoad)
 					setClockedTime(0)
@@ -201,12 +215,15 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 			startTimer()
 			let payLoad = {
 				"description": taskDetail.description,
+				"title": taskDetail.title,
+				"videoLink": taskDetail.videoLink,
 				"projectId": project.id,
 				"startedAt": currentTime,
 				"approvedStatusId": 2,
 				"completedAt": currentTime,
 				"clockedTime": clockedTime,
 				"isBillable": isBillable,
+				"isManual": isManual
 			}
 			addTask(payLoad);
 		}
@@ -229,11 +246,45 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 	  };
 
 	const handleStartTimeChange = (date, value) => {
-		setStartTimeDate(date);
+		
+		let selected_date= new Date(selectedDate)
+		let selected_starttime= new Date(date)
+		let selected_endtime= new Date(endTime)
+		selected_starttime.setFullYear(selected_date.getFullYear())
+		selected_starttime.setMonth(selected_date.getMonth())
+		selected_starttime.setDate(selected_date.getDate())
+		selected_endtime.setFullYear(selected_date.getFullYear())
+		selected_endtime.setMonth(selected_date.getMonth())
+		selected_endtime.setDate(selected_date.getDate())
+		if(selected_endtime.getTime() > selected_starttime.getTime()){
+			setStartTimeDate(date);
+			let clockedTime= Math.floor((selected_endtime.getTime() - selected_starttime.getTime()) / 1000)
+			setClockedTime(clockedTime)
+		}else{
+			toast.error('End time must be greater then start time')
+		}
 	};
 
 	const handleEndTimeChange = (date, value) => {
-		setEndTimeDate(date);
+		
+		
+		let selected_date= new Date(selectedDate)
+		let selected_starttime= new Date(startTime)
+		let selected_endtime= new Date(date)
+		selected_starttime.setFullYear(selected_date.getFullYear())
+		selected_starttime.setMonth(selected_date.getMonth())
+		selected_starttime.setDate(selected_date.getDate())
+		selected_endtime.setFullYear(selected_date.getFullYear())
+		selected_endtime.setMonth(selected_date.getMonth())
+		selected_endtime.setDate(selected_date.getDate())
+		if(selected_endtime.getTime() > selected_starttime.getTime()){
+			setEndTimeDate(date);
+			let clockedTime= Math.floor((selected_endtime.getTime() - selected_starttime.getTime()) / 1000)
+			setClockedTime(clockedTime)
+		}else{
+			toast.error('End time must be greater then start time')
+		}
+		
 	};
 	
 
@@ -366,13 +417,15 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 										<Checkbox
 											icon={<ClockIcon />}
 											checkedIcon={<ClockIcon />}
-											onChange={(e) => setIsManual(false)}
+											onChange={(e) => { if(!isTracking){
+												setIsManual(false);
+												setClockedTime(0)}}}
 											checked={!isManual}
 										/>
 										<Checkbox
 											icon={<ListIcon />}
 											checkedIcon={<ListIcon />}
-											onChange={(e) => setIsManual(true)}
+											onChange={(e) => { if(!isTracking){setIsManual(true) }}}
 											checked={isManual}
 										/>
 										{/* <ClockIcon onClick={() => setIsManual(false)} />

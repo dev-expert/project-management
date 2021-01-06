@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 const PATH = `${api}api/comments`;
 
 export const getComments = async (params) => {
+  console.log(params)
     try {
      const response = await axios.get(`${PATH}`, { params })
      if(response.status == 200) {
@@ -26,9 +27,9 @@ export const getComments = async (params) => {
     // };
 }
 
-export const addComment = (payload) =>  {
+export const addComment = async (payload) =>  {
     try {
-      const response = axios.post(`${PATH}`, payload);
+      const response =  await axios.post(`${PATH}`, payload);
     if(response.status == 200) {
         return response;
      }else{

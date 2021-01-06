@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -9,7 +9,6 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import NoteAddIcon from '@material-ui/icons/NoteAdd';
 import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
-import { IconButton } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
 	modal: {
@@ -30,15 +29,29 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TaskEntryModel({ open,task, handleClose,handleTaskSave }) {
 	const classes = useStyles();
-	const [taskTitle, setTaskTitle] = useState();
-	const [description, setDescription] = useState();
-	const [taskVideoLink, setTaskVideoLink] = useState();
+	const [taskTitle, setTaskTitle] = useState('');
+	const [description, setDescription] = useState('');
+	const [taskVideoLink, setTaskVideoLink] = useState('');
 	const [file, setFile] = useState();
+	const [submitted, setSubmitted] = useState(false);
 
+
+	useEffect(() => {
+		if (task) {
+			setTaskTitle(task.title ? task.title : '')
+			setDescription(task.description ? task.description : '')
+			setTaskVideoLink(task.videoLink ? task.videoLink : '')
+		}
+	}, [task]);
 
 	const handleSubmit = () => {
+		setSubmitted(true)
 		if(!taskTitle) return
-		handleTaskSave({title:taskTitle,description,videoLink:taskVideoLink,file});
+		task.title = taskTitle
+		task.description = description
+		task.videoLink = taskVideoLink
+		task.file = file
+		handleTaskSave(task);
 	}
 
 	return (
@@ -76,7 +89,7 @@ export default function TaskEntryModel({ open,task, handleClose,handleTaskSave }
 									aria-describedby="component-error-text"
 
 								/>
-								{taskTitle && taskTitle.length < 20 && <FormHelperText error={true} id="component-error-text">Please add minimum 20 letters</FormHelperText>}
+								{submitted && taskTitle.length < 20 && <FormHelperText error={true} id="component-error-text">Please add minimum 20 letters</FormHelperText>}
 
 							</div>
 
@@ -87,7 +100,7 @@ export default function TaskEntryModel({ open,task, handleClose,handleTaskSave }
 									multiline
 									rows={4}
 									onChange={(e) => setDescription(e.target.value)}
-									value={task.description || description}
+									value={description}
 									placeholder="Description"
 									variant="outlined"
 								/>

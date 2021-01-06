@@ -18,7 +18,7 @@ import { Copyright } from '../Common';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { Person as PersonIcon, ShoppingCart as ShoppingCartIcon } from '@material-ui/icons';
+import { Person, Timeline, Receipt, Shop } from '@material-ui/icons';
 import access from '../../config/access';
 import { Link } from 'react-router-dom';
 const drawerWidth = 240;
@@ -108,31 +108,31 @@ export const mainListItems = (
     {access('read', 'Users') ? <Link to="/users">
     <ListItem button>
       <ListItemIcon>
-        <PersonIcon />
+        <Person />
       </ListItemIcon>
       <ListItemText primary="Users" />
     </ListItem>
     </Link> : null}
-    {access('read', 'Users') ? <Link to="/projects">
+    {access('read', 'Projects') ? <Link to="/projects">
     <ListItem button>
       <ListItemIcon>
-        <ShoppingCartIcon />
+        <Shop />
       </ListItemIcon>
       <ListItemText primary="Projects" />
     </ListItem>
     </Link> : null}
-    {access('read', 'Common') ? <Link to="/timesheet">
+    {access('read', 'Timesheet') ? <Link to="/timesheet">
     <ListItem button>
       <ListItemIcon>
-        <PersonIcon />
+        <Timeline />
       </ListItemIcon>
       <ListItemText primary="TimeSheet" />
     </ListItem>
     </Link>: null}
-    {access('read', 'Common') ? <Link to="/reports">
+    {access('read', 'Reports') ? <Link to="/reports">
     <ListItem button>
       <ListItemIcon>
-        <PersonIcon />
+        <Receipt />
       </ListItemIcon>
       <ListItemText primary="Reports" />
     </ListItem>

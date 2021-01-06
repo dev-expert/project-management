@@ -2,8 +2,8 @@ import moment from 'moment';
 import { updateAbility } from './ability';
 const FORMAT = 'MMM DD, YYYY';
 export const onLogin = token => {
-  localStorage.setItem('authToken', token)
-  updateAbility();
+  localStorage.setItem('authToken', token);
+  updateAbility(token);
 }
 
 export const onLogout = () => {
@@ -12,15 +12,17 @@ export const onLogout = () => {
 export function formatDate(date, format) {
   return date ?  moment(date).format(format||FORMAT) : '';
 }
-export const starts = (val, testVal) => val ? val.startsWith(testVal) : false;
 export const getRouteName = path => {
+  const starts = (testVal) => path && path.startsWith(testVal);
   switch (true) {
-    case starts(path, '/projects'):
+    case starts('/projects'):
       return 'Projects';
-    case starts(path, '/users'):
+    case starts('/users'):
       return 'Users';
-    case starts(path, '/tasks'):
-      return 'Tasks';
+    case starts('/timesheet'):
+      return 'Timesheet';
+    case starts('/reports'):
+      return 'Reports';
     default:
       return 'Common';
   }

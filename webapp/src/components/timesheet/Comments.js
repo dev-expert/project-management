@@ -1,9 +1,9 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import Avatar from '@material-ui/core/Avatar';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { makeStyles, withStyles, styled } from '@material-ui/core/styles';
-
+import moment from 'moment';
 
 const StyledButton = styled(Button)({
 	width: '84px',
@@ -13,8 +13,8 @@ const StyledButton = styled(Button)({
 });
 
 
-const Comment = ({comment}) => {
-
+const Comment = ({comment,onDeleteComment}) => {
+	const {userInfo} = comment;
 	return (
 		<div
 			className="comment"
@@ -24,19 +24,19 @@ const Comment = ({comment}) => {
 				<div>
 					<div
 						className="title">
-						<h5>Ramesh Yadav</h5>
+						<h5>{`${userInfo.firstName}  ${userInfo.lastName}`}</h5>
 
 						<p className="role">Content Writer</p>
 					</div>
 					<div className="body">
-						<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse ex totam consequuntur eos! Facere, beatae rerum, tempora eligendi aliquam consequuntur earum iste illo voluptatum itaque explicabo, magnam impedit doloribus quisquam?</p>
+						<p>{comment.comment}</p>
 					</div>
 				</div>
 			</div>
 			<div className="comment__detail">
-				<p className="comment__time">2 seconds ago</p>
+				<p className="comment__time">{moment(comment.createdAt).fromNow()}</p>
 			&nbsp;&nbsp;&nbsp;
-			<p className="comment__delete">Delete</p>
+		 <Button onClick={() => onDeleteComment(comment.id)}><p className="comment__delete">Delete</p></Button>
 			</div>
 
 		</div>
@@ -50,7 +50,6 @@ const CommentBox = (props) => {
 			return;
 		}
 		props.onAddComment(comment);
-
 	}
 	return (
 		<div className="comment__box">
@@ -68,15 +67,16 @@ const CommentBox = (props) => {
 }
 
 
-const Comments = ({comments, onAddComment}) => {
+const Comments = ({comments,timeEntryId,deleteComment,addComment}) => {
+
 	return (
 		<div className="comments" >
 			{comments.map((comment) => {
 				return (
-					<Comment comment={comment}/>
+					<Comment comment={comment} onDeleteComment={deleteComment}/>
 				)
 			})}
-			<CommentBox onAddComment={onAddComment}/>
+			<CommentBox onAddComment={addComment}/>
 		</div>
 
 

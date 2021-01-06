@@ -4,6 +4,7 @@ import * as UserActions from '../../actions/userActions';
 import * as ProjectActions from '../../actions/projectActions';
 import * as TaskActions from '../../actions/taskActions';
 import * as RoleActions from '../../actions/roleActions';
+import * as CommentActions from '../../actions/commentActions';
 import { withRouter } from 'react-router-dom';
 function mapStateToProps(state) {
 	const { AppReducer, UserReducer, ProjectReducer, TaskReducer, RoleReducer } = state;
@@ -14,7 +15,7 @@ function mapStateToProps(state) {
 
 const getConnect = component => {
     return connect(mapStateToProps, {
-        ...AppActions, ...UserActions, ...ProjectActions, ...TaskActions, ...RoleActions
+        ...AppActions, ...UserActions, ...ProjectActions, ...TaskActions, ...RoleActions,...CommentActions
     })(withRouter(component))
 }
 

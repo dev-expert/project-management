@@ -34,7 +34,7 @@ import {
 	KeyboardDatePicker,
   } from '@material-ui/pickers';
   import { toast } from 'react-toastify';
-  
+
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -59,14 +59,14 @@ const BorderedCell = withStyles((theme) => ({
 }))(TableCell);
 
 
-const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, getTask, getInProgressTask, task }) => {
+const Index = ({ getTasks, getProjects, tasks, projects, addComment, addTask, updateTask, getTask, getInProgressTask, task }) => {
 	const [title, setTitle] = useState('Test Title');
 	const [projectId, setProjectId] = useState(0);
 	const [isBillable, setIsBillable] = useState(false);
 	const [checkIn, setCheckIn] = useState();
 	const [checkOut, setCheckOut] = useState();
 	const [clockedTime, setClockedTime] = useState(0);
-	const [submittedBy, setSubmittedBy] = useState(3);
+	const [submittedBy, setSubmittedBy] = useState(1);
 	const [isTracking, setIsTracking] = useState(false);
 	const [intervalId, setIntervalId] = useState(null);
 	const [open, setOpen] = useState(false);
@@ -96,7 +96,7 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 			let startTime = new Date(task.startedAt).getTime()
 			let currentTime = new Date().getTime();
 			let clockedTime = Math.floor((currentTime - Number(startTime)) / 1000)
-	
+
 			if (startTime && !isTracking && !isManual) {
 				setTaskDetail(task)
 				setClockedTime(clockedTime)
@@ -106,7 +106,7 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 				setIsBillable(task.isBillable)
 			}
 		}
-		
+
 	}, [task, projects]);
 
 
@@ -160,7 +160,7 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 				toast.error('End time must be greater then start time')
 				return false;
 			}
-			
+
 			let payLoad = {
 				"description": taskDetail.description,
 				"title": taskDetail.title,
@@ -182,7 +182,7 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 		}else{
 
 			if (isTracking) {
-			
+
 				let currentTime = new Date();
 				setIsTracking(false)
 				setCheckOut(currentTime)
@@ -208,7 +208,7 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 				}, 500);
 				return;
 			}
-			
+
 			let currentTime = new Date();
 			setIsTracking(true)
 			setCheckIn(currentTime)
@@ -235,7 +235,7 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 		let currentProject = projects[0].data.find(p => p.id == evt.target.value)
 		setProject(currentProject)
 		let project_error = '';
-		
+
 		project_error= evt.target.value === 0 ? 'Select Project' : ''
 
 		setProjectError(project_error)
@@ -246,7 +246,7 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 	  };
 
 	const handleStartTimeChange = (date, value) => {
-		
+
 		let selected_date= new Date(selectedDate)
 		let selected_starttime= new Date(date)
 		let selected_endtime= new Date(endTime)
@@ -266,8 +266,8 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 	};
 
 	const handleEndTimeChange = (date, value) => {
-		
-		
+
+
 		let selected_date= new Date(selectedDate)
 		let selected_starttime= new Date(startTime)
 		let selected_endtime= new Date(date)
@@ -284,9 +284,9 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 		}else{
 			toast.error('End time must be greater then start time')
 		}
-		
+
 	};
-	
+
 
 	return (
 		<div className="timesheet">
@@ -387,7 +387,7 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 											/>
 										</BorderedCell>
 									)}
-									
+
 									<BorderedCell align="center" style={{ minWidth: '110px'}}>{formatTime(clockedTime)}</BorderedCell>
 									<BorderedCell align="center">
 										{!isManual && (
@@ -410,7 +410,7 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 												Add
 											</Button>
 										)}
-										
+
 									</BorderedCell>
 
 									<BorderedCell align="center" style={{ display: 'flex', flexDirection: 'column' }}>

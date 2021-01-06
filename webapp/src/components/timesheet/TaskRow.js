@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
@@ -13,6 +13,8 @@ import CommentIcon from '@material-ui/icons/ChatBubble';
 import Badge from '@material-ui/core/Badge';
 import ErrorIcon from '@material-ui/icons/Error';
 import Comments from './Comments';
+// import {addComment,getComments} from '../../actions/commentActions';
+import {getComments,addComment,updateComment} from '../../actions/commentActions';
 
 const FlexRow = styled('div')({
 	display: 'flex',
@@ -37,13 +39,44 @@ export const BorderedCell = withStyles((theme) => ({
 
 
 
-const TaskRow = ({ task,onAddComment }) => {
+const TaskRow = ({ task }) => {
 	const [showComments, setShowComments] = useState(false);
+	const [comments,setComments] = useState([]);
 
 
 	const toggleCommentsView = () => {
 		setShowComments((showComments => !showComments));
 	}
+
+
+
+	const fetchComments = async () => {
+	      const comments = await getComments({timeEntryId: task.id});
+		  if(comments) {
+		   setComments(comments.data);
+		  }
+		}
+
+	useEffect(() => {
+		fetchComments();
+	},[task.id]);
+
+	const handleDeleteComment = async (id) => {
+		await updateComment(id,{active:false});
+		fetchComments();
+	}
+
+	const handleAddComment = async (comment) => {
+		const payload = {
+			comment,
+			timeEntryId: task.id,
+			active:true,
+		}
+		await addComment(payload);
+		fetchComments();
+	}
+
+
 
 
 	return (
@@ -71,7 +104,7 @@ const TaskRow = ({ task,onAddComment }) => {
 
 							<FlexRow>
 								<IconButton onClick={toggleCommentsView}>
-									<Badge badgeContent={task.comments.length} color="secondary">
+									<Badge badgeContent={comments.length} color="secondary">
 										<CommentIcon />
 									</Badge>
 								</IconButton>
@@ -84,8 +117,10 @@ const TaskRow = ({ task,onAddComment }) => {
 			</div>
 			<div>
 					{showComments && <Comments
-					onAddComment={onAddComment}
-					  comments={task.comments}/>}
+					timeEntryId={task.id}
+					deleteComment={handleDeleteComment}
+					 addComment={handleAddComment}
+					  comments={comments}/>}
 				</div>
 		</>
 	)

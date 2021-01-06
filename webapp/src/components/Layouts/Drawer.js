@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -18,9 +18,10 @@ import { Copyright } from '../Common';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { Person as PersonIcon, ShoppingCart as ShoppingCartIcon } from '@material-ui/icons';
+import { Person, Timeline, Receipt, Shop } from '@material-ui/icons';
 import access from '../../config/access';
 import { Link } from 'react-router-dom';
+import { getRouteName } from '../../config/helper';
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -102,43 +103,28 @@ const useStyles = makeStyles((theme) => ({
     height: 240,
   },
 }));
-
-export const mainListItems = (
-  <div>
-    {access('read', 'Users') ? <Link to="/users">
-    <ListItem button>
-      <ListItemIcon>
-        <PersonIcon />
-      </ListItemIcon>
-      <ListItemText primary="Users" />
-    </ListItem>
-    </Link> : null}
-    {access('read', 'Users') ? <Link to="/projects">
-    <ListItem button>
-      <ListItemIcon>
-        <ShoppingCartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Projects" />
-    </ListItem>
-    </Link> : null}
-    {access('read', 'Common') ? <Link to="/timesheet">
-    <ListItem button>
-      <ListItemIcon>
-        <PersonIcon />
-      </ListItemIcon>
-      <ListItemText primary="TimeSheet" />
-    </ListItem>
-    </Link>: null}
-    {access('read', 'Common') ? <Link to="/reports">
-    <ListItem button>
-      <ListItemIcon>
-        <PersonIcon />
-      </ListItemIcon>
-      <ListItemText primary="Reports" />
-    </ListItem>
-    </Link>: null}
-  </div>
-);
+const menuItems = [
+  {
+    link: '/users',
+    name: 'Users',
+    icon: <Person />
+  },
+  {
+    link: '/projects',
+    name: 'Projects',
+    icon: <Shop />
+  },
+  {
+    link: '/timesheet',
+    name: 'Timesheet',
+    icon: <Timeline />
+  },
+  {
+    link: '/reports',
+    name: 'Reports',
+    icon: <Receipt />
+  }
+]
 function Dashboard({ isLoggedIn, logout, children, history }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
@@ -187,7 +173,17 @@ function Dashboard({ isLoggedIn, logout, children, history }) {
           </IconButton>
         </div>
         <Divider />
-        {isLoggedIn ? <List>{mainListItems}</List> : null}
+        {isLoggedIn ? <List>
+          {menuItems.map((item, id) => <Fragment key={id}>{access('read', getRouteName(item.link)) &&
+          <Link to={item.link}>
+          <ListItem button>
+            <ListItemIcon>
+              {item.icon}
+            </ListItemIcon>
+            <ListItemText primary={item.name} />
+          </ListItem>
+          </Link>}</Fragment>)}
+        </List> : null}
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />

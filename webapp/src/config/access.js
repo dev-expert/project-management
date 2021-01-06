@@ -1,6 +1,7 @@
-import ability from './ability';
+import { getAbility } from './ability';
 const access = (action, data) => {
-	//ability.can(action, data)
-	return true;
+	const ability = getAbility();
+	const canAccess = ability.can(action, data);
+	return canAccess;
 };
 export default access;

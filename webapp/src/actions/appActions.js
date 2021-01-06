@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { LOGIN, LOGOUT, SIGNUP } from '../config/actionNames';
-import { onLogin, onLogout } from '../config/helper';
 import { api } from '../config/env';
 import { toast } from 'react-toastify';
 export function login(payload) {
@@ -9,7 +8,7 @@ export function login(payload) {
             .post(`${api}login`, payload)
             .then(response => {
                 dispatch({ type: LOGIN, payload: response.data });
-                onLogin(response.data.token);
+                localStorage.setItem('authToken', response.data.token);
                 toast.success('Login Successfull')
             })
             .catch(err => {
@@ -33,7 +32,7 @@ export function register(payload) {
 export function logout() {
     return dispatch => {
         dispatch({ type: LOGOUT });
-        onLogout();
+        localStorage.removeItem('authToken');
         toast.success('Logout Successfull')
     };
 }

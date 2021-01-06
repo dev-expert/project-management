@@ -7,13 +7,9 @@ var passport = require('passport');
 var cors = require('cors');
 dottenv.config();
 var dbConn = require('./models');
-var ability = require('./auth/ability');
+var addAbility = require('./middlewares/auth/ability');
 const pagination = require('./middlewares/filter/pagination');
 const errorLogs = require('./controllers/errorLog');
-
-
-
-
 
 //Connect Database
 
@@ -39,7 +35,6 @@ require('./auth/auth');
 var indexRouter = require('./routes/index');
 var apiRouter = require('./routes/api');
 
-
 var app = express();
 
 app.use(logger('dev'));
@@ -49,7 +44,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use('/', indexRouter);
-app.use('/api', passport.authenticate('jwt', { session: false }), ability,pagination,apiRouter);
+app.use('/api', passport.authenticate('jwt', { session: false }), addAbility ,pagination,apiRouter);
 app.use(function(err, req, res, next) {
     errorLogs.errorLogging(req,err);
     res.status(err.status || 500);

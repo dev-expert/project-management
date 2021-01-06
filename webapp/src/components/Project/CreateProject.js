@@ -81,12 +81,14 @@ function CreateProject({ addProject, projectAdded, history, users: allUsers, get
   const [clients, setClients] = useState([]);
   const [filterClients, setFilterClients] = useState([]);
   const [users, setUsers] = useState([]);
+  const [teamLeads, setTeamLeads] = useState([]);
+  const [filterTeamLeads, setFilterTeamLeads] = useState([]);
   const [filterUsers, setFilterUsers] = useState([]);
   const [description, setDescription] = useState('');
   const [startDate, setStartDate] = React.useState(new Date());
   const [endDate, setEndDate] = React.useState(new Date());
   const [activeStep, setActiveStep] = React.useState(0);
-  
+
   const [submit, setSubmit ] = useState(false);
   const getName = (option, withUsername) => `${option.firstName ? option.firstName : ''} ${option.lastName ? option.lastName : ''}${withUsername ? '('+option.username+')' : ''}`
   useEffect(() => {
@@ -99,16 +101,21 @@ function CreateProject({ addProject, projectAdded, history, users: allUsers, get
   }, [getUsers])
   useEffect(() => {
     if(allUsers && allUsers.length) {
-      let filteredUsers = [], filteredClients = [];
-      allUsers.forEach(user => {
-        if(user.role === 'CLIENT') {
+      let filteredUsers = [], filteredClients = [], filteredTeamLeads=[];
+      const users = allUsers[0].data;
+      users.forEach(user => {
+        if(user.roleId === 1) {
           filteredClients.push(user)
-        }else if(user.role === 'USER') {
-          filteredUsers.push(user)
+        }else if((user.roleId === 3) || (user.roleId === 2)){
+           filteredUsers.push(user)
+        }
+        if(user.roleId === 3) {
+          filteredTeamLeads.push(user)
         }
       })
       setFilterClients(filteredClients);
       setFilterUsers(filteredUsers);
+      setFilterTeamLeads(filteredTeamLeads);
     }
   }, [allUsers])
 
@@ -126,9 +133,12 @@ function CreateProject({ addProject, projectAdded, history, users: allUsers, get
         if(clients && clients.length) {
           payload['clients'] = clients.map(client => client._id);
         }
+
         if(users && users.length) {
-          payload['users'] = users.map(user => user._id);
+          payload['users'] = users.map(user => user.id);
+          payload['team_leads'] = teamLeads.map(user => user.id);
         }
+
         addProject(payload)
       } else {
         setActiveStep(activeStep + 1);
@@ -241,7 +251,7 @@ function CreateProject({ addProject, projectAdded, history, users: allUsers, get
                       id="clients"
                       name="clients"
                       options={filterUsers}
-                      getOptionLabel={(option) => getName(option, true)}
+                      getOptionLabel={(option) => getName(option, false)}
                       value={users}
                       onChange={(e,n) => setUsers(n)}
                       filterSelectedOptions
@@ -251,6 +261,26 @@ function CreateProject({ addProject, projectAdded, history, users: allUsers, get
                           variant="outlined"
                           label="Users"
                           placeholder="Search Users"
+                        />
+                      )}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={12}>
+                  <Autocomplete
+                      multiple
+                      id="teamLeads"
+                      name="teamLeads"
+                      options={filterTeamLeads}
+                      getOptionLabel={(option) => getName(option, false)}
+                      value={teamLeads}
+                      onChange={(e,n) => setTeamLeads(n)}
+                      filterSelectedOptions
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          variant="outlined"
+                          label="Team Leads"
+                          placeholder="Search Team Leads"
                         />
                       )}
                     />
@@ -279,7 +309,7 @@ function CreateProject({ addProject, projectAdded, history, users: allUsers, get
                       <Grid container spacing={2}>
                         {clients && clients.length ? <Grid item xs={12} sm={6}>
                           <Typography variant="h6" gutterBottom className={classes.title}>
-                            Clients 
+                            Clients
                           </Typography>
                           <List disablePadding>
                           {clients.map(client => <ListItem className={classes.listItem}>
@@ -293,6 +323,16 @@ function CreateProject({ addProject, projectAdded, history, users: allUsers, get
                           </Typography>
                           <List disablePadding>
                           {users.map(user => <ListItem className={classes.listItem}>
+                            <ListItemText primary={user.username} secondary={getName(user)}/>
+                          </ListItem>)}
+                          </List>
+                        </Grid> : null}
+                        {teamLeads && teamLeads.length ? <Grid item  xs={12} sm={6}>
+                          <Typography variant="h6" gutterBottom className={classes.title}>
+                            Team Leads
+                          </Typography>
+                          <List disablePadding>
+                          {teamLeads.map(user => <ListItem className={classes.listItem}>
                             <ListItemText primary={user.username} secondary={getName(user)}/>
                           </ListItem>)}
                           </List>

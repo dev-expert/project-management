@@ -25,7 +25,13 @@ Methods.findAll = async (req, res,next) => {
     try{
 
         const user = req.user;
-        var condition = user ? { createdBy: user.id } : null
+        let condition = user ? { createdBy: user.id } : null
+
+        if(user.role !== 'Dev') {
+            condition = {};
+        }else{
+            // get tasks for projects created by team lead
+        }
 
         var result= await Task.findAll({
             where: condition,

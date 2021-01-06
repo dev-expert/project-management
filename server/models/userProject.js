@@ -10,14 +10,22 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-     
+
     }
   };
   UserProject.init({
     createdBy: {
 		type: DataTypes.INTEGER,
 		allowNull: true,
-	},
+  },
+  projectId:{
+    type: DataTypes.INTEGER,
+		allowNull: true,
+  },
+  userId:{
+    type: DataTypes.INTEGER,
+		allowNull: true,
+  },
 	updatedBy: {
 		type: DataTypes.INTEGER,
 		allowNull: true,

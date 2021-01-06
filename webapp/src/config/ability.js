@@ -1,7 +1,7 @@
 //ability.js
 import { Ability, AbilityBuilder } from "@casl/ability";
+import store from './store';
 import { decode } from 'jsonwebtoken'
-const ability = new Ability([]);
 const rolesAccess = {
   Common: [{
     action: "manage", 
@@ -30,8 +30,9 @@ const rolesAccess = {
     }
   ]
 }
-export const updateAbility = (authToken) => {
+export function getAbility() {
   const { can, rules } = new AbilityBuilder();
+  const { AppReducer: { token: authToken } } = store.getState();
   const token = authToken || localStorage.getItem('authToken');
   const roles = ['Common'];
   if(token) {
@@ -48,7 +49,5 @@ export const updateAbility = (authToken) => {
       })
     } 
   })
-  ability.update(rules)
+  return new Ability(rules);
 }
-updateAbility();
-export default ability;   

@@ -4,7 +4,8 @@ import {
 } from '../config/actionNames';
 const initialState = {
     showLoader: false,
-    isLoggedIn: localStorage.getItem('authToken') || false,
+    isLoggedIn: Boolean(localStorage.getItem('authToken')) || false,
+    token: localStorage.getItem('authToken')|| '',
     signUp: false
 };
 function reducer(state = initialState, action) {
@@ -13,6 +14,7 @@ function reducer(state = initialState, action) {
             return {
                 ...state,
                 isLoggedIn: true,
+                token: action.payload.token
             }
         case SIGNUP:
             return {

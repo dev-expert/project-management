@@ -20,19 +20,20 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		route: {
 			type: DataTypes.TEXT,
-			allowNull: false,
+			allowNull: true,
 		},
 		requestPayload: {
 			type: DataTypes.STRING(255),
-			allowNull: false,
+			allowNull: true,
 		},
-		requestJSON: { type: DataTypes.JSON, allowNull: false },
-		stackTrace: { type: DataTypes.JSON, allowNull: false },
+		requestJSON: { type: DataTypes.JSON, allowNull: true },
+		stackTrace: { type: DataTypes.JSON, allowNull: true },
 		
 	}, {
 		sequelize,
+		modelName: 'ErrorLog',
 		timestamps: true,
-		modelName: 'Role',
+
 	});
 	return ErrorLog;
 };

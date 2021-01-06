@@ -1,8 +1,8 @@
 
-const ErrorLog = require('../models/errorLog').errorLog;
+const ErrorLog = require('../models/').ErrorLog;
 
+module.exports.errorLogging = async (req, err) => {
 
-exports.errorLogging = async  (req, err) => {
   let payload = {
     userId: req.user.id ? req.user.id : '',
     userEmail: req.user.email ? req.user.email : '',
@@ -12,7 +12,13 @@ exports.errorLogging = async  (req, err) => {
     stackTrace: JSON.stringify(err)
   };
   try {
-    let result = await ErrorLog.create(payload);
+    let result = await ErrorLog.create({
+              userId: req.user.id,
+              userEmail: req.user.email ? req.user.email : '',
+              route: req.originalUrl ? req.originalUrl : '',
+              requestPayload: JSON.stringify(req.body),
+              stackTrace: JSON.stringify(err)
+                });
     return result;
   }
   catch (error) {
@@ -20,3 +26,4 @@ exports.errorLogging = async  (req, err) => {
   }
 
 };
+

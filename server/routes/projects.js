@@ -28,7 +28,7 @@ const findProjects = async (req, onlyOne = false) => {
 		let result = [];
 
 		if (onlyOne) {
-			result = await ProjectModel.findByPk(query.id);
+			result = await ProjectModel.findByPk(req.id);
 		} else {
 
 

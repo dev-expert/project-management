@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
-import { MuiThemeProvider } from '@material-ui/core/styles';
+import { MuiThemeProvider,createMuiTheme } from '@material-ui/core/styles';
 import { Provider } from 'react-redux';
 import appStore from './config/store';
 import Login from './components/Auth/Signin';
@@ -22,11 +22,18 @@ import MomentUtils from "@date-io/moment";
 import {
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
+import { orange } from '@material-ui/core/colors';
+
 import ProtectedRoute from './components/Auth/protectedRoute';
+const theme = createMuiTheme({
+  status: {
+    danger: orange[500],
+  },
+});
 function App() {
   return (
     <Provider store={appStore}>
-      <MuiThemeProvider>
+      <MuiThemeProvider theme={theme}>
         <MuiPickersUtilsProvider utils={MomentUtils}>
         <Router>
         <Drawer>

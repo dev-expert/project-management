@@ -13,7 +13,7 @@ import CommentIcon from '@material-ui/icons/ChatBubble';
 import Badge from '@material-ui/core/Badge';
 import ErrorIcon from '@material-ui/icons/Error';
 import Comments from './Comments';
-// import {addComment,getComments} from '../../actions/commentActions';
+
 import {getComments,addComment,updateComment} from '../../actions/commentActions';
 
 const FlexRow = styled('div')({
@@ -48,8 +48,7 @@ const TaskRow = ({ task }) => {
 		setShowComments((showComments => !showComments));
 	}
 
-
-
+	// Fetch comments for given time entry
 	const fetchComments = async () => {
 	      const comments = await getComments({timeEntryId: task.id});
 		  if(comments) {
@@ -61,19 +60,24 @@ const TaskRow = ({ task }) => {
 		fetchComments();
 	},[task.id]);
 
+	// Update comment to soft delete
 	const handleDeleteComment = async (id) => {
 		await updateComment(id,{active:false});
 		fetchComments();
 	}
 
-	const handleAddComment = async (comment) => {
+	const handleAddComment = async (comment,onCommentSuccess) => {
 		const payload = {
 			comment,
 			timeEntryId: task.id,
 			active:true,
 		}
-		await addComment(payload);
-		fetchComments();
+		const response = await addComment(payload);
+		if(response.status === 200) {
+		  onCommentSuccess();
+		  fetchComments();
+		}
+
 	}
 
 

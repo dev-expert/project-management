@@ -13,7 +13,7 @@ const StyledButton = styled(Button)({
 });
 
 
-const Comment = ({comment,onDeleteComment}) => {
+const Comment = ({comment,currentUser,onDeleteComment}) => {
 	const {userInfo} = comment;
 	return (
 		<div
@@ -45,12 +45,18 @@ const Comment = ({comment,onDeleteComment}) => {
 
 const CommentBox = (props) => {
 	const [comment,setComment] = useState('');
+
+
+
 	const addComment = () => {
 		if(!comment){
 			return;
 		}
-		props.onAddComment(comment);
+		props.onAddComment(comment, () => {
+			setComment('')
+		});
 	}
+
 	return (
 		<div className="comment__box">
 			<Avatar alt="Remy Sharp" src="https://picsum.photos/200/200" />
@@ -67,13 +73,13 @@ const CommentBox = (props) => {
 }
 
 
-const Comments = ({comments,timeEntryId,deleteComment,addComment}) => {
+const Comments = ({comments,deleteComment,addComment}) => {
 
 	return (
 		<div className="comments" >
-			{comments.map((comment) => {
+			{comments.map((comment,index) => {
 				return (
-					<Comment comment={comment} onDeleteComment={deleteComment}/>
+					<Comment key={index} comment={comment} onDeleteComment={deleteComment}/>
 				)
 			})}
 			<CommentBox onAddComment={addComment}/>

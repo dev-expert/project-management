@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
@@ -16,6 +16,8 @@ import ErrorIcon from '@material-ui/icons/Error';
 import moment from 'moment';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import {getComments,addComment,updateComment} from '../../actions/commentActions';
+
 
 import Comments from '../Timesheet/Comments';
 
@@ -54,20 +56,59 @@ export const BorderedCell = withStyles((theme) => ({
 
 
 
-const TaskRow = ({ task,onViewTask }) => {
+const TaskRow = ({ task, onViewTask }) => {
 	const [showComments, setShowComments] = useState(false);
-	 const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
-	console.log('task ', task);
+	const [anchorEl, setAnchorEl] = React.useState(null);
+	const open = Boolean(anchorEl);
+	const [comments,setComments] = useState([]);
+
+
+	const toggleCommentsView = () => {
+		setShowComments((showComments => !showComments));
+	}
+
+	// Fetch comments for given time entry
+	const fetchComments = async () => {
+	      const comments = await getComments({timeEntryId: task.id});
+		  if(comments) {
+		   setComments(comments.data);
+		  }
+		}
+
+	useEffect(() => {
+		fetchComments();
+	},[task.id]);
+
+	// Update comment to soft delete
+	const handleDeleteComment = async (id) => {
+		await updateComment(id,{active:false});
+		fetchComments();
+	}
+
+	const handleAddComment = async (comment,onCommentSuccess) => {
+		const payload = {
+			comment,
+			timeEntryId: task.id,
+			active:true,
+		}
+		const response = await addComment(payload);
+		if(response.status === 200) {
+		  onCommentSuccess();
+		  fetchComments();
+		}
+
+	}
+
+
 
 
 	const handleMenuClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+		setAnchorEl(event.currentTarget);
+	};
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
+	const handleMenuClose = () => {
+		setAnchorEl(null);
+	};
 
 	const getDuration = (start, end) => {
 		const duration = moment.duration(moment(end).diff(moment(start)));
@@ -75,7 +116,6 @@ const TaskRow = ({ task,onViewTask }) => {
 			return '';
 		} else {
 			const { _data } = duration
-			console.log('Duration: ', duration)
 			return `${_data.hours || '00'}:${_data.minutes || '00'}:${_data.seconds || '00'}`
 		}
 	}
@@ -86,19 +126,13 @@ const TaskRow = ({ task,onViewTask }) => {
 		}
 		return `${moment(start).format('hh:mm A')}  ${moment(end).format('hh:mm A')}
 									${moment(start).format('MM/DD/YYYY')}`
-
 	}
-
-	const toggleCommentsView = () => {
-		setShowComments((showComments => !showComments));
-	}
-
 	return (
 		<>
 			<div style={{ display: 'flex', padding: '10px 15px', borderBottom: '1px solid lightgray' }}>
 				<div key={task.name} style={{ display: 'flex', width: '50%' }}>
 					<div style={{ flex: 1 }}>
-						{task.description} <Button onClick={() =>onViewTask(task)}><CreateIcon /></Button> <Separator />  {task.Projects.name}
+						{task.description} <Button onClick={() => onViewTask(task)}><CreateIcon /></Button> <Separator />  {task.Projects.name}
 					</div>
 				</div>
 				<div style={{ width: '50%' }}>
@@ -130,7 +164,7 @@ const TaskRow = ({ task,onViewTask }) => {
 										aria-haspopup="true"
 										onClick={handleMenuClick}
 									>
-								<MoreVertOutlinedIcon />
+										<MoreVertOutlinedIcon />
 									</IconButton>
 									<Menu
 										id="long-menu"
@@ -145,9 +179,9 @@ const TaskRow = ({ task,onViewTask }) => {
 											},
 										}}
 									>
-											<MenuItem
-													onClick={handleMenuClose}>
-												Approve
+										<MenuItem
+											onClick={handleMenuClose}>
+											Approve
 											</MenuItem>
 									</Menu>
 								</div>
@@ -157,7 +191,11 @@ const TaskRow = ({ task,onViewTask }) => {
 				</div>
 			</div>
 			<div>
-				{showComments && <Comments />}
+					{showComments && <Comments
+					timeEntryId={task.id}
+					deleteComment={handleDeleteComment}
+					 addComment={handleAddComment}
+					  comments={comments}/>}
 			</div>
 		</>
 	)

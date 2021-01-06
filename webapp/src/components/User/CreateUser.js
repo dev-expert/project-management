@@ -40,7 +40,7 @@ function CreateUser({ history, addUser, userActionPerformed,getRoles,roles }) {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [type, setType] = useState('EMPLOYEE');
+  const [type, setType] = useState('-1');
   const [submit, setSubmit ] = useState(false);
 
   useEffect(() => {
@@ -137,7 +137,7 @@ function CreateUser({ history, addUser, userActionPerformed,getRoles,roles }) {
                   label="Type"
                   error={submit && !type}
                 >
-                <MenuItem value="">
+                <MenuItem value="-1">
                 <em>None</em>
               </MenuItem>
               {roles && roles.length ? roles.map((row, id) => (

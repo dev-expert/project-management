@@ -25,8 +25,10 @@ const findUsers = async (req, onlyOne = false) => {
 	try {
 		let result = [];
 		if (onlyOne) {
+			console.log(req);
 			result = await UserModel.findOne({
-				where: { active: true },
+				where: { active: true , id: req.id },
+
 				include: [{ model: RoleModel, as: 'role' }]
 			});
 		} else {
@@ -79,9 +81,9 @@ const findUsers = async (req, onlyOne = false) => {
 			result.push({ data: users.rows, 'totalRecords': users.count });
 		}
 		return result;
-	} catch (err) {
-		throw err;
-	}
+	}catch (err) {
+	throw err;
+}
 }
 
 const Methods = {};
@@ -93,9 +95,10 @@ Methods.create = async (req, res, next) => {
 		user.createdBy = id;
 		const result = await createUsers(user);
 		res.status(201).json(result);
-	} catch (err) {
-		next(err);
 	}
+    catch(error){
+        next(error);
+    }
 }
 
 Methods.findAll = async (req, res, next) => {
@@ -108,9 +111,9 @@ Methods.findAll = async (req, res, next) => {
 		var result = await findUsers(req)
 		return res.json(result);
 	}
-	catch (error) {
-		next(error);
-	}
+    catch(error){
+        next(error);
+    }
 }
 
 Methods.findOne = async (req, res, next) => {
@@ -119,9 +122,9 @@ Methods.findOne = async (req, res, next) => {
 		var result = await findUsers({ id }, true)
 		res.json(result);
 	}
-	catch (error) {
-		next(error);
-	}
+    catch(error){
+        next(error);
+    }
 }
 
 Methods.update = async (req, res, next) => {
@@ -130,9 +133,10 @@ Methods.update = async (req, res, next) => {
 		const updatedUser = req.body;
 		const result = await createUsers(updatedUser, { id });
 		res.json(result);
-	} catch (err) {
-		next(err);
 	}
+    catch(error){
+        next(error);
+    }
 }
 
 Methods.delete = async (req, res, next) => {
@@ -140,9 +144,10 @@ Methods.delete = async (req, res, next) => {
 		const { id } = req.params;
 		const result = await createUsers({ active: false }, { id });
 		res.json(result);
-	} catch (err) {
-		next(err);
 	}
+    catch(error){
+        next(error);
+    }
 }
 
 module.exports = Methods;

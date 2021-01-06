@@ -1,10 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var UserController = require('../controllers/users');
-var protectRoute = require('../auth/protect-route');
-router.get('/', protectRoute('read', 'users'), UserController.findAll);
-router.post('/', protectRoute('write', 'users'), UserController.create);
-router.get('/:id',protectRoute('read', 'users'), UserController.findOne);
-router.put('/:id', protectRoute('update', 'users'), UserController.update);
-router.delete('/:id', protectRoute('delete', 'users'), UserController.delete);
+router.get('/', UserController.findAll);
+router.post('/', UserController.create);
+router.get('/:id', UserController.findOne);
+router.put('/:id', UserController.update);
+router.delete('/:id', UserController.delete);
 module.exports = router;

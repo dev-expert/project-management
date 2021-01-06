@@ -35,29 +35,30 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-function DisplayUser({ history, addUser, userActionPerformed, getUser, user,updateUser }) {
+function DisplayUser({ history, addUser, userActionPerformed, getUser, user,updateUser ,getRoles,roles}) {
     const id = history.location.state.id;
     const classes = useStyles();
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [type, setType] = useState('EMPLOYEE');
+    const [type, setType] = useState('-1');
     const [submit, setSubmit] = useState(false);
     useEffect(() => {
 
         getUser(id);
 
     }, [getUser, id])
+    useEffect(() => {
+        getRoles();
+      }, [getRoles])
 
     useEffect(() => {
-        if(user && user.UserDetails){
-            setFirstName(user.UserDetails[0].firstName);
-            setLastName(user.UserDetails[0].lastName);
+        if(user){
+            setFirstName(user.firstName);
+            setLastName(user.lastName);
             setEmail(user.email);
-            setType(user.role);
-            setPassword(user.password);
-            setSubmit(user.UserDetails[0].firstName);
+            setType(user.role?user.role.id:'-1');
+            setSubmit(false);
         }
 
     }, [user])
@@ -69,8 +70,8 @@ function DisplayUser({ history, addUser, userActionPerformed, getUser, user,upda
     }, [userActionPerformed, history])
     const handleSubmit = () => {
         setSubmit(true)
-        if (email && password && firstName && type) {
-            updateUser(id,{ email, password, firstName, lastName, role: type });
+        if (email && firstName && type) {
+            updateUser(id,{ email, firstName, lastName, role: type });
         }
     }
 
@@ -125,21 +126,6 @@ function DisplayUser({ history, addUser, userActionPerformed, getUser, user,upda
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                name="password"
-                                label="Password"
-                                type="password"
-                                id="password"
-                                autoComplete="current-password"
-                                onChange={e => setPassword(e.target.value)}
-                                value={password}
-                                error={submit && !password}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
                             <FormControl fullWidth variant="outlined" className={classes.formControl}>
                                 <InputLabel id="type-user">Type</InputLabel>
                                 <Select
@@ -152,9 +138,12 @@ function DisplayUser({ history, addUser, userActionPerformed, getUser, user,upda
                                     label="Type"
                                     error={submit && !type}
                                 >
-                                    <MenuItem value='CLIENT'>CLIENT</MenuItem>
-                                    <MenuItem value='EMPOLOYEE'>EMPOLOYEE</MenuItem>
-                                    <MenuItem value='MANAGER'>MANAGER</MenuItem>
+                                   <MenuItem value="-1">
+                <em>None</em>
+              </MenuItem>
+              {roles && roles.length ? roles.map((row, id) => (
+                <MenuItem key={row.id} value={row.id}>{row.role}</MenuItem>
+              )) : null}
                                 </Select>
                             </FormControl>
                         </Grid>

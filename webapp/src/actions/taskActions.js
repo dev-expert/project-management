@@ -40,25 +40,33 @@ export function getTask(id) {
 }
 export function addTask(payload) {
     return dispatch => {
-        axios
+        return axios
             .post(`${PATH}`, payload)
             .then(response => {
                 dispatch({ type: CREATE_TASK, payload: response.data });
                 toast.success('Task created Successfully')
+                return response.data
             })
             .catch(err => {
+                return false
             });
     };
 }
 export function updateTask(id, payload) {
     return dispatch => {
-        axios
+        return axios
             .put(`${PATH}/${id}`, payload)
             .then(response => {
-                dispatch({ type: UPDATE_TASK, payload: response.data });
-                toast.success('Task updated Successfully')
+                // dispatch({ type: UPDATE_TASK, payload: response.data });
+                if(response.data && response.data[0]){
+                    toast.success('Task updated Successfully')
+                    return response.data[0];
+                }else{
+                    toast.error('Something went wrong')
+                }
             })
             .catch(err => {
+                return false;
             });
     };
 }

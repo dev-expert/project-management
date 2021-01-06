@@ -61,12 +61,11 @@ const BorderedCell = withStyles((theme) => ({
 
 const Index = ({ getTasks, getProjects, tasks, projects, addComment, addTask, updateTask, getTask, getInProgressTask, task }) => {
 	const [title, setTitle] = useState('Test Title');
-	const [projectId, setProjectId] = useState(0);
+	const [projectId, setProjectId] = useState('');
 	const [isBillable, setIsBillable] = useState(false);
 	const [checkIn, setCheckIn] = useState();
 	const [checkOut, setCheckOut] = useState();
 	const [clockedTime, setClockedTime] = useState(0);
-	const [submittedBy, setSubmittedBy] = useState(1);
 	const [isTracking, setIsTracking] = useState(false);
 	const [intervalId, setIntervalId] = useState(null);
 	const [open, setOpen] = useState(false);
@@ -134,11 +133,9 @@ const Index = ({ getTasks, getProjects, tasks, projects, addComment, addTask, up
 
 	const handleSubmit = async () => {
 		let project_error = '';
-
-		project_error= projectId === 0 ? 'Select Project' : ''
-
+		project_error= projectId === '' ? 'Select Project' : ''
 		setProjectError(project_error)
-		if(projectId === 0){
+		if(projectId === ''){
 			return false;
 		}
 
@@ -173,12 +170,19 @@ const Index = ({ getTasks, getProjects, tasks, projects, addComment, addTask, up
 				"isBillable": isBillable,
 				"isManual": isManual
 			}
-			addTask(payLoad);
-			setClockedTime(0)
-			setIsBillable(false)
-			setTaskDetail('')
-			setProject()
-			setProjectId(0)
+			let res = await addTask(payLoad);
+			if(res){
+				setClockedTime(0)
+				setIsBillable(false)
+				setTaskDetail('')
+				setProject('')
+				setProjectId('')
+				setSelectedDate(new Date())
+				setStartTimeDate(new Date())
+				setEndTimeDate(new Date())
+				getTasks();
+			}
+			
 		}else{
 
 			if (isTracking) {
@@ -187,7 +191,6 @@ const Index = ({ getTasks, getProjects, tasks, projects, addComment, addTask, up
 				setIsTracking(false)
 				setCheckOut(currentTime)
 				setTimeout(async () => {
-					clearInterval(intervalId)
 					let payLoad = {
 						"description": taskDetail.description,
 						"title": taskDetail.title,
@@ -199,12 +202,17 @@ const Index = ({ getTasks, getProjects, tasks, projects, addComment, addTask, up
 						"isBillable": isBillable,
 						"isManual": isManual
 					}
-					updateTask(taskDetail.id,payLoad)
-					setClockedTime(0)
-					setIsBillable(false)
-					setTaskDetail('')
-					setProject()
-					setProjectId(0)
+					let res= await updateTask(taskDetail.id,payLoad)
+					console.log(res)
+					if(res){
+						clearInterval(intervalId)
+						setClockedTime(0)
+						setIsBillable(false)
+						setTaskDetail('')
+						setProject('')
+						setProjectId('')
+						getTasks();
+					}
 				}, 500);
 				return;
 			}
@@ -220,12 +228,15 @@ const Index = ({ getTasks, getProjects, tasks, projects, addComment, addTask, up
 				"projectId": project.id,
 				"startedAt": currentTime,
 				"approvedStatusId": 2,
-				"completedAt": currentTime,
 				"clockedTime": clockedTime,
 				"isBillable": isBillable,
 				"isManual": isManual
 			}
-			addTask(payLoad);
+			let res = await addTask(payLoad);
+			console.log(res)
+			if(res){
+				setTaskDetail(res)
+			}
 		}
 	}
 
@@ -307,13 +318,13 @@ const Index = ({ getTasks, getProjects, tasks, projects, addComment, addTask, up
 									</BorderedCell>
 									<BorderedCell align="center" style={{ cursor: 'pointer' }}>
 
-										<FormControl>
-											<div style={{ display: 'flex' }} onClick={() => setOpen(!open)}>
+										<FormControl style={{ position: 'relative', minWidth: '100px', height: '100%'}}>
+											<div style={{ display: 'flex', display: 'flex', background: '#ffffff', zIndex: '1', width: '100%', height: '40px' }} onClick={() => setOpen(!open)}>
 												<ControlPointOutlinedIcon />
 												<span htmlFor="age-native-simple">{project ? project.name : 'Select Project'}</span>
 											</div>
 
-											<Select
+											<Select style={{position: 'absolute'}}
 												labelId="demo-mutiple-name-label"
 												id="demo-mutiple-name"
 												value={projectId}
@@ -340,13 +351,7 @@ const Index = ({ getTasks, getProjects, tasks, projects, addComment, addTask, up
 									<BorderedCell align="center">
 										<div
 											style={{ display: 'flex', cursor: 'pointer', justifyContent: 'space-between' }}
-											onClick={() => {
-												if (!project) {
-													alert('Please select project for task')
-													return;
-												}
-												setModelOpen(true);
-											}}>
+											onClick={() => { setModelOpen(true); }}>
 											{taskDetail ? (taskDetail.title) : ("What are you working")}<DescriptionIcon />
 										</div>
 									</BorderedCell>
@@ -447,7 +452,7 @@ const Index = ({ getTasks, getProjects, tasks, projects, addComment, addTask, up
 			</div>
 
 			<div>
-				<TaskEntryModel open={modelOpen} task={task} handleTaskSave={(task) => setTaskDetail(task)} handleClose={() => setModelOpen(false)} />
+				<TaskEntryModel open={modelOpen} task={task} handleTaskSave={(task) => {setTaskDetail(task); setModelOpen(false)}} handleClose={() => setModelOpen(false)} />
 			</div>
 
 

@@ -90,15 +90,7 @@ Methods.update = async (req, res,next) => {
 
         const id = req.params.id
         var result= await Task.update(req.body, {where: { id: id }})
-        if(result == 1){
-            res.send({
-                message: "Updated"
-            })
-        }else{
-            res.send({
-                message: "Cannot Update"
-            })
-        }
+        return res.send(result)
     }
     catch(error){
         next(error);

@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 const PATH = `${api}api/comments`;
 
 export const getComments = async (params) => {
+
     try {
      const response = await axios.get(`${PATH}`, { params })
      if(response.status == 200) {
@@ -16,7 +17,7 @@ export const getComments = async (params) => {
         toast.success('Error fetching comments')
 
     }
- 
+
 }
 
 export const addComment = async (payload) =>  {

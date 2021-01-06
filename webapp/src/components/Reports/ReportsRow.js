@@ -17,6 +17,8 @@ import moment from 'moment';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import {getComments,addComment,updateComment} from '../../actions/commentActions';
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+
 
 
 import Comments from '../Timesheet/Comments';
@@ -56,7 +58,7 @@ export const BorderedCell = withStyles((theme) => ({
 
 
 
-const TaskRow = ({ task, onViewTask }) => {
+const TaskRow = ({ task, onViewTask,onApproveTask }) => {
 	const [showComments, setShowComments] = useState(false);
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const open = Boolean(anchorEl);
@@ -110,6 +112,10 @@ const TaskRow = ({ task, onViewTask }) => {
 		setAnchorEl(null);
 	};
 
+	const approveTask = () => {
+		onApproveTask(task.id);
+	}
+
 	const getDuration = (start, end) => {
 		const duration = moment.duration(moment(end).diff(moment(start)));
 		if (!duration._isValid) {
@@ -158,14 +164,22 @@ const TaskRow = ({ task, onViewTask }) => {
 									</Badge>
 								</IconButton>
 								<div>
-									<IconButton
+									{
+									task.approvedStatusId !== 1 ? (<IconButton
 										aria-label="more"
 										aria-controls="long-menu"
 										aria-haspopup="true"
 										onClick={handleMenuClick}
 									>
 										<MoreVertOutlinedIcon />
-									</IconButton>
+									</IconButton>): (
+										<CheckCircleOutlineIcon color="primary" style={{color:'green'}}/>
+									)
+								}
+
+
+
+
 									<Menu
 										id="long-menu"
 										anchorEl={anchorEl}
@@ -180,7 +194,7 @@ const TaskRow = ({ task, onViewTask }) => {
 										}}
 									>
 										<MenuItem
-											onClick={handleMenuClose}>
+											onClick={approveTask}>
 											Approve
 											</MenuItem>
 									</Menu>

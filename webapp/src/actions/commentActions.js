@@ -10,45 +10,34 @@ export const getComments = async (params) => {
      if(response.status == 200) {
         return response;
      }else{
-         throw new Error('');
+          toast.success('Error fetching comments')
      }
     } catch (error) {
-      throw new Error('');
+        toast.success('Error fetching comments')
+
     }
-    // return dispatch => {
-    //     axios
-    //         .get(`${PATH}`, { params })
-    //         .then(response => {
-    //             dispatch({ type: GET_COMMENTS, payload: response.data });
-    //         })
-    //         .catch(err => {
-    //         });
-    // };
+ 
 }
 
-export const addComment = (payload) =>  {
+export const addComment = async (payload) =>  {
     try {
-      const response = axios.post(`${PATH}`, payload);
-    if(response.status == 200) {
-        return response;
-     }else{
-         throw new Error('');
-     }
+      const response = await axios.post(`${PATH}`, payload);
+      if(response.status === 200){
+      return response;
+      }else{
+        toast.success('Error adding comment')
+      }
     } catch (error) {
+        toast.error('Error adding comment')
 
     }
-            // .then(response => {
-            //     dispatch({ type: CREATE_COMMENT, payload: response.data });
-            //     toast.success('Comment Added Successfully')
-            // })
-            // .catch(err => {
-            // });
+
 }
 
 
-export const updateComment = (id,payload) =>  {
+export const updateComment = async (id,payload) =>  {
     try {
-    const response = axios.put(`${PATH}/${id}`, payload)
+    const response = await axios.put(`${PATH}/${id}`, payload)
       if(response.status == 200) {
         return response;
      }else{
@@ -57,10 +46,5 @@ export const updateComment = (id,payload) =>  {
     } catch (error) {
 
     }
-            // .then(response => {
-            //     dispatch({ type: CREATE_COMMENT, payload: response.data });
-            //     toast.success('Comment Added Successfully')
-            // })
-            // .catch(err => {
-            // });
+
 }

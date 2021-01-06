@@ -51,27 +51,18 @@ const StyledTableCell = withStyles((theme) => ({
 
 
 
-
-function createData(name, description, duration, total, protein) {
-	return { name, description, duration, total, protein };
-}
-
-
-export default function BasicTable({tasks}) {
+export default function TimeSheetTable({tasks}) {
 	const classes = useStyles();
 
 	return (
 		<TableContainer component={Paper}>
-			<div className={classes.table} aria-label="simple table">
-				<TableHead>
-					<TableRow>
-						<StyledTableCell>Today</StyledTableCell>
-						<StyledTableCell align="right">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</StyledTableCell>
-						<StyledTableCell align="right">Non Billable: 03:00 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</StyledTableCell>
-						<StyledTableCell align="right"><FlexRow>Billable: 05:30  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total : 8:30 <CreateIcon /></FlexRow></StyledTableCell>
-
-					</TableRow>
-				</TableHead>
+			<div className={classes.table} >
+				<FlexRow>
+						<div>&nbsp;&nbsp;Today</div>
+						<div >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+						<div >Non Billable: 03:00 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+						<div ><span>Billable: 05:30  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total : 8:30 <CreateIcon /></span></div>
+				</FlexRow>
 				<div>
 					{tasks.map((row) => (
 						<TaskRow key={row.id}  task={row}/>

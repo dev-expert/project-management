@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 const ProjectModel = require('../models').Project;
 const UserModel = require('../models').User;
+const UserProjectModel = require('../models').UserProject;
+const TeamLeadProjectModel = require('../models').TeamLeadProject;
 var Sequelize = require('sequelize');
 
 const createProjects = async (payload, filter = null, updateMany = false) => {
@@ -15,7 +17,15 @@ const createProjects = async (payload, filter = null, updateMany = false) => {
 			}
 		} else {
 			payload.active = true;
-			result = await ProjectModel.create(payload);
+			const { users, team_leads, ...rest } = payload;
+			result = await ProjectModel.create(rest);
+			users.forEach(async (id) => {
+				await UserProjectModel.create({ projectId: result.dataValues.id, userId: id })
+			})
+			team_leads.forEach(async (id) => {
+				await TeamLeadProjectModel.create({ projectId: result.dataValues.id, userId: id })
+			})
+
 		}
 		return result;
 	} catch (err) {
@@ -24,7 +34,7 @@ const createProjects = async (payload, filter = null, updateMany = false) => {
 }
 const findProjects = async (req, onlyOne = false) => {
 	try {
-		const { filter, query } = req;
+		const { filter, query,user } = req;
 		let result = [];
 
 		if (onlyOne) {
@@ -62,6 +72,30 @@ const findProjects = async (req, onlyOne = false) => {
 			}
 
 
+			 if (user.role === 'Dev') {
+			  const userProjects = await UserProjectModel.findAll({where :{userId: user.id},attributes: ['projectId']})
+			  const projectIds = userProjects.map(u => u.get('projectId'))
+			  where = {
+				  ...where,
+					id: {
+						[Sequelize.Op.in]: [projectIds]
+					}
+				};
+
+			} else if (user.role === 'TeamLead') {
+				// get tasks for projects created by team lead
+				//admin
+				const projects = await TeamLeadProjectModel.findAll({ where: { userId: user.id }, attributes: ['projectId'] })
+				const projectIds = projects.map(u => u.get('projectId'))
+				where = {
+					...where,
+					id: {
+						[Sequelize.Op.in]: [projectIds]
+					}
+				};
+			}
+
+
 			let projects = await ProjectModel.findAndCountAll({
 				...filter,
 				where,
@@ -72,15 +106,15 @@ const findProjects = async (req, onlyOne = false) => {
 	} catch (err) {
 		throw err;
 	}
-}	
+}
 router.get(
 	'/', async (req, res, next) => {
 		try {
 			const result = await findProjects(req);
 			res.json(result);
-	    }
+		}
 		catch (error) {
-		  next(error);
+			next(error);
 		}
 	}
 );
@@ -89,12 +123,11 @@ router.post(
 		try {
 			const project = req.body;
 			// project.createdBy = req.user.username;
-			console.log(project);
 			const result = await createProjects(project);
 			res.json(result);
-	    }
+		}
 		catch (error) {
-		  next(error);
+			next(error);
 		}
 	}
 );
@@ -104,9 +137,9 @@ router.get(
 			const { id } = req.params;
 			const result = await findProjects({ id: id }, true);
 			res.json(result);
-	    }
+		}
 		catch (error) {
-		  next(error);
+			next(error);
 		}
 	}
 );
@@ -117,9 +150,9 @@ router.put(
 			const updatedProject = req.body;
 			const result = await createProjects(updatedProject, { id: id });
 			res.json(result);
-	    }
+		}
 		catch (error) {
-		  next(error);
+			next(error);
 		}
 	}
 );
@@ -133,9 +166,9 @@ router.delete(
 			}, { where: { id: id } });
 
 			res.json(result);
-	    }
+		}
 		catch (error) {
-		  next(error);
+			next(error);
 		}
 	}
 );

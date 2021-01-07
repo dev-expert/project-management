@@ -182,7 +182,7 @@ const Index = ({ getTasks, getProjects, tasks, projects, addComment, addTask, up
 				setEndTimeDate(new Date())
 				getTasks();
 			}
-			
+
 		}else{
 
 			if (isTracking) {
@@ -447,7 +447,7 @@ const Index = ({ getTasks, getProjects, tasks, projects, addComment, addTask, up
 
 
 				<div className="timesheet__table">
-					<TimeSheetTable tasks={tasks}/>
+					<TimeSheetTable tasks={tasks} updateTask={updateTask}/>
 				</div>
 			</div>
 

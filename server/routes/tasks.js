@@ -4,6 +4,7 @@ var TaskController = require('../controllers/task')
 
 /* GET task listing. */
 router.get('/', TaskController.findAll);
+router.get('/reports', TaskController.taskReport);
 router.get('/inprogress', TaskController.findInProgress);
 router.get('/:id', TaskController.findOne);
 router.post('/', TaskController.create);

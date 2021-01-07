@@ -15,22 +15,22 @@ const MenuProps = {
 };
 
 
-const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, getTask, getInProgressTask }) => {
+const Index = ({ getTaskReports, getProjects, reportTasks, projects, addTask, updateTask, getTask, getInProgressTask }) => {
 	const [modelOpen, setModelOpen] = useState(false);
 	const [currentTask,setCurrentTask] = useState();
 
 	useEffect(() => {
 		getProjects();
-		getTasks();
+		getTaskReports();
 
-	}, [getTasks])
+	}, [getTaskReports])
 
 	useEffect(() => {
 		// Fetch INPROGRESS Task,
 	}, []);
 
-	const handleViewTask = (task) => {
-		setCurrentTask(task)
+	const handleViewTask = (reportTask) => {
+		setCurrentTask(reportTask)
 		setModelOpen(true)
 	}
 
@@ -43,7 +43,7 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 		<div className="reports">
 			<div>
 				<div className="reports__table">
-					<ReportsTable tasks={tasks} onViewTask={handleViewTask} onApproveTask={handleApproveTask}/>
+					<ReportsTable reportTasks={reportTasks} onViewTask={handleViewTask} onApproveTask={handleApproveTask}/>
 				</div>
 			</div>
 			<div>

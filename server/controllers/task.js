@@ -23,8 +23,7 @@ Methods.create = async (req, res, next) => {
         next(error);
     }
 }
-
-Methods.findAll = async (req, res, next) => {
+Methods.taskReport = async (req, res, next) => {
     try {
         let condition;
         const user = req.user;
@@ -43,6 +42,41 @@ Methods.findAll = async (req, res, next) => {
                     [Sequelize.Op.in]: [projectIds]
                 }
             };
+        }
+
+        var result = await Task.findAll({
+            where: condition,
+            include: [
+                {
+                    model: Projects, as: "Projects"
+                },
+                {
+                    model: comment, as: "comments"
+                },
+                {
+                    model: users, as: "userInfo"
+                }
+            ]
+        });
+        // if(result.length){
+        return res.send(result)
+        // }
+        // throw new Error("No data found")
+    }
+    catch (error) {
+        next(error);
+    }
+}
+
+Methods.findAll = async (req, res, next) => {
+    try {
+        let condition;
+        const user = req.user;
+
+        if (user.role === 'Dev') {
+            condition = user ? { createdBy: user.id } : null
+        }else{
+            condition = {};
         }
 
         var result = await Task.findAll({

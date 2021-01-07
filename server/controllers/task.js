@@ -39,7 +39,7 @@ Methods.taskReport = async (req, res, next) => {
             const projectIds = projects.map(u => u.get('projectId'))
             condition = {
                 projectId: {
-                    [Sequelize.Op.in]: [projectIds]
+                    [Sequelize.Op.in]: projectIds
                 }
             };
         }

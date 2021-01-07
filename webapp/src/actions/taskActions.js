@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CREATE_TASK, GET_TASKS, GET_TASK, UPDATE_TASK, DELETE_TASK } from '../config/actionNames';
+import { CREATE_TASK, GET_TASKS, GET_REPORT_TASK,GET_TASK, UPDATE_TASK, DELETE_TASK } from '../config/actionNames';
 import { api } from '../config/env';
 import { toast } from 'react-toastify';
 const PATH = `${api}api/tasks`;
@@ -14,6 +14,22 @@ export function getTasks(params) {
             });
     };
 }
+
+export function getTaskReports(params) {
+    return dispatch => {
+        axios
+            .get(`${PATH}/reports`, { params })
+            .then(response => {
+                dispatch({ type: GET_REPORT_TASK, payload: response.data });
+            })
+            .catch(err => {
+            });
+    };
+}
+
+
+
+
 
 export const getInProgressTask = () => {
     return dispatch => {

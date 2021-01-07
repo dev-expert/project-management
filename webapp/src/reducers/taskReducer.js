@@ -1,9 +1,10 @@
 import {
-    CREATE_TASK, GET_TASKS, GET_TASK, UPDATE_TASK
+    CREATE_TASK, GET_TASKS, GET_TASK, UPDATE_TASK,GET_REPORT_TASK
 } from '../config/actionNames';
 const initialState = {
     task: {},
     tasks: [],
+    reportTasks:[],
     taskAdded: false,
 };
 function reducer(state = initialState, action) {
@@ -24,6 +25,11 @@ function reducer(state = initialState, action) {
             return {
                 ...state,
                 tasks: action.payload,
+            }
+        case GET_REPORT_TASK:
+            return{
+                ...state,
+                reportTasks: action.payload,
             }
         default:
             return state;

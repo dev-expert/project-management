@@ -73,11 +73,8 @@ Methods.findAll = async (req, res, next) => {
         let condition;
         const user = req.user;
 
-        if (user.role !== 'Admin') {
-            condition = user ? { createdBy: user.id } : null
-        }else{
-            condition = {};
-        }
+        condition = user ? { createdBy: user.id } : null
+      
 
         var result = await Task.findAll({
             where: condition,

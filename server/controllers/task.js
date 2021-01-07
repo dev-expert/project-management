@@ -73,7 +73,7 @@ Methods.findAll = async (req, res, next) => {
         let condition;
         const user = req.user;
 
-        if (user.role === 'Dev') {
+        if (user.role !== 'Admin') {
             condition = user ? { createdBy: user.id } : null
         }else{
             condition = {};

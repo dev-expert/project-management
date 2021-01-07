@@ -452,7 +452,7 @@ const Index = ({ getTasks, getProjects, tasks, projects, addComment, addTask, up
 			</div>
 
 			<div>
-				<TaskEntryModel open={modelOpen} task={task} handleTaskSave={(task) => {setTaskDetail(task); setModelOpen(false)}} handleClose={() => setModelOpen(false)} />
+				<TaskEntryModel open={modelOpen} editable={true} task={task} handleTaskSave={(task) => {setTaskDetail(task); setModelOpen(false)}} handleClose={() => setModelOpen(false)} />
 			</div>
 
 

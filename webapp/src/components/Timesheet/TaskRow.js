@@ -13,6 +13,7 @@ import CommentIcon from '@material-ui/icons/ChatBubble';
 import Badge from '@material-ui/core/Badge';
 import ErrorIcon from '@material-ui/icons/Error';
 import Comments from './Comments';
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 
 import {getComments,addComment,updateComment} from '../../actions/commentActions';
 
@@ -113,7 +114,12 @@ const TaskRow = ({ task }) => {
 									</Badge>
 								</IconButton>
 								<MoreVertOutlinedIcon />
-								<ErrorIcon color="secondary" />
+								{
+									task.approvedStatusId !== 1 ? (<ErrorIcon color="secondary" />): (
+										<CheckCircleOutlineIcon color="primary" style={{color:'green'}}/>
+									)
+								}
+
 							</FlexRow>
 						</div>
 					</BorderedDiv>

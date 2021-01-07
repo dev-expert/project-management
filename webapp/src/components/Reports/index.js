@@ -23,7 +23,6 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 		getProjects();
 		getTasks();
 
-
 	}, [getTasks])
 
 	useEffect(() => {
@@ -35,13 +34,16 @@ const Index = ({ getTasks, getProjects, tasks, projects, addTask, updateTask, ge
 		setModelOpen(true)
 	}
 
+	const handleApproveTask = (taskId,) => {
+		updateTask(taskId,{approvedStatusId:1})
+	}
 
 
 	return (
 		<div className="reports">
 			<div>
 				<div className="reports__table">
-					<ReportsTable tasks={tasks} onViewTask={handleViewTask} />
+					<ReportsTable tasks={tasks} onViewTask={handleViewTask} onApproveTask={handleApproveTask}/>
 				</div>
 			</div>
 			<div>

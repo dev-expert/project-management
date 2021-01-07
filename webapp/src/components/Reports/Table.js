@@ -50,7 +50,7 @@ const BorderedDiv = styled('div')({
 
 
 
-export default function ReportsTable({tasks,onViewTask}) {
+export default function ReportsTable({tasks,onViewTask,onApproveTask}) {
 	const classes = useStyles();
 
 
@@ -90,7 +90,7 @@ export default function ReportsTable({tasks,onViewTask}) {
 
 				<div>
 					{tasks.map((row,index) => (
-						<ReportsRow task={row} key={index} onViewTask={onViewTask}/>
+						<ReportsRow task={row} key={index} onViewTask={onViewTask} onApproveTask={onApproveTask}/>
 					))}
 				</div>
 

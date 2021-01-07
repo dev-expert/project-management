@@ -2,7 +2,7 @@
 const { AbilityBuilder, Ability } = require('@casl/ability');
 const rolesAccess = {
   Common: [{
-    action: "manage", 
+    action: "manage",
     subject: "Common"
   }],
   ADMIN: [
@@ -19,6 +19,10 @@ const rolesAccess = {
     {
       action: ['read'],
       subject: ['Projects']
+    },
+    {
+      action: ['read','write'],
+      subject: ['Comments']
     }
   ],
   TeamLead: [
@@ -29,6 +33,10 @@ const rolesAccess = {
     {
       action: 'read',
       subject: ['Reports', 'Projects']
+    },
+     {
+      action: ['read','write'],
+      subject: ['Comments']
     }
   ]
 }
@@ -44,7 +52,7 @@ function defineAbilitiesFor (role) {
       permissions.forEach(permission => {
         can(permission.action, permission.subject);
       })
-    } 
+    }
   })
   return new Ability(rules)
 }
@@ -61,13 +69,13 @@ const getSubjectFromPath = (path) => {
   let startsWith = (startsVal) => path && path.startsWith(startsVal)
   switch(true) {
     case startsWith('/users'):
-    case startsWith('/roles'):  
+    case startsWith('/roles'):
       return 'Users';
-    case startsWith('/tasks'): 
+    case startsWith('/tasks'):
       return 'Timesheet';
-    case startsWith('/comments'): 
+    case startsWith('/comments'):
       return 'Comments';
-    case startsWith('/projects'): 
+    case startsWith('/projects'):
     return 'Projects';
     default: return 'Common';
   }
@@ -81,7 +89,7 @@ module.exports = (req, res, next) => {
     return next()
   } else {
     return res.status(403).json({
-      message: `You are not authorized to ${action} on ${route}`
+      message: `You are not authorized to ${action}`
     })
   }
 }

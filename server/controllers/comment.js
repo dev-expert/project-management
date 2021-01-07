@@ -15,8 +15,10 @@ Methods.create = async (req, res, next) => {
 }
 
 Methods.findAll = async (req, res, next) => {
-    const timeEntryId = req.query.timeEntryId;
 
+
+    const timeEntryId = req.query.timeEntryId;
+    console.log("TImeEntry: ",timeEntryId)
     try {
         const condition = {active: true, timeEntryId}
         var result = await CommentModel.findAll({

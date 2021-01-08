@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
@@ -16,7 +16,7 @@ import ErrorIcon from '@material-ui/icons/Error';
 import moment from 'moment';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import {getComments,addComment,updateComment} from '../../actions/commentActions';
+import { getComments, addComment, updateComment } from '../../actions/commentActions';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 
 
@@ -58,11 +58,11 @@ export const BorderedCell = withStyles((theme) => ({
 
 
 
-const TaskRow = ({ task, onViewTask,onApproveTask }) => {
+const TaskRow = ({ task, onViewTask, onApproveTask }) => {
 	const [showComments, setShowComments] = useState(false);
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const open = Boolean(anchorEl);
-	const [comments,setComments] = useState([]);
+	const [comments, setComments] = useState([]);
 
 
 	const toggleCommentsView = () => {
@@ -71,32 +71,28 @@ const TaskRow = ({ task, onViewTask,onApproveTask }) => {
 
 	// Fetch comments for given time entry
 	const fetchComments = async () => {
-	      const comments = await getComments({timeEntryId: task.id});
-		  if(comments) {
-		   setComments(comments.data);
-		  }
+		const comments = await getComments({ timeEntryId: task.id });
+		if (comments) {
+			setComments(comments.data);
 		}
-
-	useEffect(() => {
-		fetchComments();
-	},[task.id]);
+	}
 
 	// Update comment to soft delete
 	const handleDeleteComment = async (id) => {
-		await updateComment(id,{active:false});
+		await updateComment(id, { active: false });
 		fetchComments();
 	}
 
-	const handleAddComment = async (comment,onCommentSuccess) => {
+	const handleAddComment = async (comment, onCommentSuccess) => {
 		const payload = {
 			comment,
 			timeEntryId: task.id,
-			active:true,
+			active: true,
 		}
 		const response = await addComment(payload);
-		if(response.status === 200) {
-		  onCommentSuccess();
-		  fetchComments();
+		if (response.status === 200) {
+			onCommentSuccess();
+			fetchComments();
 		}
 
 	}
@@ -165,17 +161,17 @@ const TaskRow = ({ task, onViewTask,onApproveTask }) => {
 								</IconButton>
 								<div>
 									{
-									task.approvedStatusId !== 1 ? (<IconButton
-										aria-label="more"
-										aria-controls="long-menu"
-										aria-haspopup="true"
-										onClick={handleMenuClick}
-									>
-										<MoreVertOutlinedIcon />
-									</IconButton>): (
-										<CheckCircleOutlineIcon color="primary" style={{color:'green'}}/>
-									)
-								}
+										task.approvedStatusId !== 1 ? (<IconButton
+											aria-label="more"
+											aria-controls="long-menu"
+											aria-haspopup="true"
+											onClick={handleMenuClick}
+										>
+											<MoreVertOutlinedIcon />
+										</IconButton>) : (
+												<CheckCircleOutlineIcon color="primary" style={{ color: 'green' }} />
+											)
+									}
 
 
 
@@ -205,11 +201,11 @@ const TaskRow = ({ task, onViewTask,onApproveTask }) => {
 				</div>
 			</div>
 			<div>
-					{showComments && <Comments
+				{showComments && <Comments
 					timeEntryId={task.id}
 					deleteComment={handleDeleteComment}
-					 addComment={handleAddComment}
-					  comments={comments}/>}
+					addComment={handleAddComment}
+					comments={comments} />}
 			</div>
 		</>
 	)

@@ -1,10 +1,14 @@
 const CommentModel = require('../models').Comment;
+const viewedCommentsModel = require('../models').viewedComments;
+
 const users = require('../models').User;
+var Sequelize = require('sequelize');
+
 
 const Methods = {};
 
 Methods.create = async (req, res, next) => {
-    const body = { ...req.body, createdBy: req.user.id};
+    const body = { ...req.body, createdBy: req.user.id };
     try {
         var result = await CommentModel.create(body)
         res.json(result);
@@ -13,20 +17,45 @@ Methods.create = async (req, res, next) => {
         next(error);
     }
 }
+Methods.unreadComments = async (req, res, next) => {
+
+    let taskIdParams = [3,4];  
+    try {
+        var result = await CommentModel.findAll({
+            group: ['timeEntryId'],
+            where: {
+                timeEntryId: { [Sequelize.Op.in]: taskIdParams }
+            },
+            attributes: ['id', [Sequelize.fn('COUNT', 'id'), 'count']],
+            include: [
+                {
+                    model: viewedCommentsModel, as: "commentData",
+                    
+                }
+            ]
+        })
+        res.json(result);
+    }
+    catch (error) {
+        next(error);
+    }
+
+
+}
 
 Methods.findAll = async (req, res, next) => {
 
 
     const timeEntryId = req.query.timeEntryId;
-    console.log("TImeEntry: ",timeEntryId)
+    console.log("TImeEntry: ", timeEntryId)
     try {
-        const condition = {active: true, timeEntryId}
+        const condition = { active: true, timeEntryId }
         var result = await CommentModel.findAll({
             where: condition,
             include: [
-                 {
+                {
                     model: users, as: "userInfo"
-                 }
+                }
             ]
         })
         return res.json(result);

@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import ReportsTable from './Table';
 import getConnect from '../Common/connect';
 import TaskEntryModel from '../Timesheet/TaskEntryModal';
-
+import ReportsMenu from './ReportsMenu'
+import ReportsFilter from './ReportsFilter'
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -15,15 +16,17 @@ const MenuProps = {
 };
 
 
-const Index = ({ getTaskReports, getProjects, reportTasks, projects, addTask, updateTask, getTask, getInProgressTask }) => {
+const Index = ({ getTaskReports, getProjects, reportTasks, projects, addTask, updateTask, getTask, getInProgressTask,getUsers,users }) => {
 	const [modelOpen, setModelOpen] = useState(false);
 	const [currentTask,setCurrentTask] = useState();
 
 	useEffect(() => {
 		getProjects();
 		getTaskReports();
+		getUsers();
 
 	}, [getTaskReports])
+	console.log("Users: ",users);
 
 	useEffect(() => {
 		// Fetch INPROGRESS Task,
@@ -41,10 +44,10 @@ const Index = ({ getTaskReports, getProjects, reportTasks, projects, addTask, up
 
 	return (
 		<div className="reports">
-			<div>
-				<div className="reports__table">
+			<ReportsMenu/>
+			<div className="main">
+					<ReportsFilter projects={projects} users={users}/>
 					<ReportsTable reportTasks={reportTasks} onViewTask={handleViewTask} onApproveTask={handleApproveTask}/>
-				</div>
 			</div>
 			<div>
 			{modelOpen &&	<TaskEntryModel open={modelOpen} task={currentTask} handleTaskSave={(task) => console.log('View only')} handleClose={() => setModelOpen(false)} />}

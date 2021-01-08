@@ -55,45 +55,26 @@ export default function ReportsTable({reportTasks,onViewTask,onApproveTask}) {
 
 
 	return (
-		<TableContainer component={Paper}>
+		 <div className="reports__table">
+			{/*Container Heading  */}
+			<h4 className="heading">Task Board</h4>
 
-					<>
-			<div style={{ display: 'flex' }}>
-				<div style={{ display: 'flex', width: '50%',padding:'10px' }}>
-					<div  style={{ flex: 1 }}>
-						Time Entry
-						</div>
-				</div>
-				<div style={{ width: '50%', padding:'10px' }}>
-						<div style={{ display: 'flex', flex: 1,
-									padding: '0 5px 0px 30px',
-									justifyContent: 'space-between',
-									alignItems: 'center' }} >
-							<FlexRow>
-								User
-							</FlexRow>
-							<FlexRow>
-								Time
-							</FlexRow>
-							<FlexRow>
-								Duration
-							</FlexRow>
-							<FlexRow>
-							</FlexRow>
-						</div>
-				</div>
-			</div>
-			<div>
-					{/* {showComments && <Comments />} */}
-				</div>
-		</>
+			<div className="reports__table__main">
 
-				<div>
+				<div className="table__head">
+					<p>Name</p>
+					<p>Task Description</p>
+					<p>Project Detail</p>
+					<p>Time/Date</p>
+					<p>Actions</p>
+				 </div>
+
+				{/* Reports Main  */}
+
 					{reportTasks.map((row,index) => (
 						<ReportsRow task={row} key={index} onViewTask={onViewTask} onApproveTask={onApproveTask}/>
 					))}
-				</div>
-
-		</TableContainer>
+		</div>
+		</div>
 	);
 }

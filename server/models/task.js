@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
         as: 'userInfo',
 
       })
-
+ 
 
       Task.hasMany(models.Comment, {
         foreignKey: 'timeEntryId',

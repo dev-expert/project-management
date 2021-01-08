@@ -13,7 +13,28 @@ const createProjects = async (payload, filter = null, updateMany = false) => {
 			if (updateMany) {
 				result = await ProjectModel.updateMany(filter, payload);
 			} else {
-				result = await ProjectModel.update(payload, { where: filter });
+			const { users, team_leads, ...rest } = payload;
+				result = await ProjectModel.update({
+										name:payload.name,
+										startDate:payload.startDate,
+										endDate:payload.endDate,
+										description:payload.description
+									}, { where: filter });
+
+				let allUserProjects = await UserProjectModel.findAll({where:{projectId:filter.id }});
+				let a = [];
+				allUserProjects.forEach(async (userProjects) => {
+					a.push(userProjects.dataValues.userId);
+
+				});
+
+				team_leads.forEach(async (id) => {
+					let data = 	await TeamLeadProjectModel.findOne({where:{userId: id,projectId:filter.id }});
+					
+					if(!data.dataValues.id){
+						await TeamLeadProjectModel.create({ projectId: filter.id, userId: id })
+						}
+					})
 			}
 		} else {
 			payload.active = true;
@@ -38,7 +59,25 @@ const findProjects = async (req, onlyOne = false) => {
 		let result = [];
 
 		if (onlyOne) {
-			result = await ProjectModel.findByPk(req.id);
+			result = await ProjectModel.findOne(
+								{where:{id:req.id},
+								include: [
+									{
+										model: TeamLeadProjectModel, as: 'TeamLeadProject',
+										include:[{
+
+											model:UserModel,as:'userInfo'
+										}]
+									},
+									{
+										model: UserProjectModel, as: 'UserProject',
+										include:[{
+
+											model:UserModel,as:'userInfo'
+										}]
+									}									
+								]},
+								);
 		} else {
 
 

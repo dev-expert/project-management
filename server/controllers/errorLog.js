@@ -12,13 +12,7 @@ module.exports.errorLogging = async (req, err) => {
     stackTrace: JSON.stringify(err)
   };
   try {
-    let result = await ErrorLog.create({
-              userId: req.user.id,
-              userEmail: req.user.email ? req.user.email : '',
-              route: req.originalUrl ? req.originalUrl : '',
-              requestPayload: JSON.stringify(req.body),
-              stackTrace: JSON.stringify(err)
-                });
+    let result = await ErrorLog.create(payload);
     return result;
   }
   catch (error) {

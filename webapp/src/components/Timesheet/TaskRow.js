@@ -77,11 +77,6 @@ const TaskRow = ({ task, updateTask }) => {
 		setModelOpen(false)
 	}
 
-
-	useEffect(() => {
-		fetchComments();
-	}, [task.id]);
-
 	// Update comment to soft delete
 	const handleDeleteComment = async (id) => {
 		await updateComment(id, { active: false });

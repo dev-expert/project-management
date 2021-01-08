@@ -36,7 +36,7 @@ const Comment = ({comment,currentUser,onDeleteComment}) => {
 			<div className="comment__detail">
 				<p className="comment__time">{moment(comment.createdAt).fromNow()}</p>
 			&nbsp;&nbsp;&nbsp;
-		 <Button onClick={() => onDeleteComment(comment.id)}><p className="comment__delete">Delete</p></Button>
+		 {/* <Button onClick={() => onDeleteComment(comment.id)}><p className="comment__delete">Delete</p></Button> */}
 			</div>
 
 		</div>

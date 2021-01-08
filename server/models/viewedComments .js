@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
 },{
 	sequelize,
     modelName: 'viewedComments',
-	timestamps: true
+	timestamps: false
   });
   return viewedComments ;
 };

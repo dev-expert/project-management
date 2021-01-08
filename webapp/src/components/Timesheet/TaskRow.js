@@ -51,6 +51,7 @@ export const BorderedCell = withStyles((theme) => ({
 
 const TaskRow = ({ task, updateTask }) => {
 	const [showComments, setShowComments] = useState(false);
+	const [commentsFetched, setCommentsFetched] = useState(false);
 	const [comments, setComments] = useState([]);
 	const [taskEditView, setTaskEditView] = useState();
 	const [description, setDescription] = useState(task.description);
@@ -61,6 +62,9 @@ const TaskRow = ({ task, updateTask }) => {
 
 
 	const toggleCommentsView = () => {
+		if(!commentsFetched){
+			fetchComments();
+		}
 		setShowComments((showComments => !showComments));
 	}
 
@@ -69,6 +73,7 @@ const TaskRow = ({ task, updateTask }) => {
 		const comments = await getComments({ timeEntryId: task.id });
 		if (comments) {
 			setComments(comments.data);
+			setCommentsFetched(true);
 		}
 	}
 
@@ -111,7 +116,9 @@ const TaskRow = ({ task, updateTask }) => {
 						<FlexRow>
 							<>
 								{task.description}
-								<Button onClick={() => setModelOpen(true)}><CreateIcon /></Button>
+								<Button onClick={() => {
+									setModelOpen(true)
+								}}><CreateIcon /></Button>
 							</>
 
 
@@ -124,17 +131,17 @@ const TaskRow = ({ task, updateTask }) => {
 
 							<FlexRow>
 								{/* {startSelectedDate ? startSelectedDate : task.startedAt || "00:00"} */}
-								<form  noValidate>
+								<form noValidate>
 									<TextField
 										id="datetime-local"
 										type="datetime-local"
-										onBlur={(e,d) => {
-										if(moment(task.startedAt).isSame(e.target.value)) {
+										onBlur={(e, d) => {
+											if (moment(task.startedAt).isSame(e.target.value)) {
 												return;
-										}
-											updateTask(task.id,{startedAt:e.target.value})
+											}
+											updateTask(task.id, { startedAt: e.target.value })
 										}}
-      								    defaultValue={moment(task.startedAt).format("YYYY-MM-DDTHH:mm")}
+										defaultValue={moment(task.startedAt).format("YYYY-MM-DDTHH:mm")}
 										InputLabelProps={{
 											shrink: true,
 										}}
@@ -142,17 +149,17 @@ const TaskRow = ({ task, updateTask }) => {
 								</form>
 							</FlexRow>
 							<FlexRow>
-								<form  noValidate>
+								<form noValidate>
 									<TextField
 										id="datetime-local"
 										type="datetime-local"
 										onBlur={(e) => {
-											if(moment(task.completedAt).isSame(e.target.value)) {
+											if (moment(task.completedAt).isSame(e.target.value)) {
 												return;
 											}
-											updateTask(task.id,{completedAt:e.target.value})
+											updateTask(task.id, { completedAt: e.target.value })
 										}}
-      								    defaultValue={moment(task.completedAt).format("YYYY-MM-DDTHH:mm")}
+										defaultValue={moment(task.completedAt).format("YYYY-MM-DDTHH:mm")}
 										InputLabelProps={{
 											shrink: true,
 										}}

@@ -11,27 +11,30 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
- 
+
     }
   };
   viewedComments.init({
-    commentId: DataTypes.TEXT,
-    userId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
+    commentId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
     },
-	createdBy: {
-		type: DataTypes.INTEGER,
-		allowNull: true,
-	},
-	updatedBy: {
-		type: DataTypes.INTEGER,
-		allowNull: true,
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    createdBy: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    updatedBy: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
     }
-},{
-	sequelize,
+  }, {
+    sequelize,
     modelName: 'viewedComments',
-	timestamps: false
+    timestamps: false
   });
-  return viewedComments ;
+  return viewedComments;
 };

@@ -9,7 +9,7 @@ module.exports.errorLogging = async (req, err) => {
     route: req.originalUrl ? req.originalUrl : '',
     requestPayload: JSON.stringify(req.body),
     // requestJSON: JSON.stringify(req),
-    stackTrace: JSON.stringify(err)
+    stackTrace: {"message":JSON.stringify(err.stack)}
   };
   try {
     let result = await ErrorLog.create(payload);

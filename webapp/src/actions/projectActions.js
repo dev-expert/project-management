@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CREATE_PROJECT, GET_PROJECTS, GET_PROJECT, UPDATE_PROJECT,DELETE_PROJECT } from '../config/actionNames';
+import { CREATE_PROJECT, GET_PROJECTS, GET_PROJECT, UPDATE_PROJECT,DELETE_PROJECT,REDIRECT_URI } from '../config/actionNames';
 import { api } from '../config/env';
 import { toast } from 'react-toastify';
 const PATH = `${api}api/projects`;
@@ -40,7 +40,7 @@ export function addProject(payload) {
                 dispatch({ type: CREATE_PROJECT, payload: response.data });
                 toast.success('Project created Successfully')
                 setTimeout(()=>{
-                    dispatch({ type:UPDATE_PROJECT, payload: response.data });
+                    dispatch({ type:REDIRECT_URI, payload: response.data });
                 },500)
             })
             .catch(err => {
@@ -54,6 +54,10 @@ export function updateProject(id, payload) {
             .then(response => {
                 dispatch({ type: UPDATE_PROJECT, payload: response.data });
                 toast.success('Project updated Successfully')
+                setTimeout(()=>{
+                    dispatch({ type:REDIRECT_URI, payload: response.data });
+                },500)
+
 
             })
             .catch(err => {

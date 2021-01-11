@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-function DisplayUser({ history, addUser, userActionPerformed, getUser, user,updateUser ,getRoles,roles}) {
+function DisplayUser({ history, addUser, userActionPerformed, getUser, user,updateUser ,getRoles,roles,editUser}) {
     const id = history.location.state.id;
     const classes = useStyles();
     const [firstName, setFirstName] = useState('');
@@ -64,7 +64,8 @@ function DisplayUser({ history, addUser, userActionPerformed, getUser, user,upda
     }, [user])
 
     useEffect(() => {
-        if (userActionPerformed) {
+        debugger;
+        if (editUser) {
             history.push('/users')
         }
     }, [userActionPerformed, history])

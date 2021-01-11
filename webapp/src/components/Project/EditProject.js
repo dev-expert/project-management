@@ -118,6 +118,7 @@ function EditProject({ updateProject, history, users: allUsers, getUsers, getPro
   const getName = (option, withUsername) => `${option.firstName ? option.firstName : ''} ${option.lastName ? option.lastName : ''}${withUsername ? '(' + option.username + ')' : ''}`
   useEffect(() => {
     if (projectUpdated) {
+      history.push('/projects');
     }
   }, [projectUpdated, history])
   useEffect(() => {

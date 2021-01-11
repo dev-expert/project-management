@@ -13,28 +13,49 @@ const createProjects = async (payload, filter = null, updateMany = false) => {
 			if (updateMany) {
 				result = await ProjectModel.updateMany(filter, payload);
 			} else {
-			const { users, team_leads, ...rest } = payload;
+				const { users, team_leads, ...rest } = payload;
 				result = await ProjectModel.update({
-										name:payload.name,
-										startDate:payload.startDate,
-										endDate:payload.endDate,
-										description:payload.description
-									}, { where: filter });
+					name: payload.name,
+					startDate: payload.startDate,
+					endDate: payload.endDate,
+					description: payload.description
+				}, { where: filter });
 
-				let allUserProjects = await UserProjectModel.findAll({where:{projectId:filter.id }});
+				// check user project if exists than update if not available than create or delete 
+				let allUserProjects = await UserProjectModel.findAll({ where: { projectId: filter.id } });
 				let a = [];
 				allUserProjects.forEach(async (userProjects) => {
+					let ab = users.includes(userProjects.dataValues.userId);
+					if (ab == false) {
+						await UserProjectModel.destroy({ where: { projectId: filter.id, userId: userProjects.dataValues.userId } });
+					}
 					a.push(userProjects.dataValues.userId);
-
 				});
 
-				team_leads.forEach(async (id) => {
-					let data = 	await TeamLeadProjectModel.findOne({where:{userId: id,projectId:filter.id }});
-					
-					if(!data.dataValues.id){
-						await TeamLeadProjectModel.create({ projectId: filter.id, userId: id })
-						}
-					})
+				for (let user of users) {
+					let ab = a.includes(user);
+					if (ab == false) {
+						 result = await UserProjectModel.create({ projectId: filter.id, userId: user });
+					}
+				}
+
+				// check teamlead project if exists than update if not available than create or delete 
+				let allTeamLeadProjects = await TeamLeadProjectModel.findAll({ where: { projectId: filter.id } });
+				let t = []
+				allTeamLeadProjects.forEach(async (teamLeadProjectsData) => {
+					let ab = team_leads.includes(teamLeadProjectsData.dataValues.userId);
+					if (ab == false) {
+						await TeamLeadProjectModel.destroy({ where: { projectId: filter.id, userId: teamLeadProjectsData.dataValues.userId } });
+					}
+					t.push(teamLeadProjectsData.dataValues.userId);
+				});
+
+				for (let user of team_leads) {
+					let ab = t.includes(user);
+					if (ab == false) {
+						result = await TeamLeadProjectModel.create({ projectId: filter.id, userId: user });
+					}
+				}
 			}
 		} else {
 			payload.active = true;
@@ -55,29 +76,31 @@ const createProjects = async (payload, filter = null, updateMany = false) => {
 }
 const findProjects = async (req, onlyOne = false) => {
 	try {
-		const { filter, query,user } = req;
+		const { filter, query, user } = req;
 		let result = [];
 
 		if (onlyOne) {
 			result = await ProjectModel.findOne(
-								{where:{id:req.id},
-								include: [
-									{
-										model: TeamLeadProjectModel, as: 'TeamLeadProject',
-										include:[{
+				{
+					where: { id: req.id },
+					include: [
+						{
+							model: TeamLeadProjectModel, as: 'TeamLeadProject',
+							include: [{
 
-											model:UserModel,as:'userInfo'
-										}]
-									},
-									{
-										model: UserProjectModel, as: 'UserProject',
-										include:[{
+								model: UserModel, as: 'userInfo'
+							}]
+						},
+						{
+							model: UserProjectModel, as: 'UserProject',
+							include: [{
 
-											model:UserModel,as:'userInfo'
-										}]
-									}									
-								]},
-								);
+								model: UserModel, as: 'userInfo'
+							}]
+						}
+					]
+				},
+			);
 		} else {
 
 
@@ -111,11 +134,11 @@ const findProjects = async (req, onlyOne = false) => {
 			}
 
 
-			 if (user.role === 'Dev') {
-			  const userProjects = await UserProjectModel.findAll({where :{userId: user.id},attributes: ['projectId']})
-			  const projectIds = userProjects.map(u => u.get('projectId'))
-			  where = {
-				  ...where,
+			if (user.role === 'Dev') {
+				const userProjects = await UserProjectModel.findAll({ where: { userId: user.id }, attributes: ['projectId'] })
+				const projectIds = userProjects.map(u => u.get('projectId'))
+				where = {
+					...where,
 					id: {
 						[Sequelize.Op.in]: [projectIds]
 					}

@@ -1,27 +1,23 @@
 import React, { useState, useEffect } from 'react'
 
 import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
 import { makeStyles, withStyles, styled } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
-import DollarIcon from '@material-ui/icons/AttachMoney'
-import CreateIcon from '@material-ui/icons/Create';
-import Button from '@material-ui/core/Button';
 import DateRangeIcon from '@material-ui/icons/DateRange';
 import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined';
-import PlayArrowOutlinedIcon from '@material-ui/icons/PlayArrowOutlined';
 import CommentIcon from '@material-ui/icons/ChatBubble';
 import Badge from '@material-ui/core/Badge';
-import ErrorIcon from '@material-ui/icons/Error';
 import moment from 'moment';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import MenuItem from '@material-ui/core/MenuItem';
+import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import { getComments, addComment, updateComment } from '../../actions/commentActions';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 
 
-
 import Comments from '../Timesheet/Comments';
+
 
 const FlexRow = styled('div')({
 	display: 'flex',
@@ -36,6 +32,8 @@ const BorderedDiv = styled('div')({
 	border: '1px solid lightgray',
 	alignItems: 'center'
 });
+
+
 
 const Separator = styled('span')(
 	{
@@ -100,9 +98,6 @@ const TaskRow = ({ task, onViewTask, onApproveTask }) => {
 
 
 
-	const handleMenuClick = (event) => {
-		setAnchorEl(event.currentTarget);
-	};
 
 	const handleMenuClose = () => {
 		setAnchorEl(null);
@@ -131,73 +126,56 @@ const TaskRow = ({ task, onViewTask, onApproveTask }) => {
 	}
 	return (
 		<>
-			<div style={{ display: 'flex', padding: '10px 15px', borderBottom: '1px solid lightgray' }}>
-				<div key={task.name} style={{ display: 'flex', width: '50%' }}>
-					<div style={{ flex: 1 }}>
-						{task.description} <Button onClick={() => onViewTask(task)}><CreateIcon /></Button> <Separator />  {task.Projects.name}
-					</div>
+			{/* Report Row */}
+			<div className="report">
+				{/* User Name */}
+				<div className="user">
+					{task.userInfo.firstName} {task.userInfo.lastName}
 				</div>
-				<div style={{ width: '50%' }}>
-					<div>
-						<div style={{
-							display: 'flex', flex: 1,
-							padding: '0 5px 0px 30px',
-							justifyContent: 'space-between',
-							alignItems: 'center'
-						}} >
-							<FlexRow>
-								{task.userInfo.firstName} {task.userInfo.lastName}
-							</FlexRow>
-							<FlexRow>
-								{getTime(task.startedAt, task.completedAt)}
-							</FlexRow>
-							{getDuration(task.startedAt, task.completedAt)}
-							<FlexRow>
+				{/* Task description */}
+				<div className="description">
+					{task.description}
+				</div>
+				{/* Project detail */}
+				<div className="project">
+					{task.Projects.name}
+				</div>
 
-								<IconButton onClick={toggleCommentsView}>
-									<Badge badgeContent={task.comments.length} color="secondary">
-										<CommentIcon />
-									</Badge>
-								</IconButton>
-								<div>
-									{
-										task.approvedStatusId !== 1 ? (<IconButton
-											aria-label="more"
-											aria-controls="long-menu"
-											aria-haspopup="true"
-											onClick={handleMenuClick}
-										>
-											<MoreVertOutlinedIcon />
-										</IconButton>) : (
-												<CheckCircleOutlineIcon color="primary" style={{ color: 'green' }} />
-											)
-									}
+				{/* TIme /duration */}
+				<div className="time">
+					{getTime(task.startedAt, task.completedAt)}
+					{getDuration(task.startedAt, task.completedAt)}
+				</div>
 
+				{/* Actions */}
+				<div className="actions">
 
-
-
-									<Menu
-										id="long-menu"
-										anchorEl={anchorEl}
-										keepMounted
-										open={open}
-										onClose={handleMenuClose}
-										PaperProps={{
-											style: {
-												maxHeight: ITEM_HEIGHT * 4.5,
-												width: '20ch',
-											},
-										}}
-									>
-										<MenuItem
-											onClick={approveTask}>
-											Approve
-											</MenuItem>
-									</Menu>
-								</div>
-							</FlexRow>
-						</div>
+					{/* Approved */}
+					<div className="approve">
+						{
+							task.approvedStatusId !== 1 ? (
+								<Button variant="contained" onClick={approveTask} style={{backgroundColor:'rgba(255, 92, 0, 0.8)', width:'92px'}}>Approve</Button>
+							) : (
+									<Button variant="contained"  style={{backgroundColor:'#3AC47D',width:'92px', color:'white'}}  >Approved</Button>
+								)
+						}
 					</div>
+
+					{/* Comments */}
+					<div>
+					 <IconButton onClick={toggleCommentsView}>
+						<Badge badgeContent={task.comments.length} color="secondary">
+							<CommentIcon />
+						</Badge>
+					</IconButton>
+					</div>
+
+
+					{/* Visible */}
+					<div>
+						<Button onClick={() => onViewTask(task)}><VisibilityIcon /></Button>
+					</div>
+
 				</div>
 			</div>
 			<div>

@@ -51,7 +51,7 @@ const StyledTableCell = withStyles((theme) => ({
 
 
 
-export default function TimeSheetTable({tasks}) {
+export default function TimeSheetTable({tasks,updateTask}) {
 	const classes = useStyles();
 
 	return (
@@ -65,7 +65,7 @@ export default function TimeSheetTable({tasks}) {
 				</FlexRow>
 				<div>
 					{tasks.map((row) => (
-						<TaskRow key={row.id}  task={row}/>
+						<TaskRow key={row.id}  task={row} updateTask={updateTask}/>
 					))}
 				</div>
 			</div>

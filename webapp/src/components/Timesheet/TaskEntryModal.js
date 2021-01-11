@@ -27,13 +27,14 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export default function TaskEntryModel({ open,task, handleClose,handleTaskSave }) {
+export default function TaskEntryModel({ open,task, handleClose,handleTaskSave,editable }) {
 	const classes = useStyles();
 	const [taskTitle, setTaskTitle] = useState('');
 	const [description, setDescription] = useState('');
 	const [taskVideoLink, setTaskVideoLink] = useState('');
 	const [file, setFile] = useState();
 	const [submitted, setSubmitted] = useState(false);
+
 
 
 	useEffect(() => {
@@ -79,6 +80,7 @@ export default function TaskEntryModel({ open,task, handleClose,handleTaskSave }
 							<div>
 								<TextField
 									required
+									disabled={!editable}
 									fullWidth
 									id="filled-required"
 									label="Title"
@@ -89,7 +91,6 @@ export default function TaskEntryModel({ open,task, handleClose,handleTaskSave }
 									aria-describedby="component-error-text"
 
 								/>
-								{submitted && taskTitle.length < 20 && <FormHelperText error={true} id="component-error-text">Please add minimum 20 letters</FormHelperText>}
 
 							</div>
 
@@ -98,12 +99,15 @@ export default function TaskEntryModel({ open,task, handleClose,handleTaskSave }
 									id="outlined-multiline-static"
 									fullWidth
 									multiline
+									disabled={!editable}
 									rows={4}
 									onChange={(e) => setDescription(e.target.value)}
 									value={description}
 									placeholder="Description"
 									variant="outlined"
 								/>
+								{description && description.length < 20 && <FormHelperText error={true} id="component-error-text">Please add minimum 20 letters</FormHelperText>}
+
 								{/* <FormHelperText id="component-error-text">Error</FormHelperText> */}
 							</div>
 
@@ -111,6 +115,7 @@ export default function TaskEntryModel({ open,task, handleClose,handleTaskSave }
 								<div style={{ flex: 1.5 }}>
 									<TextField
 										required
+								    	disabled={!editable}
 										fullWidth
 										value={taskVideoLink}
 										onChange={(e) => setTaskVideoLink(e.target.value)}
@@ -129,6 +134,7 @@ export default function TaskEntryModel({ open,task, handleClose,handleTaskSave }
 										style={{ width: '100%' }}
 										startIcon={<NoteAddIcon />}
 										component="label"
+							    		disabled={!editable}
 									>
 										<div style={{ fontSize: '12px', color: 'gray' }}>
 											{
@@ -159,6 +165,7 @@ export default function TaskEntryModel({ open,task, handleClose,handleTaskSave }
 								onClick={handleClose}
 								startIcon={<CloseIcon />}
 								component="label"
+							    		disabled={!editable}
 							>
 								Cancel
 							 </Button>
@@ -166,6 +173,7 @@ export default function TaskEntryModel({ open,task, handleClose,handleTaskSave }
 							<Button
 								variant="contained"
 								onClick={handleSubmit}
+							    disabled={!editable}
 								startIcon={<SaveIcon />}
 								component="label"
 							>

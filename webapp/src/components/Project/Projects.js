@@ -81,6 +81,12 @@ const handleChange = (event, value) => {
     
 };
 
+const handleKeyPress = (event) => {
+  if(event.key === 'Enter'){
+    handleSearch();
+  }
+}
+
 const handleSearch = () => {
   setOffset(0)
   setPage(1)
@@ -103,9 +109,8 @@ const handelDelete  = (id) => {
           </button>
         </Grid>
         <Grid item xs={12} md={12} lg={12} >
-        <form className={classes.root} noValidate autoComplete="off">
-          <TextField id="name" label="Search" onChange={handleNameChange} variant="outlined" />
-          <FormControl></FormControl>
+        <form className={classes.root} noValidate autoComplete="off" onSubmit={e => { e.preventDefault(); }} >
+          <TextField id="name" label="Search" onKeyPress={handleKeyPress} onChange={handleNameChange} variant="outlined" />
           <button onClick={handleSearch} style={{marginLeft: '10px'}} type="button" className='btn btn-primary'>
           Search
           </button>

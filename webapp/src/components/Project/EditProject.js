@@ -367,7 +367,7 @@ function EditProject({ updateProject, history, users: allUsers, getUsers, getPro
                     onClick={handleSubmit}
                     className={classes.button}
                   >
-                    {activeStep === steps.length - 1 ? 'Edit Project' : 'Next'}
+                    {activeStep === steps.length - 1 ? 'Save' : 'Next'}
                   </Button>
                 </div>
               </React.Fragment>

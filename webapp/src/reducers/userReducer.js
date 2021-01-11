@@ -42,7 +42,7 @@ function reducer(state = initialState, action) {
                 editUser: false,
                 userAdded: false
             }
-        case USER_ACTION_PERFORMED:debugger;
+        case USER_ACTION_PERFORMED:
             return {
                 ...state,
                 userActionPerformed: false,

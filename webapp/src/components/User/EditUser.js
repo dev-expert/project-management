@@ -156,7 +156,7 @@ function DisplayUser({ history, addUser, userActionPerformed, getUser, user,upda
                         className={classes.submit}
                         onClick={handleSubmit}
                     >
-                        Edit USER
+                         Save
           </Button>
                 </form>
             </div>

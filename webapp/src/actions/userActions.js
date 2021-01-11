@@ -42,12 +42,15 @@ export function addUser(payload) {
 		axios
 			.post(`${PATH}`, payload)
 			.then(response => {
+				if(response.data.error){
+					toast.error(response.data.message);
+				}else{
 				toast.success('User created Successfully');
 				dispatch({ type: CREATE_USER, payload: response.data });
-			
+				}
 			})
 			.catch(err => {
-				toast.error('Unable to create User')
+				toast.error('Unable to create User');
 			});
 	};
 }
@@ -56,14 +59,18 @@ export function updateUser(id, payload) {
 		axios
 			.put(`${PATH}/${id}`, payload)
 			.then(response => {
+				if(response.data.error){
+					toast.error(response.data.message);
+				}else{
 				toast.success('User updated Successfully');
 				dispatch({ type: UPDATE_USER, payload: response.data });
 				setTimeout(()=>{
                     dispatch({ type:URER_REDIRECT_URI, payload: response.data });
-                },500)
+				},500)
+			}
 			})
 			.catch(err => {
-				toast.error('Unable to create User')
+				toast.error('Unable to update User');
 			});
 	};
 }

@@ -20,7 +20,7 @@ Methods.create = async (req, res, next) => {
 	}
 }
 Methods.unreadComments = async (req, res, next) => {
-	let taskIdParams = [1];
+	let taskIdParams = req.query.timeEntryId;
 	try {
 		const unreadComments = await db.sequelize.query('select count(*) as unreadCommentsCount, timeEntryId from Comments where timeEntryId  in (:taskIds) and id not in (select commentId from viewedComments where userId = :userId) group by timeEntryId',
 			{

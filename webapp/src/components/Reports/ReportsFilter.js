@@ -128,7 +128,7 @@ const ReportsOverview = (props) => {
 						labelId="demo-mutiple-checkbox-label"
 						id="demo-mutiple-checkbox"
 						multiple
-						value={selectedProjects}
+						value={selectedClients}
 						onChange={(event) => {
 							setSelectedClients(event.target.value);
 						}}

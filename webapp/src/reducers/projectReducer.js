@@ -15,7 +15,7 @@ function reducer(state = initialState, action) {
                 ...state,
                 project: action.payload,
             }
-        case UPDATE_PROJECT:debugger;
+        case UPDATE_PROJECT:
             return {
                 ...state,
                 project: action.payload,

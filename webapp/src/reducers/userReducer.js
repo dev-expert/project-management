@@ -8,7 +8,6 @@ const initialState = {
     userAdded: false,
     editUser: false,
 
-
 };
 function reducer(state = initialState, action) {
     switch (action.type) {
@@ -16,14 +15,14 @@ function reducer(state = initialState, action) {
             ...state,
             user: action.payload,
             userActionPerformed: true,
-            userAdded:true
+            userAdded: true
         }
-        case UPDATE_USER:
-            return{
+        case UPDATE_USER:debugger;
+            return {
                 ...state,
-                user:action.payload,
+                user: action.payload,
                 editUser: true,
-                
+                userActionPerformed:true
             }
         case GET_USER:
             return {
@@ -34,25 +33,22 @@ function reducer(state = initialState, action) {
             return {
                 ...state,
                 users: action.payload,
-                userAdded:false
-                
-            }
-        case USER_ACTION_PERFORMED:
-            return {
-                ...state,
-                userActionPerformed: false,
-                userAdded:false,
+                userAdded: false
 
             }
         case URER_REDIRECT_URI:
             return {
                 ...state,
-                user: action.payload,
-                editUser:false,
+                editUser: false,
                 userAdded: false
             }
+        case USER_ACTION_PERFORMED:debugger;
+            return {
+                ...state,
+                userActionPerformed: false,
+                userAdded: false,
+            }
         case DELETE_USER:
-
         default:
             return state;
     }

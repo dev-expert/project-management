@@ -64,11 +64,11 @@ function DisplayUser({ history, addUser, userActionPerformed, getUser, user,upda
     }, [user])
 
     useEffect(() => {
-        debugger;
         if (editUser) {
+
             history.push('/users')
         }
-    }, [userActionPerformed, history])
+    }, [editUser, history])
     const handleSubmit = () => {
         setSubmit(true)
         if (email && firstName && type) {

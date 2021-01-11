@@ -12,6 +12,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Chip from '@material-ui/core/Chip';
 import TextField from '@material-ui/core/TextField';
 import moment from 'moment';
+import Button from '@material-ui/core/Button';
+
 
 
 const ITEM_HEIGHT = 60;
@@ -52,6 +54,10 @@ const ReportsOverview = (props) => {
 			setUsers(tmpUsers);
 		}
 	}, [props.users])
+
+	const handleApplyFilter = () => {
+		props.applyFilter({projects:selectedProjects,users:selectedUsers})
+	}
 
 	return (
 		<div className="reports__filter">
@@ -97,16 +103,17 @@ const ReportsOverview = (props) => {
 						input={<Input />}
 						renderValue={(selected) => (
 							<div className="chips">
-								{selected.map((value) => (
+								{selected.map((value) => {
+									return (
 									<Chip key={value} label={value} className="chip" />
-								))}
+								)})}
 							</div>
 						)}
 						MenuProps={MenuProps}
 					>
 						{projects.map((project) => (
-							<MenuItem key={project.id} value={project.name}>
-								<Checkbox checked={selectedProjects.indexOf(project.name) > -1} />
+							<MenuItem key={project.id} value={project.id}>
+								<Checkbox checked={selectedProjects.indexOf(project.id) > -1} />
 								<ListItemText primary={project.name} />
 							</MenuItem>
 						))}
@@ -166,13 +173,17 @@ const ReportsOverview = (props) => {
 						MenuProps={MenuProps}
 					>
 						{users.map((user) => (
-							<MenuItem key={user.id} value={user.firstName}>
-								<Checkbox checked={selectedUsers.indexOf(user.name) > -1} />
+							<MenuItem key={user.id} value={user.id}>
+								<Checkbox checked={selectedUsers.indexOf(user.id) > -1} />
 								<ListItemText primary={user.firstName + " " + user.lastName} />
 							</MenuItem>
 						))}
 					</Select>
 				</FormControl>
+
+				{/* Apply filter */}
+				<Button variant="contained" onClick={handleApplyFilter} style={{backgroundColor:'#0F59A5',margin:'10px 10px', color:'white'}}  >Apply Filter</Button>
+
 			</div>
 
 			{/* date filter */}

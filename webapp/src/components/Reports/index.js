@@ -26,7 +26,6 @@ const Index = ({ getTaskReports, getProjects, reportTasks, projects, addTask, up
 		getUsers();
 
 	}, [getTaskReports])
-	console.log("Users: ",users);
 
 	useEffect(() => {
 		// Fetch INPROGRESS Task,
@@ -41,12 +40,16 @@ const Index = ({ getTaskReports, getProjects, reportTasks, projects, addTask, up
 		updateTask(taskId,{approvedStatusId:1})
 	}
 
+	const handleApplyFilter = (filter) => {
+		getTaskReports(filter);
+	}
+
 
 	return (
 		<div className="reports">
 			<ReportsMenu/>
 			<div className="main">
-					<ReportsFilter projects={projects} users={users}/>
+					<ReportsFilter projects={projects} users={users} applyFilter={handleApplyFilter}/>
 					<ReportsTable reportTasks={reportTasks} onViewTask={handleViewTask} onApproveTask={handleApproveTask}/>
 			</div>
 			<div>

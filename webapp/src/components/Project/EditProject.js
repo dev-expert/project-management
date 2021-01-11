@@ -103,7 +103,6 @@ function EditProject({ updateProject, history, users: allUsers, getUsers, getPro
 
   useEffect(() => {
     if (project) {
-      debugger;
       setName(project.name);
       setDescription(project.description);
       setEndDate(project.endDate);
@@ -159,7 +158,7 @@ function EditProject({ updateProject, history, users: allUsers, getUsers, getPro
           payload['clients'] = clients.map(client => client._id);
         }
         if (UserSelectInfo && UserSelectInfo.length) 
-        { debugger;
+        { 
           payload['users'] = UserSelectInfo.map(user => user.id);
           payload['team_leads'] = TeamLeadSelectInfo.map(user => user.id);
 

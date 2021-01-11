@@ -111,6 +111,12 @@ function Users({ history, getUsers, users, deleteUser, getRoles, roles }) {
       role: search.role
     })
   };
+
+const handleKeyPress = (event) => {
+    if(event.key === 'Enter'){
+      handleSearch(event);
+    }
+  }
   
   const handleSearch = () => {
     setOffset(0)
@@ -132,7 +138,7 @@ function Users({ history, getUsers, users, deleteUser, getRoles, roles }) {
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
         <form className={classes.root} noValidate autoComplete="off">
-          <TextField id="name" label="Search" onChange={handleNameChange} variant="outlined" />
+          <TextField id="name" label="Search" onKeyPress={handleKeyPress} onChange={handleNameChange} variant="outlined" />
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel id="role-select-label">Role</InputLabel>
             <Select

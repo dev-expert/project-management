@@ -11,6 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
 
+      UserProject.belongsTo(models.User, {
+				foreignKey: "userId",
+        as: 'userInfo',
+
+      })
+
     }
   };
   UserProject.init({

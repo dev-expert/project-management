@@ -14,12 +14,12 @@ const errorLogs = require('./controllers/errorLog');
 //Connect Database
 
 process.on("uncaughtException", (e) => {
+	console.error('uncaughtException ===================>')
 	console.error(e);
-	process.exit(1);
   });
   process.on("unhandledRejection", (e) => {
+	console.error('unhandledRejection ===================>')
 	console.error(e);
-	process.exit(1);
   });
 
 dbConn.sequelize
@@ -46,6 +46,8 @@ app.use(cookieParser());
 app.use('/', indexRouter);
 app.use('/api', passport.authenticate('jwt', { session: false }), addAbility ,pagination,apiRouter);
 app.use(function(err, req, res, next) {
+	console.error('ErronHandler ===================>')
+
     console.log(err);
     errorLogs.errorLogging(req,err);
     res.status(err.status || 500);

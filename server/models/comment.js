@@ -15,6 +15,11 @@ module.exports = (sequelize, DataTypes) => {
 				foreignKey: "createdBy",
         as: 'userInfo',
       })
+
+      Comment.hasMany(models.viewedComments, {
+        foreignKey: 'commentId',
+        as: 'commentData'
+      });
     }
   };
   Comment.init({

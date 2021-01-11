@@ -89,10 +89,10 @@ function CreateProject({ addProject, projectAdded, history, users: allUsers, get
   const [endDate, setEndDate] = React.useState(new Date());
   const [activeStep, setActiveStep] = React.useState(0);
 
-  const [submit, setSubmit ] = useState(false);
-  const getName = (option, withUsername) => `${option.firstName ? option.firstName : ''} ${option.lastName ? option.lastName : ''}${withUsername ? '('+option.username+')' : ''}`
+  const [submit, setSubmit] = useState(false);
+  const getName = (option, withUsername) => `${option.firstName ? option.firstName : ''} ${option.lastName ? option.lastName : ''}${withUsername ? '(' + option.username + ')' : ''}`
   useEffect(() => {
-    if(projectAdded) {
+    if (projectAdded) {
       history.push('/projects')
     }
   }, [projectAdded, history])
@@ -100,16 +100,16 @@ function CreateProject({ addProject, projectAdded, history, users: allUsers, get
     getUsers();
   }, [getUsers])
   useEffect(() => {
-    if(allUsers && allUsers.length) {
-      let filteredUsers = [], filteredClients = [], filteredTeamLeads=[];
+    if (allUsers && allUsers.length) {
+      let filteredUsers = [], filteredClients = [], filteredTeamLeads = [];
       const users = allUsers[0].data;
       users.forEach(user => {
-        if(user.roleId === 1) {
+        if (user.roleId === 1) {
           filteredClients.push(user)
-        }else if((user.roleId === 3) || (user.roleId === 2)){
-           filteredUsers.push(user)
+        } else if ((user.roleId === 3) || (user.roleId === 2)) {
+          filteredUsers.push(user)
         }
-        if(user.roleId === 3) {
+        if (user.roleId === 3) {
           filteredTeamLeads.push(user)
         }
       })
@@ -125,16 +125,16 @@ function CreateProject({ addProject, projectAdded, history, users: allUsers, get
 
   const handleSubmit = () => {
     setSubmit(true)
-    if(activeStep === 0 && !name) {
+    if (activeStep === 0 && !name) {
       return
     } else {
-      if(activeStep === steps.length - 1 ) {
+      if (activeStep === steps.length - 1) {
         const payload = { name, startDate, endDate, description };
-        if(clients && clients.length) {
+        if (clients && clients.length) {
           payload['clients'] = clients.map(client => client._id);
         }
 
-        if(users && users.length) {
+        if (users && users.length) {
           payload['users'] = users.map(user => user.id);
           payload['team_leads'] = teamLeads.map(user => user.id);
         }
@@ -169,129 +169,130 @@ function CreateProject({ addProject, projectAdded, history, users: allUsers, get
                     Project details
                   </Typography>
                   <Grid container spacing={3}>
-                  <Grid item xs={12} sm={12}>
-                    <TextField
-                      required
-                      name="name"
-                      variant="outlined"
-                      fullWidth
-                      id="name"
-                      label="Name"
-                      onChange={e => setName(e.target.value)}
-                      value={name}
-                      autoFocus
-                      error={submit && !name}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={12}>
-                    <TextField
-                      variant="outlined"
-                      fullWidth
-                      id="description"
-                      label="Description"
-                      name="description"
-                      onChange={e => setDescription(e.target.value)}
-                      value={description}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={12}>
-                    <KeyboardDatePicker
-                      inputVariant='outlined'
-                      fullWidth
-                      margin="normal"
-                      id="startDate"
-                      label="Start Date"
-                      format="DD/MM/yyyy"
-                      value={startDate}
-                      onChange={setStartDate}
-                      required
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={12}>
-                    <KeyboardDatePicker
-                      inputVariant='outlined'
-                      fullWidth
-                      margin="normal"
-                      id="endDate"
-                      label="End Date"
-                      format="DD/MM/yyyy"
-                      value={endDate}
-                      required
-                      onChange={setEndDate}
-                    />
-                  </Grid>
-                </Grid> </React.Fragment> : activeStep === 1 ? <React.Fragment>
-                  <Typography className={classes.typo} component="h6" variant="h5" gutterBottom>
-                    Clients and Users
+                    <Grid item xs={12} sm={12}>
+                      <TextField
+                        required
+                        name="name"
+                        variant="outlined"
+                        fullWidth
+                        id="name"
+                        label="Name"
+                        onChange={e => setName(e.target.value)}
+                        value={name}
+                        autoFocus
+                        error={submit && !name}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={12}>
+                      <TextField
+                        variant="outlined"
+                        fullWidth
+                        id="description"
+                        label="Description"
+                        name="description"
+                        onChange={e => setDescription(e.target.value)}
+                        value={description}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={12}>
+                      <KeyboardDatePicker
+                        inputVariant='outlined'
+                        fullWidth
+                        margin="normal"
+                        id="startDate"
+                        label="Start Date"
+                        format="DD/MM/yyyy"
+                        value={startDate}
+                        onChange={setStartDate}
+                        required
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={12}>
+                      <KeyboardDatePicker
+                        inputVariant='outlined'
+                        fullWidth
+                        margin="normal"
+                        id="endDate"
+                        label="End Date"
+                        format="DD/MM/yyyy"
+                        value={endDate}
+                        required
+                        onChange={setEndDate}
+                      />
+                    </Grid>
+                  </Grid> </React.Fragment> : activeStep === 1 ? <React.Fragment>
+                    <Typography className={classes.typo} component="h6" variant="h5" gutterBottom>
+                      Clients and Users
                   </Typography>
-                  <Grid container spacing={3}>
-                  <Grid item xs={12} sm={12}>
-                  <Autocomplete
-                      multiple
-                      id="clients"
-                      name="clients"
-                      options={filterClients}
-                      getOptionLabel={(option) => getName(option, true)}
-                      value={clients}
-                      onChange={(e,n) => setClients(n)}
-                      filterSelectedOptions
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          variant="outlined"
-                          label="Clients"
-                          placeholder="Search Clients"
+                    <Grid container spacing={3}>
+                      <Grid item xs={12} sm={12}>
+                        <Autocomplete
+                          multiple
+                          id="clients"
+                          name="clients"
+                          options={filterClients}
+                          getOptionLabel={(option) => getName(option, true)}
+                          value={clients}
+                          onChange={(e, n) => setClients(n)}
+                          filterSelectedOptions
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              variant="outlined"
+                              label="Clients"
+                              placeholder="Search Clients"
+                            />
+                          )}
                         />
-                      )}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={12}>
-                  <Autocomplete
-                      multiple
-                      id="clients"
-                      name="clients"
-                      options={filterUsers}
-                      getOptionLabel={(option) => getName(option, false)}
-                      value={users}
-                      onChange={(e,n) => setUsers(n)}
-                      filterSelectedOptions
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          variant="outlined"
-                          label="Users"
-                          placeholder="Search Users"
+                      </Grid>
+                      <Grid item xs={12} sm={12}>
+                        <Autocomplete
+                          multiple
+                          id="clients"
+                          name="clients"
+                          options={filterUsers}
+                          getOptionLabel={(option) => getName(option, false)}
+                          value={users}
+                          onChange={(e, n) => setUsers(n)}
+                          filterSelectedOptions
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              variant="outlined"
+                              label="Users"
+                              placeholder="Search Users"
+                            />
+                          )}
                         />
-                      )}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={12}>
-                  <Autocomplete
-                      multiple
-                      id="teamLeads"
-                      name="teamLeads"
-                      options={filterTeamLeads}
-                      getOptionLabel={(option) => getName(option, false)}
-                      value={teamLeads}
-                      onChange={(e,n) => setTeamLeads(n)}
-                      filterSelectedOptions
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          variant="outlined"
-                          label="Team Leads"
-                          placeholder="Search Team Leads"
+                      </Grid>
+                      <Grid item xs={12} sm={12}>
+                        <Autocomplete
+                          multiple
+                          id="teamLeads"
+                          name="teamLeads"
+                          options={filterTeamLeads}
+                          getOptionLabel={(option) => getName(option, false)}
+                          value={teamLeads}
+                          onChange={(e, n) => setTeamLeads(n)}
+                          filterSelectedOptions
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              variant="outlined"
+                              label="Team Leads"
+                              placeholder="Search Team Leads"
+                            />
+                            
+                          )}
                         />
-                      )}
-                    />
-                  </Grid>
-               </Grid></React.Fragment> : activeStep === 2 ? <React.Fragment>
+                      </Grid>
+                    </Grid></React.Fragment> : activeStep === 2 ? <React.Fragment>
                       <Typography variant="h6" gutterBottom>
                         Project
                       </Typography>
                       <List disablePadding>
                         <ListItem className={classes.listItem}>
-                          <ListItemText primary={name} secondary={description}/>
+                          <ListItemText primary={name} secondary={description} />
                         </ListItem>
                         <ListItem className={classes.listItem}>
                           <ListItemText primary="Start date" />
@@ -312,33 +313,33 @@ function CreateProject({ addProject, projectAdded, history, users: allUsers, get
                             Clients
                           </Typography>
                           <List disablePadding>
-                          {clients.map(client => <ListItem className={classes.listItem}>
-                            <ListItemText primary={client.username} secondary={getName(client)}/>
-                          </ListItem>)}
+                            {clients.map(client => <ListItem className={classes.listItem}>
+                              <ListItemText primary={client.username} secondary={getName(client)} />
+                            </ListItem>)}
                           </List>
                         </Grid> : null}
-                        {users && users.length ? <Grid item  xs={12} sm={6}>
+                        {users && users.length ? <Grid item xs={12} sm={6}>
                           <Typography variant="h6" gutterBottom className={classes.title}>
                             Users
                           </Typography>
                           <List disablePadding>
-                          {users.map(user => <ListItem className={classes.listItem}>
-                            <ListItemText primary={user.username} secondary={getName(user)}/>
-                          </ListItem>)}
+                            {users.map(user => <ListItem className={classes.listItem}>
+                              <ListItemText primary={user.username} secondary={getName(user)} />
+                            </ListItem>)}
                           </List>
                         </Grid> : null}
-                        {teamLeads && teamLeads.length ? <Grid item  xs={12} sm={6}>
+                        {teamLeads && teamLeads.length ? <Grid item xs={12} sm={6}>
                           <Typography variant="h6" gutterBottom className={classes.title}>
                             Team Leads
                           </Typography>
                           <List disablePadding>
-                          {teamLeads.map(user => <ListItem className={classes.listItem}>
-                            <ListItemText primary={user.username} secondary={getName(user)}/>
-                          </ListItem>)}
+                            {teamLeads.map(user => <ListItem className={classes.listItem}>
+                              <ListItemText primary={user.username} secondary={getName(user)} />
+                            </ListItem>)}
                           </List>
                         </Grid> : null}
                       </Grid>
-                    </React.Fragment>: null}
+                    </React.Fragment> : null}
                 <div className={classes.buttons}>
                   {activeStep !== 0 && (
                     <Button onClick={handleBack} className={classes.button}>
@@ -363,4 +364,4 @@ function CreateProject({ addProject, projectAdded, history, users: allUsers, get
     </Container>
   );
 }
-export default  getConnect(CreateProject);
+export default getConnect(CreateProject);

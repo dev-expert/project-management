@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-function CreateUser({ history, addUser, userActionPerformed,getRoles,roles }) {
+function CreateUser({ history, addUser,userAdded, userActionPerformed,getRoles,roles }) {
   const classes = useStyles();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -48,10 +48,10 @@ function CreateUser({ history, addUser, userActionPerformed,getRoles,roles }) {
   }, [getRoles])
 
   useEffect(() => {
-    if(userActionPerformed) {
+    if(userAdded) {
       history.push('/users')
     }
-  }, [userActionPerformed, history])
+  }, [userAdded, history])
   const handleSubmit = () => {
     setSubmit(true)
     if(email && password && firstName && type) {

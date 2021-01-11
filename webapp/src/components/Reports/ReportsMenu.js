@@ -6,12 +6,9 @@ const ReportsOverview = () => {
 		<div className="reports__menu">
 			{/*  */}
 			<ul>
-				<li>Team</li>
-				<li>Projects</li>
-				<li>Timesheet</li>
-				<li>Meetings</li>
-				<li>Risk</li>
-				<li>Issues</li>
+				<li>Pending</li>
+				<li>Approved</li>
+				<li>All</li>
 			</ul>
 		</div>
 	)

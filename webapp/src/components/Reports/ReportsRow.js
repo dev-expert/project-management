@@ -137,7 +137,6 @@ const TaskRow = ({ task, onViewTask, onApproveTask }) => {
 				<div className="user">
 					{task.userInfo.firstName} {task.userInfo.lastName}
 				</div>
-<<<<<<< HEAD
 				{/* Task description */}
 				<div className="description">
 					{task.description} <Button onClick={() => onViewTask(task)}><CreateIcon /></Button>
@@ -187,63 +186,6 @@ const TaskRow = ({ task, onViewTask, onApproveTask }) => {
 							<MenuItem
 								onClick={approveTask}>
 								Approve
-=======
-				<div style={{ width: '50%' }}>
-					<div>
-						<div style={{
-							display: 'flex', flex: 1,
-							padding: '0 5px 0px 30px',
-							justifyContent: 'space-between',
-							alignItems: 'center'
-						}} >
-							<FlexRow>
-								{task.userInfo.firstName} {task.userInfo.lastName}
-							</FlexRow>
-							<FlexRow>
-								{getTime(task.startedAt, task.completedAt)}
-							</FlexRow>
-							{getDuration(task.startedAt, task.completedAt)}
-							<FlexRow>
-
-								<IconButton onClick={toggleCommentsView}>
-									<Badge badgeContent={task.comments.length} color="secondary">
-										<CommentIcon />
-									</Badge>
-								</IconButton>
-								<div>
-									{
-										task.approvedStatusId !== 1 ? (<IconButton
-											aria-label="more"
-											aria-controls="long-menu"
-											aria-haspopup="true"
-											onClick={handleMenuClick}
-										>
-											<MoreVertOutlinedIcon />
-										</IconButton>) : (
-												<CheckCircleOutlineIcon color="primary" style={{ color: 'green' }} />
-											)
-									}
-
-
-
-
-									<Menu
-										id="long-menu"
-										anchorEl={anchorEl}
-										keepMounted
-										open={open}
-										onClose={handleMenuClose}
-										PaperProps={{
-											style: {
-												maxHeight: ITEM_HEIGHT * 4.5,
-												width: '20ch',
-											},
-										}}
-									>
-										<MenuItem
-											onClick={approveTask}>
-											Approve
->>>>>>> dev
 											</MenuItem>
 						</Menu>
 					</div>

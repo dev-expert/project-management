@@ -14,22 +14,34 @@ const errorLogs = require('./controllers/errorLog');
 //Connect Database
 
 process.on("uncaughtException", (e) => {
-	console.error('uncaughtException ===================>')
-	console.error(e);
-  });
-  process.on("unhandledRejection", (e) => {
-	console.error('unhandledRejection ===================>')
-	console.error(e);
-  });
+	try {
+		console.error('uncaughtException ===================>')
+		console.error(e);
+		errorLogs.errorLogging(null, err);
+	} catch (error) {
+
+	}
+
+
+});
+process.on("unhandledRejection", (e) => {
+	try {
+		console.error('unhandledRejection ===================>')
+		console.error(e);
+		errorLogs.errorLogging(null, err);
+	} catch (error) {
+
+	}
+});
 
 dbConn.sequelize
-  .authenticate()
-  .then(() => {
-    debug('DB Connection has been established successfully.');
-  })
-  .catch(err => {
-    debug('Unable to connect to the database:', err);
-  });
+	.authenticate()
+	.then(() => {
+		debug('DB Connection has been established successfully.');
+	})
+	.catch(err => {
+		debug('Unable to connect to the database:', err);
+	});
 
 require('./auth/auth');
 var indexRouter = require('./routes/index');
@@ -44,14 +56,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use('/', indexRouter);
-app.use('/api', passport.authenticate('jwt', { session: false }), addAbility ,pagination,apiRouter);
-app.use(function(err, req, res, next) {
+app.use('/api', passport.authenticate('jwt', { session: false }), addAbility, pagination, apiRouter);
+app.use(function (err, req, res, next) {
 	console.error('ErronHandler ===================>')
 
-    console.log(err);
-    errorLogs.errorLogging(req,err);
-    res.status(err.status || 500);
-    res.json({ error: err });
+	console.log(err);
+	errorLogs.errorLogging(req, err);
+	res.status(err.status || 500);
+	res.json({ error: err });
 });
 
 module.exports = app;

@@ -25,8 +25,28 @@ Methods.create = async (req, res, next) => {
 }
 Methods.taskReport = async (req, res, next) => {
     try {
-        let condition;
+        let condition = {};
         const user = req.user;
+
+        if(req.query.users) {
+            condition = {
+                createdBy: {
+                    [Sequelize.Op.in]: req.query.users
+                }
+            };
+        }
+
+         if(req.query.projects) {
+            condition = {
+                ...condition,
+                projectId: {
+                    [Sequelize.Op.in]: req.query.projects
+                }
+            };
+        }
+
+
+
 
         if (user.role === 'Admin') {
             condition = {};
@@ -38,6 +58,7 @@ Methods.taskReport = async (req, res, next) => {
             const projects = await TeamLeadProjectModel.findAll({ where: { userId: user.id }, attributes: ['projectId'] })
             const projectIds = projects.map(u => u.get('projectId'))
             condition = {
+                ...condition,
                 projectId: {
                     [Sequelize.Op.in]: projectIds
                 }
@@ -74,7 +95,7 @@ Methods.findAll = async (req, res, next) => {
         const user = req.user;
 
         condition = user ? { createdBy: user.id } : null
-      
+
 
         var result = await Task.findAll({
             where: condition,

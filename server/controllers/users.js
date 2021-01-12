@@ -4,10 +4,7 @@ var Sequelize = require('sequelize');
 const createUsers = async (payload, filter = null, updateMany = false) => {
 
 	try {
-		let check = await UserModel.findOne({where:{email:payload.email}});
-		if(check && check.dataValues != null){
-			return {error:true,message:'email must be unique'};
-		}
+	
 		let result = null;
 		if (filter !== null) {
 			if (updateMany) {
@@ -16,6 +13,11 @@ const createUsers = async (payload, filter = null, updateMany = false) => {
 				result = await UserModel.update(payload, { where: filter });
 			}
 		} else {
+			let check = await UserModel.findOne({where:{email:payload.email}});
+			if(check && check.dataValues != null){
+				return {error:true,message:'Email must be unique'};
+			}
+
 			payload.active = true;
 			result = await UserModel.create(payload);
 		}

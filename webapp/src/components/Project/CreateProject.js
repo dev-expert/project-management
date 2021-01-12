@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
   },
 }));
-const steps = ['Project details', 'Clients and Users', 'Review Project'];
+const steps = ['Project details', 'Users', 'Review Project'];
 
 function CreateProject({ addProject, projectAdded, history, users: allUsers, getUsers }) {
   const classes = useStyles();
@@ -222,10 +222,10 @@ function CreateProject({ addProject, projectAdded, history, users: allUsers, get
                     </Grid>
                   </Grid> </React.Fragment> : activeStep === 1 ? <React.Fragment>
                     <Typography className={classes.typo} component="h6" variant="h5" gutterBottom>
-                      Clients and Users
+                      Users
                   </Typography>
                     <Grid container spacing={3}>
-                      <Grid item xs={12} sm={12}>
+                      {/* <Grid item xs={12} sm={12}>
                         <Autocomplete
                           multiple
                           id="clients"
@@ -244,7 +244,7 @@ function CreateProject({ addProject, projectAdded, history, users: allUsers, get
                             />
                           )}
                         />
-                      </Grid>
+                      </Grid> */}
                       <Grid item xs={12} sm={12}>
                         <Autocomplete
                           multiple

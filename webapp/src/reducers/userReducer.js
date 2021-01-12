@@ -17,7 +17,7 @@ function reducer(state = initialState, action) {
             userActionPerformed: true,
             userAdded: true
         }
-        case UPDATE_USER:debugger;
+        case UPDATE_USER:
             return {
                 ...state,
                 user: action.payload,
